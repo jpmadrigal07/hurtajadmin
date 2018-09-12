@@ -108,10 +108,22 @@ if(
   $pheading = "Add Employee"; 
 } else if (isset($_GET["employee"]) && isset($_GET["view"]) && trim($_GET["employee"]) == "focus" && trim($_GET["view"]) == "employee"){
   $pheading = "View Employee"; 
-} else if (isset($_GET["payroll"]) && isset($_GET["add"]) && trim($_GET["payroll"]) == "focus" && trim($_GET["add"]) == "payroll"){
-  $pheading = "Upload Payroll"; 
-} else if (isset($_GET["payroll"]) && isset($_GET["view"]) && trim($_GET["payroll"]) == "focus" && trim($_GET["view"]) == "payroll"){
-  $pheading = "View Payroll"; 
+} else if (isset($_GET["payroll"]) && isset($_GET["action"]) && trim($_GET["payroll"]) == "focus" && trim($_GET["action"]) == "attendance"){
+  $pheading = "Import Attendance"; 
+} else if (isset($_GET["payroll"]) && isset($_GET["action"]) && trim($_GET["payroll"]) == "focus" && trim($_GET["action"]) == "payslip"){
+  $pheading = "Generate Payslip"; 
+} else if (isset($_GET["payroll"]) && isset($_GET["action"]) && trim($_GET["payroll"]) == "focus" && trim($_GET["action"]) == "sss"){
+  $pheading = "SSS Contribution"; 
+} else if (isset($_GET["payroll"]) && isset($_GET["action"]) && trim($_GET["payroll"]) == "focus" && trim($_GET["action"]) == "philhealth"){
+  $pheading = "PhilHealth Contribution"; 
+} else if (isset($_GET["payroll"]) && isset($_GET["action"]) && trim($_GET["payroll"]) == "focus" && trim($_GET["action"]) == "pagibig"){
+  $pheading = "Pag-IBIG Contribution"; 
+} else if (isset($_GET["payroll"]) && isset($_GET["action"]) && trim($_GET["payroll"]) == "focus" && trim($_GET["action"]) == "tax"){
+  $pheading = "Withholding Tax"; 
+} else if (isset($_GET["payroll"]) && isset($_GET["action"]) && trim($_GET["payroll"]) == "focus" && trim($_GET["action"]) == "holidays"){
+  $pheading = "Holidays"; 
+} else if (isset($_GET["payroll"]) && isset($_GET["action"]) && trim($_GET["payroll"]) == "focus" && trim($_GET["action"]) == "holidayrate"){
+  $pheading = "Holiday Rate"; 
 } else if (isset($_GET["settings"]) && trim($_GET["settings"]) == "focus"){
   $pheading = "Account Settings";
 } else {
@@ -250,10 +262,28 @@ if(
                             <a href="#"><i class="fa fa-money fa-fw"></i> Payroll<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="account.php?id=<?php echo $id; ?>&payroll=focus&add=payroll">Import Payroll</a>
+                                    <a href="account.php?id=<?php echo $id; ?>&payroll=focus&action=attendance">Import Attendance</a>
                                 </li>
                                 <li>
-                                    <a href="account.php?id=<?php echo $id; ?>&payroll=focus&view=payroll">View Payroll</a>
+                                    <a href="account.php?id=<?php echo $id; ?>&payroll=focus&action=payslip">Generate Payslip</a>
+                                </li>
+                                <li>
+                                    <a href="account.php?id=<?php echo $id; ?>&payroll=focus&action=sss">SSS Contribution</a>
+                                </li>
+                                <li>
+                                    <a href="account.php?id=<?php echo $id; ?>&payroll=focus&action=philhealth">PhilHealth Contribution</a>
+                                </li>
+                                <li>
+                                    <a href="account.php?id=<?php echo $id; ?>&payroll=focus&action=pagibig">Pag-IBIG Contribution</a>
+                                </li>
+                                <li>
+                                    <a href="account.php?id=<?php echo $id; ?>&payroll=focus&action=tax">Withholding Tax</a>
+                                </li>
+                                <li>
+                                    <a href="account.php?id=<?php echo $id; ?>&payroll=focus&action=holidays">Holidays</a>
+                                </li>
+                                <li>
+                                    <a href="account.php?id=<?php echo $id; ?>&payroll=focus&action=holidayrate">Holiday Rate</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->
@@ -408,14 +438,14 @@ if(
                                             <div class="form-group">
                                               <label class="control-label">Invoice Date</label>
                                               <div class="input-group date" id="datePicker1">
-                                                <input type="text" class="form-control" name="date" id="add-collectibles-invoice-date" />
+                                                <input type="text" class="form-control" name="date" id="add-collectibles-invoice-date" autocomplete="off" />
                                                 <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
                                               </div>
                                             </div>
                                             <div class="form-group">
                                               <label class="control-label">Maturity Date</label>
                                               <div class="input-group date" id="datePicker2">
-                                                <input type="text" class="form-control" name="date" id="add-collectibles-maturity-date" />
+                                                <input type="text" class="form-control" name="date" id="add-collectibles-maturity-date" autocomplete="off" />
                                                 <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
                                               </div>
                                             </div>
@@ -426,7 +456,7 @@ if(
                                             <div class="form-group">
                                               <label class="control-label">Delivery Date</label>
                                               <div class="input-group date" id="datePicker3">
-                                                <input type="text" class="form-control" name="date" id="add-collectibles-delivery-date" />
+                                                <input type="text" class="form-control" name="date" id="add-collectibles-delivery-date" autocomplete="off" />
                                                 <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
                                               </div>
                                             </div>
@@ -441,7 +471,7 @@ if(
                                             <div class="form-group">
                                               <label class="control-label">O.R Date</label>
                                               <div class="input-group date" id="datePicker4">
-                                                <input type="text" class="form-control" name="date" id="add-collectibles-or-date" />
+                                                <input type="text" class="form-control" name="date" id="add-collectibles-or-date" autocomplete="off" />
                                                 <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
                                               </div>
                                             </div>
@@ -791,20 +821,25 @@ if(
                         </div>
                         <!-- /.col-lg-12 -->
                     </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading"><a type="button" class="btn btn-danger" href="account.php?id=<?php echo $id; ?>&employee=focus&view=employee">View Employee</a></div>
+                        <div id="my-request" class="panel panel-default">
+                            <div class="panel-heading"><a type="button" class="btn btn-danger" id="AddNewEmployeeBtn" href="account.php?id=<?php echo $log_id; ?>&employee=focus&view=employee">Master Lists</a></div>
                             <div class="panel-body">
-                                <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="table-responsive">
-                                        <div class="col-md-6 col-md-offset-3">
-                                        <form role="form" onsubmit="return false;">
-                                            <span id="addEmployeeStatus"></span>
-                                            <div class="form-group">
-                                                <label class="control-label">Name</label>
-                                                <input type="text" class="form-control" id="add-employee-name" placeholder="">
-                                            </div>
-                                            <div class="form-group">
+                                <div class="col-md-6 col-md-offset-3">
+                                    <form id="loginForm" onsubmit="return false;">
+                                        <span id="addEmployeeStatus"></span>
+                                        <div class="form-group">
+                                            <label class="control-label">First Name</label>
+                                            <input type="text" class="form-control" id="add-employee-fname" placeholder="">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Middle Name</label>
+                                            <input type="text" class="form-control" id="add-employee-mname" placeholder="">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Last Name</label>
+                                            <input type="text" class="form-control" id="add-employee-lname" placeholder="">
+                                        </div>
+                                        <div class="form-group">
                                                 <label class="control-label">Gender</label>
                                                 <select class="form-control" id="add-employee-gender">
                                                     <option value=""></option>
@@ -814,31 +849,74 @@ if(
                                             </div>
                                             <div class="form-group">
                                               <label class="control-label">Date of Birth</label>
-                                              <div class="input-group date" id="datePicker1">
-                                                <input type="text" class="form-control" name="date" id="add-employee-birthday" />
+                                              <div class="input-group date" id="datePicker5">
+                                                <input type="text" class="form-control" name="date" id="add-employee-birthday" autocomplete="off" />
                                                 <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
                                               </div>
                                             </div>
-                                            <div class="form-group">
-                                                <label class="control-label">Phone</label>
-                                                <input type="text" class="form-control" id="add-employee-contact" placeholder="">
-                                            </div>
-                                            <div class="form-group">
+                                        <div class="form-group">
+                                            <label class="control-label">Contact</label>
+                                            <input type="text" class="form-control" id="add-employee-contact" placeholder="">
+                                        </div>
+                                        <div class="form-group">
                                                 <label class="control-label">Address</label>
                                                 <input type="text" class="form-control" id="add-employee-address" placeholder="">
-                                            </div>
-                                            <div class="form-group">
-                                              <label class="control-label">Date Hired</label>
-                                              <div class="input-group date" id="datePicker2">
-                                                <input type="text" class="form-control" name="date" id="add-employee-hired-date" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Status</label>
+                                            <select class="form-control" id="add-employee-status">
+                                                <option value=""></option>
+                                                <option value="1">Active</option>
+                                                <option value="2">Resigned</option>
+                                                <option value="3">Terminated</option>
+                                                <option value="4">AWOL</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Join Date</label>
+                                            <div class="date">
+                                                <div class="input-group date" id="datePicker6">
+                                                <input type="text" class="form-control" name="date" id="add-employee-hired-date" autocomplete="off"/>
                                                 <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
                                               </div>
                                             </div>
-                                            <button type="button" class="btn btn-primary" id="addEmployeeBtn" style="width: 100%;" onclick="addEmployeeRecord()">ADD</button>
-                                        </form>
                                         </div>
-                                    </div>
-                                </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Start Date (Optional)</label>
+                                            <div class="date">
+                                                <div class="input-group date" id="datePicker7">
+                                                <input type="text" class="form-control" name="date" id="add-employee-start-date" autocomplete="off"/>
+                                                <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+                                              </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">End Date (Optional)</label>
+                                            <div class="date">
+                                                <div class="input-group date" id="datePicker8">
+                                                <input type="text" class="form-control" name="date" id="add-employee-end-date" autocomplete="off" />
+                                                <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+                                              </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                                <label class="control-label">TIN I.D (Optional)</label>
+                                                <input type="text" class="form-control" id="add-employee-tin" placeholder="">
+                                        </div>
+                                        <div class="form-group">
+                                                <label class="control-label">Pag-IBIG I.D (Optional)</label>
+                                                <input type="text" class="form-control" id="add-employee-pagibig" placeholder="">
+                                        </div>
+                                        <div class="form-group">
+                                                <label class="control-label">PhilHealth I.D (Optional)</label>
+                                                <input type="text" class="form-control" id="add-employee-philhealth" placeholder="">
+                                        </div>
+                                        <div class="form-group">
+                                                <label class="control-label">SSS I.D (Optional)</label>
+                                                <input type="text" class="form-control" id="add-employee-sss" placeholder="">
+                                        </div>
+                                        <button type="button" class="btn btn-primary" id="addEmployeeBtn" style="width: 100%;" onclick="addEmployeeRecord()">ADD</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -851,51 +929,105 @@ if(
                         <!-- /.col-lg-12 -->
                     </div>
                     <div class="panel panel-default">
-                        <div class="panel-heading"><a type="button" class="btn btn-danger" href="account.php?id=<?php echo $id; ?>&employee=focus&add=employee">Add Employee</a></div>
+                        <div class="panel-heading"><a type="button" class="btn btn-danger" href="account.php?id=<?php echo $log_id; ?>&employee=focus&add=employee">Add Employee</a></div>
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="table-responsive">
+                                        <div class="form-group">
+                                            <select class="form-control" id="select-filter">
+                                                <option value="">Select Filter</option>
+                                                <option value="name">Filter by Name</option>
+                                                <option value="status">Filter by Status</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group" id="select-filter-search" hidden="true">
                                         <div class="input-group">
-                                            <input type="text" class="form-control" name="date" placeholder="Search Employee" id="search-employee"/>
+                                            <input type="text" class="form-control" name="date" placeholder="Search Employee" id="search-employee" autocomplete="off" />
                                             <span class="input-group-addon add-on"><span class="glyphicon glyphicon-search"></span></span>
+                                        </div>
+                                        </div>
+                                        <div class="form-group" id="select-filter-status" hidden="true"><!--Status-->
+                                            <select class="form-control" id="select-status">
+                                                <option value="">Select Status</option>
+                                                <option value="1">Active</option>
+                                                <option value="2">Resigned</option>
+                                                <option value="3">Terminated</option>
+                                                <option value="4">AWOL</option>
+                                            </select>
                                         </div>
                                         <hr>
                                         <div id="employee-search-result">
-                                        <table class="table table-striped">
+                                        <table class="table table-bordered">
                                             <thead>
                                                 <tr>
                                                     <th>Employee ID</th>
                                                     <th>Name</th>
                                                     <th>Gender</th>
-                                                    <th>Date of Birth</th>
-                                                    <th>Phone</th>
-                                                    <th>Address</th>
-                                                    <th>Date Hired</th>
+                                                    <th>Status</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <?php
-                                                $sql = "SELECT * FROM hurtajadmin_employee WHERE employee_status = '1' ORDER BY id DESC";
+                                                $sql = "SELECT * FROM hurtajadmin_employee WHERE employee_status != '5' ORDER BY id DESC";
                                                 $query = mysqli_query($db_conn, $sql);
                                                 $count = 0;
                                                 while($row = mysqli_fetch_array($query)) {  
                                                     $count++; 
                                                     $recid = $row["id"];
                                                     $empid = $row["employee_id"];
-                                                    $name = $row["employee_name"];
+                                                    $fname = $row["employee_fname"];
+                                                    $mname = $row["employee_mname"];
+                                                    $lname = $row["employee_lname"];
                                                     $gender = $row["employee_gender"];
                                                     $birthday = $row["employee_birthday"];
                                                     $address = $row["employee_address"];
                                                     $contact = $row["employee_phone"];
                                                     $datehired = $row["employee_date_hired"];
+                                                    $datestart = $row["employee_date_start"];
+                                                    $dateend = $row["employee_date_end"];
+                                                    $stats = $row["employee_status"];
 
-                                                    $editbirthday = date("m/d/Y", strtotime($birthday));
-                                                    $editdatehired = date("m/d/Y", strtotime($datehired));
+                                                    $tinid = "";
+                                                    $pagibigid = "";
+                                                    $philhealthid = "";
+                                                    $sssid = "";
 
-                                                    $birthday = date("F d, Y", strtotime($birthday));
-                                                    $datehired = date("F d, Y", strtotime($datehired));
+                                                    $sqlempid = "SELECT * FROM hurtajadmin_employee_identification WHERE employee_id = '$empid' LIMIT 1";
+                                                    $queryempid = mysqli_query($db_conn, $sqlempid);
+                                                    while($rowempid = mysqli_fetch_array($queryempid)) {
+                                                        $tinid = $rowempid["employee_identification_tin"];
+                                                        $pagibigid = $rowempid["employee_identification_pagibig"];
+                                                        $philhealthid = $rowempid["employee_identification_philhealth"];
+                                                        $sssid = $rowempid["employee_identification_sss"];
+                                                    }
+
+                                                    $mnameinitial = substr($mname, 0, 1);
+
+                                                    if($birthday == "0000-00-00 00:00:00" || $birthday == "1970-01-01 00:00:00" || $birthday == "1970-01-01 01:00:00") {
+                                                        $birthday = "";
+                                                    } else {
+                                                        $birthday = date("m/d/Y", strtotime($birthday));
+                                                    }
+                                                    
+                                                    if($datehired == "0000-00-00 00:00:00" || $datehired == "1970-01-01 00:00:00" || $datehired == "1970-01-01 01:00:00") {
+                                                        $datehired = "";
+                                                    } else {
+                                                        $datehired = date("m/d/Y", strtotime($datehired));
+                                                    }
+
+                                                    if($datestart == "0000-00-00 00:00:00" || $datestart == "1970-01-01 00:00:00" || $datestart == "1970-01-01 01:00:00") {
+                                                        $datestart = "";
+                                                    } else {
+                                                        $datestart = date("m/d/Y", strtotime($datestart));
+                                                    }
+
+                                                    if($dateend == "0000-00-00 00:00:00" || $dateend == "1970-01-01 00:00:00" || $dateend == "1970-01-01 01:00:00") {
+                                                        $dateend = "";
+                                                    } else {
+                                                        $dateend = date("m/d/Y", strtotime($dateend));
+                                                    }
                                                     
                                                     $gendertext = "";
 
@@ -905,17 +1037,399 @@ if(
                                                         $gendertext = "Female";
                                                     }
 
+                                                    $statstext = "";
+
+                                                    if($stats == "1") {
+                                                        $statstext = "Active";
+                                                    } else if($stats == "2") {
+                                                        $statstext = "Resigned";
+                                                    } else if($stats == "3") {
+                                                        $statstext = "Terminated";
+                                                    } else if($stats == "4") {
+                                                        $statstext = "AWOL";
+                                                    }
+
+                                                    $perhour = 0;
+                                                    $tax = "";
+                                                    $pagibig = "";
+                                                    $sss = "";
+                                                    $philhealth = "";
+                                                    $insurancecont10 = "";
+                                                    $insurance = "";
+                                                    $taxcont1 = 0;
+                                                    $ssscont1 = 0;
+                                                    $philhealthcont1 = 0;
+                                                    $pagibigcont1 = 0;
+                                                    $taxcont2 = 0;
+                                                    $ssscont2 = 0;
+                                                    $philhealthcont2 = 0;
+                                                    $pagibigcont2 = 0;
+                                                    $hoursworked1 = 0;
+                                                    $hoursworked2 = 0;
+                                                    $otcount1 = 0;
+                                                    $utcount1 = 0;
+                                                    $otcount2 = 0;
+                                                    $xotcount1 = 0;
+                                                    $xotcount2 = 0;
+                                                    $utcount2 = 0;
+                                                    $dailycount1 = 0;
+                                                    $dailycount2 = 0;
+                                                    $disabled = "";
+                                                    $previousmonth = date("m", strtotime("-1 months"));
+                                                    $currentmonth = date("m");
+                                                    $currentyear = date("Y");
+                                                    $cashadvancefirstcycle = 0;
+                                                    $cashadvancesecondcycle = 0;
+                                                    $holidayfirstcycle = 0;
+                                                    $holidaysecondcycle = 0;
+                                                    // $firstcycledate1 = $previousmonth."/26/".$currentyear;
+                                                    // $firstcycledate2 = $currentmonth."/11/".$currentyear;
+                                                    $firstcycledate1 = "12/26/2017"; //this is cycle 25 to 10
+                                                    $firstcycledate2 = "1/11/2018";
+                                                    $firstcycledate1 = date("Y-m-d H:i:s", strtotime($firstcycledate1));
+                                                    $firstcycledate2 = date("Y-m-d H:i:s", strtotime($firstcycledate2));
+                                                    // $secondcycledate1 = $currentmonth."/11/".$currentyear;
+                                                    // $secondcycledate2 = $currentmonth."/26/".$currentyear;
+                                                    $secondcycledate1 = "1/11/2018"; //this is cycle 11 to 25
+                                                    $secondcycledate2 = "1/26/2018";
+                                                    $secondcycledate1 = date("Y-m-d H:i:s", strtotime($secondcycledate1));
+                                                    $secondcycledate2 = date("Y-m-d H:i:s", strtotime($secondcycledate2));
+                                                    $sql01 = "SELECT DISTINCT DATE(attendance_date_in_out), attendance_date_in_out, attendance_value FROM hurtajadmin_attendance WHERE employee_id = '$empid' AND attendance_date_in_out >= '$firstcycledate1' AND attendance_date_in_out < '$firstcycledate2' AND attendance_value = '0' AND attendance_status = '1'";
+                                                    $query01 = mysqli_query($db_conn, $sql01);
+                                                    $count01 = mysqli_num_rows($query01);
+                                                    while($row01 = mysqli_fetch_array($query01)) {
+                                                        $datein = $row01["attendance_date_in_out"];
+                                                        $sqlout = "SELECT id, attendance_date_in_out FROM hurtajadmin_attendance WHERE employee_id = '$empid' AND DATE(attendance_date_in_out) = DATE('$datein') AND attendance_value = '1' AND attendance_status = '1'";
+                                                        $queryout = mysqli_query($db_conn, $sqlout);
+                                                        $countout = mysqli_num_rows($queryout);
+                                                        if($countout > 0) {
+                                                            while($rowout = mysqli_fetch_array($queryout)) {
+                                                                $attendanceidout = $rowout["id"];  
+                                                                $dateout = $rowout["attendance_date_in_out"];
+                                                            }
+                                                            $hourdiff = round((strtotime($dateout) - strtotime($datein))/3600, 1);
+                                                               
+                                                            if($hourdiff > 8){ // this is for overtime 
+                                                                $otcount1 = $hourdiff - 8;
+                                                                $dailycount1 = $hourdiff - $otcount1;
+                                                            }else if($hourdiff < 8){ // this is for undertime
+                                                                $utcount1 = $hourdiff;
+                                                                $dailycount1 = $hourdiff;
+                                                            }else{
+                                                                $dailycount1 = $hourdiff;
+                                                            }
+                                                            $xotcount1 = $xotcount1 + $otcount1;
+                                                            $hoursworked1 = $hoursworked1+$dailycount1;
+
+                                                            if($hourdiff > 0){
+
+                                                                $sqlhol1 = "SELECT id FROM hurtajadmin_holidays WHERE DATE(holidays_date) = DATE('$datein') AND holidays_type = '1' AND holidays_status = '1'";
+                                                                $queryhol1 = mysqli_query($db_conn, $sqlhol1);
+                                                                $counthol1 = mysqli_num_rows($queryhol1);
+                                                                if($counthol1 > 0) {
+                                                                    $sqlholrate = "SELECT * FROM hurtajadmin_holiday_rate WHERE id = '1'";
+                                                                    $queryholrate = mysqli_query($db_conn, $sqlholrate);
+                                                                    $holratepercentage = 0;
+                                                                    while($rowholrate = mysqli_fetch_array($queryholrate)) {
+                                                                        $holratepercentage = $rowholrate["holiday_rate_percent"];  
+                                                                    }
+                                                                
+                                                                    $holidaybonus = ($holratepercentage / 100) * $hourdiff;
+                                                                    $hoursworked1 = $hoursworked1+$holidaybonus;
+                                                                }
+                                                                $sqlhol2 = "SELECT id FROM hurtajadmin_holidays WHERE DATE(holidays_date) = DATE('$datein') AND holidays_type = '2' AND holidays_status = '1'";
+                                                                $queryhol2 = mysqli_query($db_conn, $sqlhol2);
+                                                                $counthol2 = mysqli_num_rows($queryhol2);
+                                                                if($counthol2 > 0) {
+                                                                    $sqlholrate = "SELECT * FROM hurtajadmin_holiday_rate WHERE id = '2'";
+                                                                    $queryholrate = mysqli_query($db_conn, $sqlholrate);
+                                                                    $holratepercentage = 0;
+                                                                    while($rowholrate = mysqli_fetch_array($queryholrate)) {
+                                                                        $holratepercentage = $rowholrate["holiday_rate_percent"];  
+                                                                    }
+                                                                
+                                                                    $holidaybonus = ($holratepercentage / 100) * $hourdiff;
+                                                                    $hoursworked1 = $hoursworked1+$holidaybonus;
+                                                                }
+
+                                                            }
+
+                                                        } 
+                                                    }
+                                                    $sql02 = "SELECT DISTINCT DATE(attendance_date_in_out), attendance_date_in_out, attendance_value FROM hurtajadmin_attendance WHERE employee_id = '$empid' AND attendance_date_in_out >= '$secondcycledate1' AND attendance_date_in_out < '$secondcycledate2' AND attendance_value = '0' AND attendance_status = '1'";
+                                                    $query02 = mysqli_query($db_conn, $sql02);
+                                                    $count02 = mysqli_num_rows($query02);
+                                                    while($row02 = mysqli_fetch_array($query02)) {
+                                                        $datein = $row02["attendance_date_in_out"];
+                                                        $sqlout = "SELECT id, attendance_date_in_out FROM hurtajadmin_attendance WHERE employee_id = '$empid' AND DATE(attendance_date_in_out) = DATE('$datein') AND attendance_value = '1' AND attendance_status = '1'";
+                                                        $queryout = mysqli_query($db_conn, $sqlout);
+                                                        $countout = mysqli_num_rows($queryout);
+                                                        if($countout > 0) {
+                                                            while($rowout = mysqli_fetch_array($queryout)) {
+                                                                $attendanceidout = $rowout["id"];  
+                                                                $dateout = $rowout["attendance_date_in_out"];
+                                                            }
+                                                            $hourdiff = round((strtotime($dateout) - strtotime($datein))/3600, 1);
+                                                              
+                                                            if($hourdiff > 8){ // this is for overtime 
+                                                                $otcount2 = $hourdiff - 8;
+                                                                $dailycount2 = $hourdiff - $otcount2;
+                                                            }else if($hourdiff < 8){ // this is for undertime
+                                                                $utcount2 = $hourdiff;
+                                                                $dailycount2 = $hourdiff;
+                                                            }else{
+                                                                $dailycount2 = $hourdiff;
+                                                            }
+                                                            
+                                                            $xotcount2 = $xotcount2 + $otcount2;
+                                                            $hoursworked2 = $hoursworked2+$dailycount2;
+                                                            $sqlhol1 = "SELECT id FROM hurtajadmin_holidays WHERE DATE(holidays_date) = DATE('$datein') AND holidays_type = '1' AND holidays_status = '1'";
+                                                            $queryhol1 = mysqli_query($db_conn, $sqlhol1);
+                                                            $counthol1 = mysqli_num_rows($queryhol1);
+                                                            if($counthol1 > 0) {
+                                                                $sqlholrate = "SELECT * FROM hurtajadmin_holiday_rate WHERE id = '1'";
+                                                                $queryholrate = mysqli_query($db_conn, $sqlholrate);
+                                                                $holratepercentage = 0;
+                                                                while($rowholrate = mysqli_fetch_array($queryholrate)) {
+                                                                    $holratepercentage = $rowholrate["holiday_rate_percent"];  
+                                                                }
+                                                            
+                                                                $holidaybonus = ($holratepercentage / 100) * $hourdiff;
+                                                                $hoursworked2 = $hoursworked2+$holidaybonus;
+                                                            }
+                                                            $sqlhol2 = "SELECT id FROM hurtajadmin_holidays WHERE DATE(holidays_date) = DATE('$datein') AND holidays_type = '2' AND holidays_status = '1'";
+                                                            $queryhol2 = mysqli_query($db_conn, $sqlhol2);
+                                                            $counthol2 = mysqli_num_rows($queryhol2);
+                                                            if($counthol2 > 0) {
+                                                                $sqlholrate = "SELECT * FROM hurtajadmin_holiday_rate WHERE id = '2'";
+                                                                $queryholrate = mysqli_query($db_conn, $sqlholrate);
+                                                                $holratepercentage = 0;
+                                                                while($rowholrate = mysqli_fetch_array($queryholrate)) {
+                                                                    $holratepercentage = $rowholrate["holiday_rate_percent"];  
+                                                                }
+                                                            
+                                                                $holidaybonus = ($holratepercentage / 100) * $hourdiff;
+                                                                $hoursworked2 = $hoursworked2+$holidaybonus;
+                                                            }
+                                                        } 
+                                                    }
+                                                    $sql1 = "SELECT * FROM hurtajadmin_employee_settings WHERE employee_id = '$empid'";
+                                                    $query1 = mysqli_query($db_conn, $sql1);
+                                                    $count1 = mysqli_num_rows($query1);
+                                                    if($count1 > 0) {
+                                                        while($row1 = mysqli_fetch_array($query1)) {  
+                                                            $perhour = $row1["employee_settings_perhour"];
+                                                            $tax = $row1["employee_settings_tax"];
+                                                            $pagibig = $row1["employee_settings_pagibig"];
+                                                            $sss = $row1["employee_settings_sss"];
+                                                            $philhealth = $row1["employee_settings_philhealth"];
+                                                        }
+                                                    }
+                                                    // 160 hours worked from attendance
+                                                    // $bimonthsalary = $perhour*$hoursworked;
+                                                    $otpay1 = $perhour * $xotcount1; // this is base on per hour not ot per hour
+                                                    $otpay2 = $perhour * $xotcount2; // this is base on per hour not ot per hour
+                                                    $bimonthsalary1 = $perhour*$hoursworked1+$otpay1;
+                                                    $bimonthsalary2 = $perhour*$hoursworked2+$otpay2;
+                                                    if($insurancecont10 == '1') {
+                                                        $sql10 = "SELECT * FROM hurtajadmin_insurance ";
+                                                        $query10 = mysqli_query($db_conn, $sql10);
+                                                        $count10 = mysqli_num_rows($query10);
+                                                        if($count10 > 0) {
+                                                            while($row10 = mysqli_fetch_array($query10)) {  
+                                                                $insurance = $row10["insurance_fee"];
+                                                                if($insurance == "") {
+                                                                    $insurance = 0;
+                                                                }
+                                                            }
+                                                        }
+                                                    }else if($insurancecont10 == '2') {
+                                                        $insurance = 0;
+                                                    }
+                                                    if($tax == '1') {
+                                                        $sql2 = "SELECT * FROM hurtajadmin_tax_contribution WHERE $bimonthsalary1 >= tax_contribution_range_from AND $bimonthsalary1 <= tax_contribution_range_to";
+                                                        $query2 = mysqli_query($db_conn, $sql2);
+                                                        $count2 = mysqli_num_rows($query2);
+                                                        if($count2 > 0) {
+                                                            while($row2 = mysqli_fetch_array($query2)) {  
+                                                                $taxcont1 = $row2["tax_contribution_contribution"];
+                                                                if($taxcont1 == "") {
+                                                                    $taxcont1 = 0;
+                                                                }
+                                                            }
+                                                        }
+                                                        $sql21 = "SELECT * FROM hurtajadmin_tax_contribution WHERE $bimonthsalary2 >= tax_contribution_range_from AND $bimonthsalary2 <= tax_contribution_range_to";
+                                                        $query21 = mysqli_query($db_conn, $sql21);
+                                                        $count21 = mysqli_num_rows($query21);
+                                                        if($count21 > 0) {
+                                                            while($row21 = mysqli_fetch_array($query21)) {  
+                                                                $taxcont2 = $row21["tax_contribution_contribution"];
+                                                                if($taxcont2 == "") {
+                                                                    $taxcont2 = 0;
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    if($sss == '1') {
+                                                        $sql3 = "SELECT * FROM hurtajadmin_sss_contribution WHERE $bimonthsalary1 >= sss_contribution_range_from AND $bimonthsalary1 <= sss_contribution_range_to";
+                                                        $query3 = mysqli_query($db_conn, $sql3);
+                                                        $count3 = mysqli_num_rows($query3);
+                                                        if($count3 > 0) {
+                                                            while($row3 = mysqli_fetch_array($query3)) {  
+                                                                $ssscont1 = $row3["sss_contribution_contribution"];
+                                                                if($ssscont1 == "") {
+                                                                    $ssscont1 = 0;
+                                                                }
+                                                            }
+                                                        }
+                                                        $sql31 = "SELECT * FROM hurtajadmin_sss_contribution WHERE $bimonthsalary2 >= sss_contribution_range_from AND $bimonthsalary2 <= sss_contribution_range_to";
+                                                        $query31 = mysqli_query($db_conn, $sql31);
+                                                        $count31 = mysqli_num_rows($query31);
+                                                        if($count31 > 0) {
+                                                            while($row31 = mysqli_fetch_array($query31)) {  
+                                                                $ssscont2 = $row31["sss_contribution_contribution"];
+                                                                if($ssscont2 == "") {
+                                                                    $ssscont2 = 0;
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    if($philhealth == '1') {
+                                                        $sql4 = "SELECT * FROM hurtajadmin_philhealth_contribution WHERE $bimonthsalary1 >= philhealth_contribution_range_from AND $bimonthsalary1 <= philhealth_contribution_range_to";
+                                                        $query4 = mysqli_query($db_conn, $sql4);
+                                                        $count4 = mysqli_num_rows($query4);
+                                                        if($count4 > 0) {
+                                                            while($row4 = mysqli_fetch_array($query4)) {  
+                                                                $philhealthcont1 = $row4["philhealth_contribution_contribution"];
+                                                                if($philhealthcont1 == "") {
+                                                                    $philhealthcont1 = 0;
+                                                                }
+                                                            }
+                                                        }
+                                                        $sql41 = "SELECT * FROM hurtajadmin_philhealth_contribution WHERE $bimonthsalary2 >= philhealth_contribution_range_from AND $bimonthsalary2 <= philhealth_contribution_range_to";
+                                                        $query41 = mysqli_query($db_conn, $sql41);
+                                                        $count41 = mysqli_num_rows($query41);
+                                                        if($count41 > 0) {
+                                                            while($row41 = mysqli_fetch_array($query41)) {  
+                                                                $philhealthcont2 = $row41["philhealth_contribution_contribution"];
+                                                                if($philhealthcont2 == "") {
+                                                                    $philhealthcont2 = 0;
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    if($pagibig == '1') {
+                                                        $sql5 = "SELECT * FROM hurtajadmin_pagibig_contribution WHERE $bimonthsalary1 >= pagibig_contribution_range_from AND $bimonthsalary1 <= pagibig_contribution_range_to";
+                                                        $query5 = mysqli_query($db_conn, $sql5);
+                                                        $count5 = mysqli_num_rows($query5);
+                                                        if($count5 > 0) {
+                                                            while($row5 = mysqli_fetch_array($query5)) {  
+                                                                $pagibigcont1 = $row5["pagibig_contribution_contribution"];
+                                                                if($pagibigcont1 == "") {
+                                                                    $pagibigcont1 = 0;
+                                                                }
+                                                            }
+                                                        }
+                                                        $sql51 = "SELECT * FROM hurtajadmin_pagibig_contribution WHERE $bimonthsalary2 >= pagibig_contribution_range_from AND $bimonthsalary2 <= pagibig_contribution_range_to";
+                                                        $query51 = mysqli_query($db_conn, $sql51);
+                                                        $count51 = mysqli_num_rows($query51);
+                                                        if($count51 > 0) {
+                                                            while($row51 = mysqli_fetch_array($query51)) {  
+                                                                $pagibigcont2 = $row51["pagibig_contribution_contribution"];
+                                                                if($pagibigcont2 == "") {
+                                                                    $pagibigcont2 = 0;
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    $sql6 = "SELECT * FROM hurtajadmin_cash_loan_advance WHERE cash_loan_advance_date >= '$firstcycledate1' AND cash_loan_advance_date < '$firstcycledate2' AND employee_id = '$empid' AND cash_loan_advance_type = '2'";
+                                                    $query6 = mysqli_query($db_conn, $sql6);
+                                                    $count6 = mysqli_num_rows($query6);
+                                                    if($count6 > 0) {
+                                                        while($row6 = mysqli_fetch_array($query6)) {  
+                                                            $cashadvancefirstcycle = $cashadvancefirstcycle+$row6["cash_loan_advance_amount"];
+                                                        }
+                                                    }
+                                                    $sql7 = "SELECT * FROM hurtajadmin_cash_loan_advance WHERE cash_loan_advance_date >= '$secondcycledate1' AND cash_loan_advance_date < '$secondcycledate2' AND employee_id = '$empid' AND cash_loan_advance_type = '2'";
+                                                    $query7 = mysqli_query($db_conn, $sql7);
+                                                    $count7 = mysqli_num_rows($query7);
+                                                    if($count7 > 0) {
+                                                        while($row7 = mysqli_fetch_array($query7)) {  
+                                                            $cashadvancesecondcycle = $cashadvancesecondcycle+$row7["cash_loan_advance_amount"];
+                                                        }
+                                                    }
+                                                    $sql8 = "SELECT SUM(id) AS regularholidaytotal FROM hurtajadmin_holidays WHERE holidays_date >= '$firstcycledate1' AND holidays_date < '$firstcycledate2' AND holidays_type = '1' AND holidays_status = '1'";
+                                                    $query8 = mysqli_query($db_conn, $sql8);
+                                                    $count8 = mysqli_num_rows($query8);
+                                                    if($count8 > 0) {
+                                                        while($row8 = mysqli_fetch_array($query8)) {  
+                                                            $holidayfirstcycle = $row8["regularholidaytotal"];
+                                                        }
+                                                    }
+                                                    $sql9 = "SELECT SUM(id) AS regularholidaytotal FROM hurtajadmin_holidays WHERE holidays_date >= '$secondcycledate1' AND holidays_date < '$secondcycledate2' AND holidays_type = '1' AND holidays_status = '1'";
+                                                    $query9 = mysqli_query($db_conn, $sql9);
+                                                    $count9 = mysqli_num_rows($query9);
+                                                    if($count9 > 0) {
+                                                        while($row9 = mysqli_fetch_array($query9)) {  
+                                                            $holidaysecondcycle = $row9["regularholidaytotal"];
+                                                        }
+                                                    }
+
+                                                    $hoursworked = $hoursworked1+$hoursworked2;
+                                                    $deductions1 = (float)$taxcont1+(float)$pagibigcont1+(float)$ssscont1+(float)$philhealthcont1+(float)$insurance;
+                                                    $deductions2 = (float)$taxcont2+(float)$pagibigcont2+(float)$ssscont2+(float)$philhealthcont2+(float)$insurance;
+                                                    $payroll_settings_paycheck_deducted_1 = 0;
+                                                    $payroll_settings_paycheck_base_1 = 0;
+                                                    $payroll_settings_paycheck_deducted_2 = 0;
+                                                    $payroll_settings_paycheck_base_2= 0;
+                                                    
+                                                    if($perhour > 0) {
+                                                        if($deductions1 > 0 && $cashadvancefirstcycle > 0 && $hoursworked1 > 0) { 
+                                                            $payroll_settings_paycheck_deducted_1 = ($perhour*$hoursworked1+$perhour*$xotcount1)-$deductions1-$cashadvancefirstcycle;
+                                                            $payroll_settings_paycheck_base_1 = $perhour*$hoursworked1+$perhour*$xotcount1;
+                                                        } else if($deductions1 > 0 && $cashadvancefirstcycle < 1 && $hoursworked1 > 0) {
+                                                            $payroll_settings_paycheck_deducted_1 = ($perhour*$hoursworked1+$perhour*$xotcount1)-$deductions1;
+                                                            $payroll_settings_paycheck_base_1 = $perhour*$hoursworked1+$perhour*$xotcount1;
+                                                        } else if($deductions1 < 1 && $cashadvancefirstcycle > 0  && $hoursworked1 > 0) { 
+                                                            $payroll_settings_paycheck_deducted_1 = ($perhour*$hoursworked1+$perhour*$xotcount1)-$cashadvancefirstcycle;
+                                                            $payroll_settings_paycheck_base_1 = $perhour*$hoursworked1+$perhour*$xotcount1;
+                                                        } else if($deductions1 < 1 && $cashadvancefirstcycle < 1  && $hoursworked1 > 0) { 
+                                                            $payroll_settings_paycheck_deducted_1 = $perhour*$hoursworked1+$perhour*$xotcount1;
+                                                            $payroll_settings_paycheck_base_1 = $perhour*$hoursworked1+$perhour*$xotcount1;
+                                                        } else {
+                                                            $payroll_settings_paycheck_deducted_1 = "0";
+                                                        }
+                                                    } else {
+                                                        $payroll_settings_paycheck_deducted_1 = "0";
+                                                    }
+
+                                                    if($perhour > 0) {
+                                                        if($deductions2 > 0 && $cashadvancesecondcycle > 0 && $hoursworked2 > 0) { 
+                                                            $payroll_settings_paycheck_deducted_2 = ($perhour*$hoursworked2+$perhour*$xotcount2)-$deductions2-$cashadvancesecondcycle;
+                                                            $payroll_settings_paycheck_base_2 = $perhour*$hoursworked2+$perhour*$xotcount2;
+                                                        } else if($deductions2 > 0 && $cashadvancesecondcycle < 1 && $hoursworked2 > 0) { 
+                                                            $payroll_settings_paycheck_deducted_2 = ($perhour*$hoursworked2+$perhour*$xotcount2)-$deductions2;
+                                                            $payroll_settings_paycheck_base_2 = $perhour*$hoursworked2+$perhour*$xotcount2;
+                                                        } else if($deductions2 < 1 && $cashadvancesecondcycle > 0 && $hoursworked2 > 0) { 
+                                                            $payroll_settings_paycheck_deducted_2 = ($perhour*$hoursworked2+$perhour*$xotcount2)-$cashadvancesecondcycle;
+                                                            $payroll_settings_paycheck_base_2 = $perhour*$hoursworked2+$perhour*$xotcount2;
+                                                        } else if($deductions2 < 1 && $cashadvancesecondcycle < 1 && $hoursworked2 > 0) { 
+                                                            $payroll_settings_paycheck_deducted_2 = $perhour*$hoursworked2+$perhour*$xotcount2;
+                                                            $payroll_settings_paycheck_base_2 = $perhour*$hoursworked2+$perhour*$xotcount2;
+                                                        } else {
+                                                            $payroll_settings_paycheck_deducted_2 = "0";
+                                                        }
+                                                    } else {
+                                                        $payroll_settings_paycheck_deducted_2 = "0";
+                                                    }
+
                                                     echo '
                                                     <tr>
                                                     <td>'.$empid.'</td>
-                                                    <td>'.$name.'</td>           
+                                                    <td>'.$fname.' '.$mnameinitial.'. '.$lname.'</td>           
                                                     <td>'.$gendertext.'</td>
-                                                    <td>'.$birthday.'</td>
-                                                    <td>'.$address.'</td>
-                                                    <td>'.$contact.'</td>
-                                                    <td>'.$datehired.'</td>
-                                                    <td>Payroll Settings | <a href="javascript:void(0)" onclick="openEmployeeEditDialog('.$recid.',\''.$name.'\',\''.$gender.'\',\''.$editbirthday.'\',\''.$address.'\',\''.$contact.'\',\''.$editdatehired.'\')">Edit</a> | <a href="javascript:void(0)" onclick="openEmployeeDeleteDialog('.$recid.')">Delete</a></td>
-                                                    </tr>
+                                                    <td>'.$statstext.'</td>
+                                                    <td><a href="javascript:void(0)" onclick="openEmployeeMore(\''.$empid.'\',\''.$fname.' '.$mnameinitial.'. '.$lname.'\',\''.$gendertext.'\',\''.$birthday.'\',\''.$contact.'\',\''.$address.'\',\''.$datehired.'\',\''.$datestart.'\',\''.$dateend.'\',\''.$statstext.'\')">More</a> | <a href="javascript:void(0)"  onclick="openEmployeePayrollSettingsDialog(\''.$empid.'\',\''.$recid.'\',\''.$fname.' '.$mnameinitial.'. '.$lname.'\',\''.$perhour.'\',\''.$tax.'\',\''.$pagibig.'\',\''.$sss.'\',\''.$philhealth.'\',\''.$hoursworked.'\',\''.$payroll_settings_paycheck_deducted_1.'\',\''.$payroll_settings_paycheck_deducted_2.'\')">Payroll Settings</a> | <a href="javascript:void(0)" onclick="openEmployeeEditDialog('.$recid.',\''.$empid.'\',\''.$fname.'\',\''.$mname.'\',\''.$lname.'\',\''.$gender.'\',\''.$birthday.'\',\''.$address.'\',\''.$contact.'\',\''.$datehired.'\',\''.$datestart.'\',\''.$dateend.'\',\''.$stats.'\',\''.$tinid.'\',\''.$pagibigid.'\',\''.$philhealthid.'\',\''.$sssid.'\')">Edit</a> | <a href="javascript:void(0)" onclick="openEmployeeDeleteDialog('.$recid.')">Delete</a></td>
                                                     ';   
 
                                                   }
@@ -929,7 +1443,7 @@ if(
                         </div>
                     </div>
                     <br>
-            <?php } else if (isset($_GET["payroll"]) && isset($_GET["add"]) && trim($_GET["payroll"]) == "focus" && trim($_GET["add"]) == "payroll") { ?>
+            <?php } else if (isset($_GET["payroll"]) && isset($_GET["action"]) && trim($_GET["payroll"]) == "focus" && trim($_GET["action"]) == "attendance") { ?>
                     <div class="row">
                         <div class="col-lg-12">
                             <h1 class="page-header"><?php echo $pheading; ?></h1>
@@ -937,7 +1451,7 @@ if(
                         <!-- /.col-lg-12 -->
                     </div>
                         <div class="panel panel-default">
-                            <div class="panel-heading"><a type="button" class="btn btn-danger" href="account.php?id=<?php echo $id; ?>&payroll=focus&view=payroll">View Payroll</a></div>
+                            <div class="panel-heading"><a type="button" class="btn btn-danger" href="account.php?id=<?php echo $id; ?>&payroll=focus&action=payslip">Generate Payslip</a></div>
                             <div class="panel-body">
                                 <div class="row">
                                 <div class="col-lg-12">
@@ -962,79 +1476,1059 @@ if(
                             </div>
                         </div>
                         <br>
-            <?php } else if (isset($_GET["payroll"]) && isset($_GET["view"]) && trim($_GET["payroll"]) == "focus" && trim($_GET["view"]) == "payroll") { ?>
+            <?php } else if (isset($_GET["payroll"]) && isset($_GET["action"]) && trim($_GET["payroll"]) == "focus" && trim($_GET["action"]) == "payslip") { ?>
                 <div class="row">
                         <div class="col-lg-12">
                             <h1 class="page-header"><?php echo $pheading; ?></h1>
                         </div>
                         <!-- /.col-lg-12 -->
                     </div>
-                    <div class="panel panel-default">
-                        <div class="panel-heading"><a type="button" class="btn btn-danger" href="account.php?id=<?php echo $id; ?>&payroll=focus&add=payroll">Import Payroll</a></div>
+                    <div id="my-request" class="panel panel-default">
+                            <div class="panel-heading"><a type="button" class="btn btn-danger" href="account.php?id=<?php echo $id; ?>&payroll=focus&action=attendance">Import Attendance</a></div>
+                            <div class="panel-body">
+                                <div class="col-md-6 col-md-offset-3">
+                                    <form id="loginForm" onsubmit="return false;">
+                                        <span id="paySlipPageStatus"></span>
+                                        <div class="form-group">
+                                          <label class="control-label">Payment Type</label>
+                                          <select class="form-control" name="payrollType" id="payrollType">
+                                            <option value=""></option>
+                                            <option value="1">Regular</option>
+                                            <option value="2">13th month</option>
+                                            <option value="3">Service Incentive Leave (SIL)</option>
+                                          </select>
+                                        </div>
+                                        <div class="form-group" hidden="true" id="payrollToDiv">
+                                          <label class="control-label">Payment to</label>
+                                          <select class="form-control" name="payrollType" id="payrollTo">
+                                            <option value=""></option>
+                                            <option value="1">all employee</option>
+                                            <option value="2">an employee</option>
+                                          </select>
+                                        </div>
+                                        <div class="form-group" hidden="true" id="payrollEmpIDDiv">
+                                            <label class="control-label">Employee ID</label>
+                                            <input type="text" class="form-control" name="date" id="payrollEmpID"/>
+                                        </div>
+                                        <div class="form-group" hidden="true" id="payrollMonthDiv">
+                                            <label class="control-label">Month</label>
+                                            <select class="form-control" name="payrollMonth" id="payrollMonth">
+                                            <option value=""></option>
+                                            <option value="1">January</option>
+                                            <option value="2">February</option>
+                                            <option value="3">March</option>
+                                            <option value="4">April</option>
+                                            <option value="5">May</option>
+                                            <option value="6">June</option>
+                                            <option value="7">July</option>
+                                            <option value="8">August</option>
+                                            <option value="9">September</option>
+                                            <option value="10">October</option>
+                                            <option value="11">November</option>
+                                            <option value="12">December</option>
+                                          </select>
+                                        </div>
+                                        <div class="form-group" hidden="true" id="payrollCycleDiv">
+                                            <label class="control-label">Cycle</label>
+                                            <select class="form-control" name="payrollCycle" id="payrollCycle">
+                                            <option value=""></option>
+                                            <option value="1">1-15</option>
+                                            <option value="2">16-30</option>
+                                          </select>
+                                        </div>
+                                        <div class="form-group" hidden="true" id="payrollYearDiv">
+                                            <label class="control-label">Year</label>
+                                            <select class="form-control" name="payrollCycle" id="payrollYear">
+                                            <option value=""></option>
+                                            <option value="2018">2018</option>
+                                            <option value="2019">2019</option>
+                                            <option value="2020">2020</option>
+                                            <option value="2021">2021</option>
+                                            <option value="2022">2022</option>
+                                            <option value="2023">2023</option>
+                                            <option value="2024">2024</option>
+                                            <option value="2025">2025</option>
+                                            <option value="2026">2026</option>
+                                            <option value="2027">2027</option>
+                                            <option value="2028">2028</option>
+                                            <option value="2029">2029</option>
+                                            <option value="2030">2030</option>
+                                          </select>
+                                        </div>
+                                        <button type="button" class="btn btn-primary" id="paySlipPageBtn" style="width: 100%" onclick="generatePaySlipPage();">Generate</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    <br>
+            <?php } else if (isset($_GET["payroll"]) && isset($_GET["action"]) && trim($_GET["payroll"]) == "focus" && trim($_GET["action"]) == "sss") { ?>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1 class="page-header"><?php echo $pheading; ?></h1>
+                        </div>
+                        <!-- /.col-lg-12 -->
+                    </div>
+                    <div id="my-request" class="panel panel-default">
+                        <div class="panel-heading"><a type="button" class="btn btn-danger" href="account.php?id=<?php echo $id; ?>&payroll=focus&action=philhealth">Philhealth Contribution</a> <a type="button" class="btn btn-danger" href="account.php?id=<?php echo $id; ?>&payroll=focus&action=pagibig">Pag-IBIG Contribution</a>  <a type="button" class="btn btn-danger" href="account.php?id=<?php echo $id; ?>&payroll=focus&action=tax">Withholding Tax</a> <a type="button" class="btn btn-danger" href="account.php?id=<?php echo $id; ?>&payroll=focus&action=payslip">Generate Payslip</a></div>
                         <div class="panel-body">
-                            <div class="row">
+                            <table class="table table-bordered">
+                                <thead>
+                                  <tr>
+                                    <th>Range Of Compensation</th>
+                                    <th>Employee Contribution</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $ssscontribution1 = "";
+                                $ssscontribution2 = "";
+                                $ssscontribution3 = "";
+                                $ssscontribution4 = "";
+                                $ssscontribution5 = "";
+                                $ssscontribution6 = "";
+                                $ssscontribution7 = "";
+                                $ssscontribution8 = "";
+                                $ssscontribution9 = "";
+                                $ssscontribution10 = "";
+                                $ssscontribution11 = "";
+                                $ssscontribution12 = "";
+                                $ssscontribution13 = "";
+                                $ssscontribution14 = "";
+                                $ssscontribution15 = "";
+                                $ssscontribution16 = "";
+                                $ssscontribution17 = "";
+                                $ssscontribution18 = "";
+                                $ssscontribution19 = "";
+                                $ssscontribution20 = "";
+                                $ssscontribution21 = "";
+                                $ssscontribution22 = "";
+                                $ssscontribution23 = "";
+                                $ssscontribution24 = "";
+                                $ssscontribution25 = "";
+                                $ssscontribution26 = "";
+                                $ssscontribution27 = "";
+                                $ssscontribution28 = "";
+                                $ssscontribution29 = "";
+                                $ssscontribution30 = "";
+                                $ssscontribution31 = "";
+                                $sql = "SELECT * FROM hurtajadmin_sss_contribution";
+                                $query = mysqli_query($db_conn, $sql);
+                                $count = 0;
+                                while($row = mysqli_fetch_array($query)) { 
+                                    $count++;
+                                    if($count == 1) {
+                                        $ssscontribution1 = $row["sss_contribution_contribution"];
+                                    } else if($count == 2) {
+                                        $ssscontribution2 = $row["sss_contribution_contribution"];
+                                    } else if($count == 3) {
+                                        $ssscontribution3 = $row["sss_contribution_contribution"];
+                                    } else if($count == 4) {
+                                        $ssscontribution4 = $row["sss_contribution_contribution"];
+                                    } else if($count == 5) {
+                                        $ssscontribution5 = $row["sss_contribution_contribution"];
+                                    } else if($count == 6) {
+                                        $ssscontribution6 = $row["sss_contribution_contribution"];
+                                    } else if($count == 7) {
+                                        $ssscontribution7 = $row["sss_contribution_contribution"];
+                                    } else if($count == 8) {
+                                        $ssscontribution8 = $row["sss_contribution_contribution"];
+                                    } else if($count == 9) {
+                                        $ssscontribution9 = $row["sss_contribution_contribution"];
+                                    } else if($count == 10) {
+                                        $ssscontribution10 = $row["sss_contribution_contribution"];
+                                    } else if($count == 11) {
+                                        $ssscontribution11 = $row["sss_contribution_contribution"];
+                                    } else if($count == 12) {
+                                        $ssscontribution12 = $row["sss_contribution_contribution"];
+                                    } else if($count == 13) {
+                                        $ssscontribution13 = $row["sss_contribution_contribution"];
+                                    } else if($count == 14) {
+                                        $ssscontribution14 = $row["sss_contribution_contribution"];
+                                    } else if($count == 15) {
+                                        $ssscontribution15 = $row["sss_contribution_contribution"];
+                                    } else if($count == 16) {
+                                        $ssscontribution16 = $row["sss_contribution_contribution"];
+                                    } else if($count == 17) {
+                                        $ssscontribution17 = $row["sss_contribution_contribution"];
+                                    } else if($count == 18) {
+                                        $ssscontribution18 = $row["sss_contribution_contribution"];
+                                    } else if($count == 19) {
+                                        $ssscontribution19 = $row["sss_contribution_contribution"];
+                                    } else if($count == 20) {
+                                        $ssscontribution20 = $row["sss_contribution_contribution"];
+                                    } else if($count == 21) {
+                                        $ssscontribution21 = $row["sss_contribution_contribution"];
+                                    } else if($count == 22) {
+                                        $ssscontribution22 = $row["sss_contribution_contribution"];
+                                    } else if($count == 23) {
+                                        $ssscontribution23 = $row["sss_contribution_contribution"];
+                                    } else if($count == 24) {
+                                        $ssscontribution24 = $row["sss_contribution_contribution"];
+                                    } else if($count == 25) {
+                                        $ssscontribution25 = $row["sss_contribution_contribution"];
+                                    } else if($count == 26) {
+                                        $ssscontribution26 = $row["sss_contribution_contribution"];
+                                    } else if($count == 27) {
+                                        $ssscontribution27 = $row["sss_contribution_contribution"];
+                                    } else if($count == 28) {
+                                        $ssscontribution28 = $row["sss_contribution_contribution"];
+                                    } else if($count == 29) {
+                                        $ssscontribution29 = $row["sss_contribution_contribution"];
+                                    } else if($count == 30) {
+                                        $ssscontribution30 = $row["sss_contribution_contribution"];
+                                    } else if($count == 31) {
+                                        $ssscontribution31 = $row["sss_contribution_contribution"];
+                                    }
+
+                                }
+                                ?>
+                                <tr>
+                                    <td>1,000.00 - 1,249.99</td>
+                                    <td><?php echo $ssscontribution1 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditSSSContributionDialog(1, '1,000.00 - 1,249.99', '<?php if($ssscontribution1 != "-") echo $ssscontribution1; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>1,250.00 - 1,749.99</td>
+                                    <td><?php echo $ssscontribution2 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditSSSContributionDialog(2, '1,250.00 - 1,749.99', '<?php if($ssscontribution2 != "-") echo $ssscontribution2; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>1,750.00 - 2,249.99</td>
+                                    <td><?php echo $ssscontribution3 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditSSSContributionDialog(3, '1,750.00 - 2,249.99', '<?php if($ssscontribution3 != "-") echo $ssscontribution3; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2,250.00 - 2,749.99</td>
+                                    <td><?php echo $ssscontribution4 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditSSSContributionDialog(4, '2,250.00 - 2,749.99', '<?php if($ssscontribution4 != "-") echo $ssscontribution4; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2,750.00 - 3,249.99</td>
+                                    <td><?php echo $ssscontribution5 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditSSSContributionDialog(5, '2,750.00 - 3,249.99', '<?php if($ssscontribution5 != "-") echo $ssscontribution5; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>3,250.00 - 3,749.99</td>
+                                    <td><?php echo $ssscontribution6 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditSSSContributionDialog(6, '3,250.00 - 3,749.99', '<?php if($ssscontribution6 != "-") echo $ssscontribution6; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>3,750.00 - 4,249.99</td>
+                                    <td><?php echo $ssscontribution7 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditSSSContributionDialog(7, '3,750.00 - 4,249.99', '<?php if($ssscontribution7 != "-") echo $ssscontribution7; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>4,250.00 - 4,749.99</td>
+                                    <td><?php echo $ssscontribution8 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditSSSContributionDialog(8, '4,250.00 - 4,749.99', '<?php if($ssscontribution8 != "-") echo $ssscontribution8; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>4,750.00 - 5,249.99</td>
+                                    <td><?php echo $ssscontribution9 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditSSSContributionDialog(9, '4,750.00 - 5,249.99', '<?php if($ssscontribution9 != "-") echo $ssscontribution9; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>5,250.00 - 5,749.99</td>
+                                    <td><?php echo $ssscontribution10 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditSSSContributionDialog(10, '5,250.00 - 5,749.99', '<?php if($ssscontribution10 != "-") echo $ssscontribution10; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>5,750.00 - 6,249.99</td>
+                                    <td><?php echo $ssscontribution11 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditSSSContributionDialog(11, '5,750.00 - 6,249.99', '<?php if($ssscontribution11 != "-") echo $ssscontribution11; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>6,250.00 - 6,749.99</td>
+                                    <td><?php echo $ssscontribution12 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditSSSContributionDialog(12, '6,250.00 - 6,749.99', '<?php if($ssscontribution12 != "-") echo $ssscontribution12; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>6,750.00 - 7,249.99</td>
+                                    <td><?php echo $ssscontribution13 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditSSSContributionDialog(13, '6,750.00 - 7,249.99', '<?php if($ssscontribution13 != "-") echo $ssscontribution13; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>7,250.00 - 7,749.99</td>
+                                    <td><?php echo $ssscontribution14 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditSSSContributionDialog(14, '7,250.00 - 7,749.99', '<?php if($ssscontribution14 != "-") echo $ssscontribution14; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>7,750.00 - 8,249.99</td>
+                                    <td><?php echo $ssscontribution15 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditSSSContributionDialog(15, '7,750.00 - 8,249.99', '<?php if($ssscontribution15 != "-") echo $ssscontribution15; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>8,250.00 - 8,749.99</td>
+                                    <td><?php echo $ssscontribution16 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditSSSContributionDialog(16, '8,250.00 - 8,749.99', '<?php if($ssscontribution16 != "-") echo $ssscontribution16; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>8,750.00 - 9,249.99</td>
+                                    <td><?php echo $ssscontribution17 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditSSSContributionDialog(17, '8,750.00 - 9,249.99', '<?php if($ssscontribution17 != "-") echo $ssscontribution17; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>9,250.00 - 9,749.99</td>
+                                    <td><?php echo $ssscontribution18 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditSSSContributionDialog(18, '9,250.00 - 9,749.99', '<?php if($ssscontribution18 != "-") echo $ssscontribution18; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>9,750.00 - 10,249.99</td>
+                                    <td><?php echo $ssscontribution19 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditSSSContributionDialog(19, '9,750.00 - 10,249.99', '<?php if($ssscontribution19 != "-") echo $ssscontribution19; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>10,250.00 - 10,749.99</td>
+                                    <td><?php echo $ssscontribution20 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditSSSContributionDialog(20, '10,250.00 - 10,749.99', '<?php if($ssscontribution20 != "-") echo $ssscontribution20; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>10,750.00 - 11,249.99</td>
+                                    <td><?php echo $ssscontribution21 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditSSSContributionDialog(21, '10,750.00 - 11,249.99', '<?php if($ssscontribution21 != "-") echo $ssscontribution21; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>11,250.00 - 11,749.99</td>
+                                    <td><?php echo $ssscontribution22 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditSSSContributionDialog(22, '11,250.00 - 11,749.99', '<?php if($ssscontribution22 != "-") echo $ssscontribution22; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>11,750.00 - 12,249.99</td>
+                                    <td><?php echo $ssscontribution23 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditSSSContributionDialog(23, '11,750.00 - 12,249.99', '<?php if($ssscontribution23 != "-") echo $ssscontribution23; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>12,250.00 - 12,749.99</td>
+                                    <td><?php echo $ssscontribution24 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditSSSContributionDialog(24, '12,250.00 - 12,749.99', '<?php if($ssscontribution24 != "-") echo $ssscontribution24; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>12,750.00 - 13,249.99</td>
+                                    <td><?php echo $ssscontribution25 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditSSSContributionDialog(25, '12,750.00 - 13,249.99', '<?php if($ssscontribution25 != "-") echo $ssscontribution25; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>13,250.00 - 13,749.99</td>
+                                    <td><?php echo $ssscontribution26 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditSSSContributionDialog(26, '13,250.00 - 13,749.99', '<?php if($ssscontribution26 != "-") echo $ssscontribution26; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>13,750.00 - 14,249.99</td>
+                                    <td><?php echo $ssscontribution27 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditSSSContributionDialog(27, '13,750.00 - 14,249.99', '<?php if($ssscontribution27 != "-") echo $ssscontribution27; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>14,250.00 - 14,749.99</td>
+                                    <td><?php echo $ssscontribution28 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditSSSContributionDialog(28, '14,250.00 - 14,749.99', '<?php if($ssscontribution28 != "-") echo $ssscontribution28; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>14,750.00 - 15,294.99</td>
+                                    <td><?php echo $ssscontribution29 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditSSSContributionDialog(29, '14,750.00 - 15,294.99', '<?php if($ssscontribution29 != "-") echo $ssscontribution29; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>15,250.00 - 15,794.99</td>
+                                    <td><?php echo $ssscontribution30 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditSSSContributionDialog(30, '15,250.00 - 15,794.99', '<?php if($ssscontribution30 != "-") echo $ssscontribution30; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>15,750.00 - 1,000,000.00</td>
+                                    <td><?php echo $ssscontribution31 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditSSSContributionDialog(31, '15,750.00 - 1,000,000.00', '<?php if($ssscontribution31 != "-") echo $ssscontribution31; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                    <br>
+            <?php } else if (isset($_GET["payroll"]) && isset($_GET["action"]) && trim($_GET["payroll"]) == "focus" && trim($_GET["action"]) == "philhealth") { ?>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1 class="page-header"><?php echo $pheading; ?></h1>
+                        </div>
+                        <!-- /.col-lg-12 -->
+                    </div>
+                    <div id="my-request" class="panel panel-default">
+                        <div class="panel-heading"><a type="button" class="btn btn-danger" href="account.php?id=<?php echo $id; ?>&payroll=focus&action=sss">SSS Contribution</a> <a type="button" class="btn btn-danger" href="account.php?id=<?php echo $id; ?>&payroll=focus&action=pagibig">Pag-IBIG Contribution</a>  <a type="button" class="btn btn-danger" href="account.php?id=<?php echo $id; ?>&payroll=focus&action=tax">Withholding Tax</a>  <a type="button" class="btn btn-danger" href="account.php?id=<?php echo $id; ?>&payroll=focus&action=payslip">Generate Payslip</a></div>
+                        <div class="panel-body">
+                            <table class="table table-bordered">
+                                <thead>
+                                  <tr>
+                                    <th>Range Of Compensation</th>
+                                    <th>Employee Contribution</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $philhealthcontribution1 = "";
+                                $philhealthcontribution2 = "";
+                                $philhealthcontribution3 = "";
+                                $philhealthcontribution4 = "";
+                                $philhealthcontribution5 = "";
+                                $philhealthcontribution6 = "";
+                                $philhealthcontribution7 = "";
+                                $philhealthcontribution8 = "";
+                                $philhealthcontribution9 = "";
+                                $philhealthcontribution10 = "";
+                                $philhealthcontribution11 = "";
+                                $philhealthcontribution12 = "";
+                                $philhealthcontribution13 = "";
+                                $philhealthcontribution14 = "";
+                                $philhealthcontribution15 = "";
+                                $philhealthcontribution16 = "";
+                                $philhealthcontribution17 = "";
+                                $philhealthcontribution18 = "";
+                                $philhealthcontribution19 = "";
+                                $philhealthcontribution20 = "";
+                                $philhealthcontribution21 = "";
+                                $philhealthcontribution22 = "";
+                                $philhealthcontribution23 = "";
+                                $philhealthcontribution24 = "";
+                                $philhealthcontribution25 = "";
+                                $philhealthcontribution26 = "";
+                                $philhealthcontribution27 = "";
+                                $philhealthcontribution28 = "";
+                                $philhealthcontribution29 = "";
+                                $philhealthcontribution30 = "";
+                                $philhealthcontribution31 = "";
+                                $philhealthcontribution32 = "";
+                                $philhealthcontribution33 = "";
+                                $sql = "SELECT * FROM hurtajadmin_philhealth_contribution";
+                                $query = mysqli_query($db_conn, $sql);
+                                $count = 0;
+                                while($row = mysqli_fetch_array($query)) { 
+                                    $count++;
+                                    if($count == 1) {
+                                        $philhealthcontribution1 = $row["philhealth_contribution_contribution"];
+                                    } else if($count == 2) {
+                                        $philhealthcontribution2 = $row["philhealth_contribution_contribution"];
+                                    } else if($count == 3) {
+                                        $philhealthcontribution3 = $row["philhealth_contribution_contribution"];
+                                    } else if($count == 4) {
+                                        $philhealthcontribution4 = $row["philhealth_contribution_contribution"];
+                                    } else if($count == 5) {
+                                        $philhealthcontribution5 = $row["philhealth_contribution_contribution"];
+                                    } else if($count == 6) {
+                                        $philhealthcontribution6 = $row["philhealth_contribution_contribution"];
+                                    } else if($count == 7) {
+                                        $philhealthcontribution7 = $row["philhealth_contribution_contribution"];
+                                    } else if($count == 8) {
+                                        $philhealthcontribution8 = $row["philhealth_contribution_contribution"];
+                                    } else if($count == 9) {
+                                        $philhealthcontribution9 = $row["philhealth_contribution_contribution"];
+                                    } else if($count == 10) {
+                                        $philhealthcontribution10 = $row["philhealth_contribution_contribution"];
+                                    } else if($count == 11) {
+                                        $philhealthcontribution11 = $row["philhealth_contribution_contribution"];
+                                    } else if($count == 12) {
+                                        $philhealthcontribution12 = $row["philhealth_contribution_contribution"];
+                                    } else if($count == 13) {
+                                        $philhealthcontribution13 = $row["philhealth_contribution_contribution"];
+                                    } else if($count == 14) {
+                                        $philhealthcontribution14 = $row["philhealth_contribution_contribution"];
+                                    } else if($count == 15) {
+                                        $philhealthcontribution15 = $row["philhealth_contribution_contribution"];
+                                    } else if($count == 16) {
+                                        $philhealthcontribution16 = $row["philhealth_contribution_contribution"];
+                                    } else if($count == 17) {
+                                        $philhealthcontribution17 = $row["philhealth_contribution_contribution"];
+                                    } else if($count == 18) {
+                                        $philhealthcontribution18 = $row["philhealth_contribution_contribution"];
+                                    } else if($count == 19) {
+                                        $philhealthcontribution19 = $row["philhealth_contribution_contribution"];
+                                    } else if($count == 20) {
+                                        $philhealthcontribution20 = $row["philhealth_contribution_contribution"];
+                                    } else if($count == 21) {
+                                        $philhealthcontribution21 = $row["philhealth_contribution_contribution"];
+                                    } else if($count == 22) {
+                                        $philhealthcontribution22 = $row["philhealth_contribution_contribution"];
+                                    } else if($count == 23) {
+                                        $philhealthcontribution23 = $row["philhealth_contribution_contribution"];
+                                    } else if($count == 24) {
+                                        $philhealthcontribution24 = $row["philhealth_contribution_contribution"];
+                                    } else if($count == 25) {
+                                        $philhealthcontribution25 = $row["philhealth_contribution_contribution"];
+                                    } else if($count == 26) {
+                                        $philhealthcontribution26 = $row["philhealth_contribution_contribution"];
+                                    } else if($count == 27) {
+                                        $philhealthcontribution27 = $row["philhealth_contribution_contribution"];
+                                    } else if($count == 28) {
+                                        $philhealthcontribution28 = $row["philhealth_contribution_contribution"];
+                                    } else if($count == 29) {
+                                        $philhealthcontribution29 = $row["philhealth_contribution_contribution"];
+                                    } else if($count == 30) {
+                                        $philhealthcontribution30 = $row["philhealth_contribution_contribution"];
+                                    } else if($count == 31) {
+                                        $philhealthcontribution31 = $row["philhealth_contribution_contribution"];
+                                    } else if($count == 32) {
+                                        $philhealthcontribution32 = $row["philhealth_contribution_contribution"];
+                                    } else if($count == 33) {
+                                        $philhealthcontribution33 = $row["philhealth_contribution_contribution"];
+                                    }
+
+                                }
+                                ?>
+                                <tr>
+                                    <td>0.00 - 8,999.99</td>
+                                    <td><?php echo $philhealthcontribution1 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditPhilHealthContributionDialog(1, '0.00 - 8,999.99', '<?php if($philhealthcontribution1 != "-") echo $philhealthcontribution1; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>9,000.00 - 9,999.99</td>
+                                    <td><?php echo $philhealthcontribution2 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditPhilHealthContributionDialog(2, '9,000.00 - 9,999.99', '<?php if($philhealthcontribution2 != "-") echo $philhealthcontribution2; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>10,000.00 - 10,999.99</td>
+                                    <td><?php echo $philhealthcontribution3 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditPhilHealthContributionDialog(3, '10,000.00 - 10,999.99', '<?php if($philhealthcontribution3 != "-") echo $philhealthcontribution3; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>11,000.00 - 11,999.99</td>
+                                    <td><?php echo $philhealthcontribution4 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditPhilHealthContributionDialog(4, '11,000.00 - 11,999.99', '<?php if($philhealthcontribution4 != "-") echo $philhealthcontribution4; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>12,000.00 - 12,999.99</td>
+                                    <td><?php echo $philhealthcontribution5 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditPhilHealthContributionDialog(5, '12,000.00 - 12,999.99', '<?php if($philhealthcontribution5 != "-") echo $philhealthcontribution5; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>13,000.00 - 13,999.99</td>
+                                    <td><?php echo $philhealthcontribution6 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditPhilHealthContributionDialog(6, '13,000.00 - 13,999.99', '<?php if($philhealthcontribution6 != "-") echo $philhealthcontribution6; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>14,000.00 - 14,999.99</td>
+                                    <td><?php echo $philhealthcontribution7 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditPhilHealthContributionDialog(7, '14,000.00 - 14,999.99', '<?php if($philhealthcontribution7 != "-") echo $philhealthcontribution7; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>15,000.00 - 15,999.99</td>
+                                    <td><?php echo $philhealthcontribution8 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditPhilHealthContributionDialog(8, '15,000.00 - 15,999.99', '<?php if($philhealthcontribution8 != "-") echo $philhealthcontribution8; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>16,000.00 - 16,999.99</td>
+                                    <td><?php echo $philhealthcontribution9 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditPhilHealthContributionDialog(9, '16,000.00 - 16,999.99', '<?php if($philhealthcontribution9 != "-") echo $philhealthcontribution9; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>17,000.00 - 17,999.99</td>
+                                    <td><?php echo $philhealthcontribution10 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditPhilHealthContributionDialog(10, '17,000.00 - 17,999.99', '<?php if($philhealthcontribution10 != "-") echo $philhealthcontribution10; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>18,000.00 - 18,999.99</td>
+                                    <td><?php echo $philhealthcontribution11 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditPhilHealthContributionDialog(11, '18,000.00 - 18,999.99', '<?php if($philhealthcontribution11 != "-") echo $philhealthcontribution11; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>19,000.00 - 19,999.99</td>
+                                    <td><?php echo $philhealthcontribution12 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditPhilHealthContributionDialog(12, '19,000.00 - 19,999.99', '<?php if($philhealthcontribution12 != "-") echo $philhealthcontribution12; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>20,000.00 - 20,999.99</td>
+                                    <td><?php echo $philhealthcontribution13 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditPhilHealthContributionDialog(13, '20,000.00 - 20,999.99', '<?php if($philhealthcontribution13 != "-") echo $philhealthcontribution13; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>21,000.00 - 21,999.99</td>
+                                    <td><?php echo $philhealthcontribution14 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditPhilHealthContributionDialog(14, '21,000.00 - 21,999.99', '<?php if($philhealthcontribution14 != "-") echo $philhealthcontribution14; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>22,000.00 - 22,999.99</td>
+                                    <td><?php echo $philhealthcontribution15 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditPhilHealthContributionDialog(15, '22,000.00 - 22,999.99', '<?php if($philhealthcontribution15 != "-") echo $philhealthcontribution15; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>23,000.00 - 23,999.99</td>
+                                    <td><?php echo $philhealthcontribution16 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditPhilHealthContributionDialog(16, '23,000.00 - 23,999.99', '<?php if($philhealthcontribution16 != "-") echo $philhealthcontribution16; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>24,000.00 - 24,999.99</td>
+                                    <td><?php echo $philhealthcontribution17 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditPhilHealthContributionDialog(17, '24,000.00 - 24,999.99', '<?php if($philhealthcontribution17 != "-") echo $philhealthcontribution17; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>25,000.00 - 25,999.99</td>
+                                    <td><?php echo $philhealthcontribution18 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditPhilHealthContributionDialog(18, '25,000.00 - 25,999.99', '<?php if($philhealthcontribution18 != "-") echo $philhealthcontribution18; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>26,000.00 - 26,999.99</td>
+                                    <td><?php echo $philhealthcontribution19 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditPhilHealthContributionDialog(19, '26,000.00 - 26,999.99', '<?php if($philhealthcontribution19 != "-") echo $philhealthcontribution19; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>27,000.00 - 27,999.99</td>
+                                    <td><?php echo $philhealthcontribution20 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditPhilHealthContributionDialog(20, '27,000.00 - 27,999.99', '<?php if($philhealthcontribution20 != "-") echo $philhealthcontribution20; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>28,000.00 - 28,999.99</td>
+                                    <td><?php echo $philhealthcontribution21 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditPhilHealthContributionDialog(21, '28,000.00 - 28,999.99', '<?php if($philhealthcontribution21 != "-") echo $philhealthcontribution21; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>29,000.00 - 29,999.99</td>
+                                    <td><?php echo $philhealthcontribution22 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditPhilHealthContributionDialog(22, '29,000.00 - 29,999.99', '<?php if($philhealthcontribution22 != "-") echo $philhealthcontribution22; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>30,000.00 - 30,999.99</td>
+                                    <td><?php echo $philhealthcontribution23 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditPhilHealthContributionDialog(23, '30,000.00 - 30,999.99', '<?php if($philhealthcontribution23 != "-") echo $philhealthcontribution23; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>31,000.00 - 31,999.99</td>
+                                    <td><?php echo $philhealthcontribution24 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditPhilHealthContributionDialog(24, '31,000.00 - 31,999.99', '<?php if($philhealthcontribution24 != "-") echo $philhealthcontribution24; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>32,000.00 - 32,999.99</td>
+                                    <td><?php echo $philhealthcontribution25 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditPhilHealthContributionDialog(25, '32,000.00 - 32,999.99', '<?php if($philhealthcontribution25 != "-") echo $philhealthcontribution25; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>33,000.00 - 33,999.99</td>
+                                    <td><?php echo $philhealthcontribution26 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditPhilHealthContributionDialog(26, '33,000.00 - 33,999.99', '<?php if($philhealthcontribution26 != "-") echo $philhealthcontribution26; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>34,000.00 - 34,999.99</td>
+                                    <td><?php echo $philhealthcontribution27 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditPhilHealthContributionDialog(27, '34,000.00 - 34,999.99', '<?php if($philhealthcontribution27 != "-") echo $philhealthcontribution27; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>35,000.00 - 35,999.99</td>
+                                    <td><?php echo $philhealthcontribution28 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditPhilHealthContributionDialog(28, '35,000.00 - 35,999.99', '<?php if($philhealthcontribution28 != "-") echo $philhealthcontribution28; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>36,000.00 - 36,999.99</td>
+                                    <td><?php echo $philhealthcontribution29 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditPhilHealthContributionDialog(29, '36,000.00 - 36,999.99', '<?php if($philhealthcontribution29 != "-") echo $philhealthcontribution29; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>37,000.00 - 37,999.99</td>
+                                    <td><?php echo $philhealthcontribution30 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditPhilHealthContributionDialog(30, '37,000.00 - 37,999.99', '<?php if($philhealthcontribution30 != "-") echo $philhealthcontribution30; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>38,000.00 - 38,999.99</td>
+                                    <td><?php echo $philhealthcontribution31 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditPhilHealthContributionDialog(31, '38,000.00 - 38,999.99', '<?php if($philhealthcontribution31 != "-") echo $philhealthcontribution31; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>39,000.00 - 39,999.99</td>
+                                    <td><?php echo $philhealthcontribution32 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditPhilHealthContributionDialog(32, '39,000.00 - 39,999.99', '<?php if($philhealthcontribution32 != "-") echo $philhealthcontribution32; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>40,000.00 - 1,000,000.00</td>
+                                    <td><?php echo $philhealthcontribution33 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditPhilHealthContributionDialog(33, '40,000.00 - 1,000,000.00', '<?php if($philhealthcontribution33 != "-") echo $philhealthcontribution33; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                    <br>
+            <?php } else if (isset($_GET["payroll"]) && isset($_GET["action"]) && trim($_GET["payroll"]) == "focus" && trim($_GET["action"]) == "pagibig") { ?>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1 class="page-header"><?php echo $pheading; ?></h1>
+                        </div>
+                        <!-- /.col-lg-12 -->
+                    </div>
+                    <div id="my-request" class="panel panel-default">
+                        <div class="panel-heading"><a type="button" class="btn btn-danger" href="account.php?id=<?php echo $id; ?>&payroll=focus&action=sss">SSS Contribution</a> <a type="button" class="btn btn-danger" href="account.php?id=<?php echo $id; ?>&payroll=focus&action=philhealth">Philhealth Contribution</a>  <a type="button" class="btn btn-danger" href="account.php?id=<?php echo $id; ?>&payroll=focus&action=tax">Withholding Tax</a>  <a type="button" class="btn btn-danger" href="account.php?id=<?php echo $id; ?>&payroll=focus&action=payslip">Generate Payslip</a></div>
+                        <div class="panel-body">
+                            <table class="table table-bordered">
+                                <thead>
+                                  <tr>
+                                    <th>Range Of Compensation</th>
+                                    <th>Employee Contribution</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $pagibigcontribution1 = "";
+                                $pagibigcontribution2 = "";
+                                $sql = "SELECT * FROM hurtajadmin_pagibig_contribution";
+                                $query = mysqli_query($db_conn, $sql);
+                                $count = 0;
+                                while($row = mysqli_fetch_array($query)) { 
+                                    $count++;
+                                    if($count == 1) {
+                                        $pagibigcontribution1 = $row["pagibig_contribution_contribution"];
+                                    } else if($count == 2) {
+                                        $pagibigcontribution2 = $row["pagibig_contribution_contribution"];
+                                    }
+                                }
+                                ?>
+                                <tr>
+                                    <td>0.00 - 1,500.00</td>
+                                    <td><?php echo $pagibigcontribution1 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditPagibigContributionDialog(1, '0.00 - 1,500.00', '<?php if($pagibigcontribution1 != "-") echo $pagibigcontribution1; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>1,501.00 - 1,000,000.00</td>
+                                    <td><?php echo $pagibigcontribution2 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditPagibigContributionDialog(2, '1,501.00 - 1,000,000.00', '<?php if($pagibigcontribution2 != "-") echo $pagibigcontribution2; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                    <br>
+            <?php } else if (isset($_GET["payroll"]) && isset($_GET["action"]) && trim($_GET["payroll"]) == "focus" && trim($_GET["action"]) == "tax") { ?>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1 class="page-header"><?php echo $pheading; ?></h1>
+                        </div>
+                        <!-- /.col-lg-12 -->
+                    </div>
+                    <div id="my-request" class="panel panel-default">
+                        <div class="panel-heading"><a type="button" class="btn btn-danger" href="account.php?id=<?php echo $id; ?>&payroll=focus&action=philhealth">Philhealth Contribution</a> <a type="button" class="btn btn-danger" href="account.php?id=<?php echo $id; ?>&payroll=focus&action=pagibig">Pag-IBIG Contribution</a> <a type="button" class="btn btn-danger" href="account.php?id=<?php echo $id; ?>&payroll=focus&action=sss">SSS Contribution</a> <a type="button" class="btn btn-danger" href="account.php?id=<?php echo $id; ?>&payroll=focus&action=payslip">Generate Payslip</a></div>
+                        <div class="panel-body">
+                            <table class="table table-bordered">
+                                <thead>
+                                  <tr>
+                                    <th>Range Of Compensation</th>
+                                    <th>Employee Contribution</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $taxcontribution1 = "";
+                                $taxcontribution2 = "";
+                                $taxcontribution3 = "";
+                                $taxcontribution4 = "";
+                                $taxcontribution5 = "";
+                                $sql = "SELECT * FROM hurtajadmin_tax_contribution";
+                                $query = mysqli_query($db_conn, $sql);
+                                $count = 0;
+                                while($row = mysqli_fetch_array($query)) { 
+                                    $count++;
+                                    if($count == 1) {
+                                        $taxcontribution1 = $row["tax_contribution_contribution"];
+                                    } else if($count == 2) {
+                                        $taxcontribution2 = $row["tax_contribution_contribution"];
+                                    } else if($count == 3) {
+                                        $taxcontribution3 = $row["tax_contribution_contribution"];
+                                    } else if($count == 4) {
+                                        $taxcontribution4 = $row["tax_contribution_contribution"];
+                                    } else if($count == 5) {
+                                        $taxcontribution5 = $row["tax_contribution_contribution"];
+                                    }
+                                }
+                                ?>
+                                <tr>
+                                    <td>0.00 - 10,417.00</td>
+                                    <td><?php echo $taxcontribution1 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditTaxContributionDialog(1, '0.00 - 1,500.00', '<?php if($taxcontribution1 != "-") echo $taxcontribution1; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>10,418.00 - 16,667.00</td>
+                                    <td><?php echo $taxcontribution2 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditTaxContributionDialog(2, '1,501.00 - 1,000,000.00', '<?php if($taxcontribution2 != "-") echo $taxcontribution2; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>16,668.00 - 33,333.00</td>
+                                    <td><?php echo $taxcontribution3 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditTaxContributionDialog(3, '16,668.00 - 33,333.00', '<?php if($taxcontribution3 != "-") echo $taxcontribution3; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>33,334.00 - 83,333.00</td>
+                                    <td><?php echo $taxcontribution4 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditTaxContributionDialog(4, '33,334.00 - 83,333.00', '<?php if($taxcontribution4 != "-") echo $taxcontribution4; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>83,334.00 - 333,333.00</td>
+                                    <td><?php echo $taxcontribution5 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditTaxContributionDialog(5, '83,334.00 - 333,333.00', '<?php if($taxcontribution5 != "-") echo $taxcontribution5; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                    <br>
+            <?php } else if (isset($_GET["payroll"]) && isset($_GET["action"]) && trim($_GET["payroll"]) == "focus" && trim($_GET["action"]) == "holidays") { ?>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1 class="page-header"><?php echo $pheading; ?></h1>
+                        </div>
+                        <!-- /.col-lg-12 -->
+                    </div>
+                    <div class="panel panel-default">
+                            <div class="panel-heading"><a type="button" class="btn btn-danger" href="account.php?id=<?php echo $id; ?>&payroll=focus&action=addholiday">Add New</a></div>
+                            <div class="panel-body">
+                                <div class="row">
                                 <div class="col-lg-12">
                                     <div class="table-responsive">
-                                        <div class="input-group date" id="datePicker1">
-                                            <input type="text" class="form-control" name="date" placeholder="Search from date (Pay Period)" id="search-payroll-from" autocomplete="off"/>
-                                            <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
-                                        </div>
-                                        <br>
-                                        <div class="input-group date" id="datePicker2">
-                                            <input type="text" class="form-control" name="date" placeholder="Search to date (Pay Period)" id="search-payroll-to" autocomplete="off"/>
-                                            <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
-                                        </div>
-                                        <hr>
-                                        <div id="payroll-search-result">
-                                        <table class="table table-striped">
+                                        <table class="table table-bordered">
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
-                                                    <th>Pay Period</th>
+                                                    <th>Name</th>
+                                                    <th>Type</th>
+                                                    <th>Date</th>
                                                     <th>Date Added</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <?php
-                                                $sql = "SELECT DISTINCT payroll_payperiod_1, payroll_payperiod_2 FROM hurtajadmin_payroll WHERE payroll_status = '1' ORDER BY id DESC";
+                                                $sql = "SELECT * FROM hurtajadmin_holidays WHERE holidays_status = '1' ORDER BY id DESC";
                                                 $query = mysqli_query($db_conn, $sql);
                                                 $count = 0;
                                                 while($row = mysqli_fetch_array($query)) {  
                                                     $count++; 
-                                                    $payperiod1 = $row["payroll_payperiod_1"];
-                                                    $payperiod2 = $row["payroll_payperiod_2"];
-
-                                                    $sql1 = "SELECT * FROM hurtajadmin_payroll WHERE payroll_payperiod_1 = '$payperiod1' AND payroll_payperiod_2 = '$payperiod2' AND payroll_status = '1' LIMIT 1";
-                                                    $query1 = mysqli_query($db_conn, $sql1);
-            
-                                                    while($row1 = mysqli_fetch_array($query1)) {
-                                                        $dateadded = $row1["payroll_date_added"];
-                                                    }  
-
-                                                    $payperiod1 = date("F d, Y", strtotime($payperiod1));
-                                                    $payperiod2 = date("F d, Y", strtotime($payperiod2));
-                                                    $dateadded = date("F d, Y", strtotime($dateadded));
-
+                                                    $recid = $row["id"];
+                                                    $name = $row["holidays_name"];
+                                                    $type = $row["holidays_type"];
+                                                    $date = $row["holidays_date"];
+                                                    $dateadded = $row["holidays_date_added"];
+                                                    $stats = $row["holidays_status"];
+                                                    $newDate = "";
+                                                    if($type == "1") {
+                                                        $newDate = date("F d", strtotime($date));
+                                                    } else if($type == "2") {
+                                                        $newDate = date("F d, Y", strtotime($date));
+                                                    }
+                                                    $newDateAdded = date("F d, Y", strtotime($dateadded));
+                                                    $typetext = "";
+                                                    if($type == "1") {
+                                                        $typetext = "Regular Holiday";
+                                                    } else if($type == "2") {
+                                                        $typetext = "Special Non-working Holiday";
+                                                    }
+                                                
                                                     echo '
                                                     <tr>
                                                     <td>'.$count.'</td>
-                                                    <td>'.$payperiod1.' - '.$payperiod2.'</td>           
-                                                    <td>'.$dateadded.'</td>
-                                                    <td>More | Delete</td>
+                                                    <td>'.$name.'</td>     
+                                                    <td>'.$typetext.'</td>
+                                                    <td>'.$newDate.'</td>
+                                                    <td>'.$newDateAdded.'</td> 
+                                                    <td><a href="javascript:void(0)" onclick="openEditHolidayDialog(\''.$recid.'\',\''.$name.'\',\''.$type.'\',\''.$newDate.'\')">Edit</a> | <a href="javascript:void(0)" onclick="openDeleteHolidayDialog('.$recid.')">Delete</a></td>
                                                     </tr>
                                                     ';   
-
                                                   }
                                                 ?>
                                             </tbody>
                                         </table>
                                     </div>
-                                    </div>
                                 </div>
                             </div>
+                            </div>
                         </div>
+                    <br>
+            <?php } else if (isset($_GET["payroll"]) && isset($_GET["action"]) && trim($_GET["payroll"]) == "focus" && trim($_GET["action"]) == "holidayrate") { ?>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1 class="page-header"><?php echo $pheading; ?></h1>
+                        </div>
+                        <!-- /.col-lg-12 -->
                     </div>
+                    <div id="my-request" class="panel panel-default">
+                        <div class="panel-heading"><a type="button" class="btn btn-primary" href="account.php?id=<?php echo $id; ?>&dashboard=focus">Dashboard</a></div>
+                        <div class="panel-body">
+                            <table class="table table-bordered">
+                                <thead>
+                                  <tr>
+                                    <th>Type</th>
+                                    <th>Rate Percentage</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $holidayrate1 = "";
+                                $holidayrate2 = "";
+                                $sql = "SELECT * FROM hurtajadmin_holiday_rate";
+                                $query = mysqli_query($db_conn, $sql);
+                                $count = 0;
+                                while($row = mysqli_fetch_array($query)) { 
+                                    $count++;
+                                    if($count == 1) {
+                                        $holidayrate1 = $row["holiday_rate_percent"];
+                                    } else if($count == 2) {
+                                        $holidayrate2 = $row["holiday_rate_percent"];
+                                    }
+
+                                }
+                                ?>
+                                <tr>
+                                    <td>Regular Holiday</td>
+                                    <td><?php echo $holidayrate1 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditHolidayRateDialog('1', 'Regular Holiday', '<?php echo $holidayrate1; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Special Non-Working Holiday</td>
+                                    <td><?php echo $holidayrate2 ?></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="openEditHolidayRateDialog('2', 'Special Non-Working Holiday', '<?php echo $holidayrate2; ?>')">Edit</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
                     <br>
             <?php } else if (isset($_GET["settings"]) && trim($_GET["settings"]) == "focus") { ?>
                     <div class="row">
@@ -1186,6 +2680,61 @@ if(
         </div>
       </div>
     </div>
+    <!-- Modal more employee -->
+    <div class="modal fade bd-example-modal-lg" id="moreEmployee" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">More Information</h5>
+          </div>
+          <div class="modal-body">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Employee ID</th>
+                        <th>Full Name</th>
+                        <th>Gender</th>
+                        <th>Date of Birth</th>
+                        <th>Contact</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td id="moreempid"></td>
+                        <td id="moreempname"></td>     
+                        <td id="moreempgender"></td> 
+                        <td id="moreempbday"></td>
+                        <td id="moreempcontact"></td>     
+                    </tr>     
+                </tbody>
+            </table>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Address</th>
+                        <th>Date Hired</th>
+                        <th>Date Start</th>
+                        <th>Date End</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>    
+                        <td id="moreempaddress"></td>
+                        <td id="moreemphired"></td>
+                        <td id="moreempstart"></td>
+                        <td id="moreempend"></td>     
+                        <td id="moreempstat"></td>
+                    </tr>     
+                </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Modal -->
     <div class="modal fade bd-example-modal-sm" id="markPaidCollectibles" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -1291,15 +2840,15 @@ if(
                             </div>
                             <div class="form-group">
                               <label class="control-label">Invoice Date</label>
-                              <div class="input-group date" id="datePicker1">
-                                <input type="text" class="form-control" name="date" id="edit-collectibles-invoice-date" />
+                              <div class="input-group date" id="datePicker11">
+                                <input type="text" class="form-control" name="date" id="edit-collectibles-invoice-date" autocomplete="off" />
                                 <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
                             </div>
                         </div>
                         <div class="form-group">
                           <label class="control-label">Maturity Date</label>
-                          <div class="input-group date" id="datePicker2">
-                            <input type="text" class="form-control" name="date" id="edit-collectibles-maturity-date" />
+                          <div class="input-group date" id="datePicker12">
+                            <input type="text" class="form-control" name="date" id="edit-collectibles-maturity-date" autocomplete="off" />
                             <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
                         </div>
                     </div>
@@ -1309,8 +2858,8 @@ if(
                     </div>
                     <div class="form-group">
                       <label class="control-label">Delivery Date</label>
-                      <div class="input-group date" id="datePicker3">
-                        <input type="text" class="form-control" name="date" id="edit-collectibles-delivery-date" />
+                      <div class="input-group date" id="datePicker13">
+                        <input type="text" class="form-control" name="date" id="edit-collectibles-delivery-date" autocomplete="off" />
                         <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
                     </div>
                 </div>
@@ -1324,8 +2873,8 @@ if(
                 </div>
                 <div class="form-group">
                   <label class="control-label">O.R Date</label>
-                  <div class="input-group date" id="datePicker4">
-                    <input type="text" class="form-control" name="date" id="edit-collectibles-or-date" />
+                  <div class="input-group date" id="datePicker14">
+                    <input type="text" class="form-control" name="date" id="edit-collectibles-or-date" autocomplete="off" />
                     <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
                 </div>
             </div>
@@ -1343,64 +2892,191 @@ if(
     </div> 
 
      <!-- Modal -->
-    <div class="modal fade bd-example-modal-sm" id="editEmployee" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-sm" role="document">
+    <div class="modal fade bd-example-modal-md" id="editPayrollSettings" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Edit Payroll Settings</h5>
+          </div>
+          <div class="modal-body">
+             <form id="loginForm" onsubmit="return false;">
+                <div class="form-group">
+                    <span id="editPayrollSettingsStatus"></span>
+                    <input type="hidden" class="form-control" id="payroll-settings-employee-id">
+                    <input type="hidden" class="form-control" id="payroll-settings-eid">
+
+                    <label class="control-label">Employee Name</label>
+                    <input type="text" class="form-control" id="payroll-settings-employee-name" disabled="disabled">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Salary Amount per Hour</label>
+                    <input type="text" class="form-control" id="payroll-settings-salary-hour">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Tax</label>
+                    <select class="form-control" id="payroll-settings-tax" >
+                        <option value=""></option>
+                        <option value="1">Deducted</option>
+                        <option value="2">Not to Deduct</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Pag-ibig</label>
+                    <select class="form-control" id="payroll-settings-pagibig">
+                        <option value=""></option>
+                        <option value="1">Deducted</option>
+                        <option value="2">Not to Deduct</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">SSS</label>
+                    <select class="form-control" id="payroll-settings-sss">
+                        <option value=""></option>
+                        <option value="1">Deducted</option>
+                        <option value="2">Not to Deduct</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">PhilHealth</label>
+                    <select class="form-control" id="payroll-settings-philhealth">
+                        <option value=""></option>
+                        <option value="1">Deducted</option>
+                        <option value="2">Not to Deduct</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Number of Hours Worked (<?php echo date("F", strtotime("-1 months")); ?> 26 - <?php echo date("F"); ?> 25)</label>
+                    <input type="text" class="form-control" id="payroll-settings-worked" disabled="disabled">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Total Pay Amount 1 (<?php echo date("F", strtotime("-1 months")); ?> 26 - <?php echo date("F"); ?> 10)</label>
+                    <input type="text" class="form-control" id="payroll-settings-paycheck-1" disabled="disabled">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Total Pay Amount 2 (<?php echo date("F"); ?> 11 - <?php echo date("F"); ?> 25)</label>
+                    <input type="text" class="form-control" id="payroll-settings-paycheck-2" disabled="disabled">
+                </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="editPayrollSettingsBtn" onclick="editPayrollSettingsRecord()">Update</button>
+          </div>
+      </div>
+    </div>
+    </div>
+
+     <!-- Modal -->
+    <div class="modal fade bd-example-modal-md" id="editEmployee" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Edit Employee</h5>
           </div>
           <div class="modal-body">
-            <span id="editEmployeeStatus"></span>
-            <input type="hidden" class="form-control" id="edit-employee-id">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="table-responsive">
-                        <form role="form" onsubmit="return false;">
-                            <div class="form-group">
-                                <label class="control-label">Name</label>
-                                <input type="text" class="form-control" id="edit-employee-name" placeholder="">
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label">Gender</label>
-                                <select class="form-control" id="edit-employee-gender">
-                                    <option value=""></option>
-                                    <option value="1">Male</option>
-                                    <option value="2">Female</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                              <label class="control-label">Date of Birth</label>
-                              <div class="input-group date" id="datePicker5">
-                                <input type="text" class="form-control" name="date" id="edit-employee-birthday" />
-                                <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Phone</label>
-                            <input type="text" class="form-control" id="edit-employee-contact" placeholder="">
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Address</label>
-                            <input type="text" class="form-control" id="edit-employee-address" placeholder="">
-                        </div>
-                        <div class="form-group">
-                          <label class="control-label">Date Hired</label>
-                          <div class="input-group date" id="datePicker6">
-                            <input type="text" class="form-control" name="date" id="edit-employee-hired-date" />
-                            <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
-                        </div>
-                    </div>
-                </form>
+                <span id="editEmployeeStatus"></span>
+           <form role="form" onsubmit="return false;">
+            <input type="hidden" class="form-control" id="edit-employee-eid">
+            <div class="form-group">
+                <label class="control-label">Employee ID</label>
+                <input type="text" class="form-control" id="edit-employee-id" disabled>
+            </div>
+            <div class="form-group">
+                <label class="control-label">First Name</label>
+                <input type="text" class="form-control" id="edit-employee-fname" placeholder="">
+            </div>
+            <div class="form-group">
+                <label class="control-label">Middle Name</label>
+                <input type="text" class="form-control" id="edit-employee-mname" placeholder="">
+            </div>
+            <div class="form-group">
+                <label class="control-label">Last Name</label>
+                <input type="text" class="form-control" id="edit-employee-lname" placeholder="">
+            </div>
+            <div class="form-group">
+                <label class="control-label">Gender</label>
+                <select class="form-control" id="edit-employee-gender">
+                    <option value=""></option>
+                    <option value="1">Male</option>
+                    <option value="2">Female</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Date of Birth</label>
+                <div class="input-group date" id="datePicker15">
+                    <input type="text" class="form-control" name="date" id="edit-employee-birthday" autocomplete="off"/>
+                    <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Contact</label>
+                <input type="text" class="form-control" id="edit-employee-contact" placeholder="">
+            </div>
+            <div class="form-group">
+                <label class="control-label">Address</label>
+                <input type="text" class="form-control" id="edit-employee-address" placeholder="">
+            </div>
+            <div class="form-group">
+                <label class="control-label">Status</label>
+                <select class="form-control" id="edit-employee-status">
+                    <option value=""></option>
+                    <option value="1">Active</option>
+                    <option value="2">Resigned</option>
+                    <option value="3">Terminated</option>
+                    <option value="4">AWOL</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Join Date</label>
+                <div class="date">
+                    <div class="input-group date" id="datePicker16">
+                        <input type="text" class="form-control" name="date" id="edit-employee-hired-date" autocomplete="off" />
+                        <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
                     </div>
                 </div>
             </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" id="editEmployeeBtn" onclick="editEmployeeRecord()">Update</button>
-          </div>
+            <div class="form-group">
+                <label class="control-label">Start Date</label>
+                <div class="date">
+                    <div class="input-group date" id="datePicker17">
+                        <input type="text" class="form-control" name="date" id="edit-employee-start-date" autocomplete="off" />
+                        <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label">End Date</label>
+                <div class="date">
+                    <div class="input-group date" id="datePicker18">
+                        <input type="text" class="form-control" name="date" id="edit-employee-end-date" autocomplete="off" />
+                        <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label">TIN I.D (Optional)</label>
+                <input type="text" class="form-control" id="edit-employee-tin" placeholder="">
+            </div>
+            <div class="form-group">
+                <label class="control-label">Pag-IBIG I.D (Optional)</label>
+                <input type="text" class="form-control" id="edit-employee-pagibig" placeholder="">
+            </div>
+            <div class="form-group">
+                <label class="control-label">PhilHealth I.D (Optional)</label>
+                <input type="text" class="form-control" id="edit-employee-philhealth" placeholder="">
+            </div>
+            <div class="form-group">
+                <label class="control-label">SSS I.D (Optional)</label>
+                <input type="text" class="form-control" id="edit-employee-sss" placeholder="">
+            </div>
+           </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="editEmployeeBtn" onclick="editEmployeeRecord()">Update</button>
         </div>
       </div>
+    </div>
     </div>
 
     <!-- Modal -->
@@ -1422,6 +3098,260 @@ if(
         </div>
       </div>
     </div>
+
+    <!--Modal edit sss con-->
+  <div class="modal fade bd-example-modal-sm" id="editSSSContribution" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Edit SSS Contribution</h5>
+          </div>
+          <div class="modal-body">
+            <span id="editSSSContributionStatus"></span>
+            <input type="hidden" class="form-control" id="edit-sss-contribution-id">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="table-responsive">
+                        <form role="form" onsubmit="return false;">
+                            <div class="form-group">
+                                <label class="control-label">Range Of Compensation</label>
+                                <input type="text" class="form-control" id="edit-sss-contribution-range" placeholder="" disabled="disabled">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Employee Contribution</label>
+                                <input type="text" class="form-control" id="edit-sss-contribution-amount" placeholder="">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="editSSSContributionBtn" onclick="editSSSContributionRecord()">Update</button>
+          </div>
+        </div>
+      </div>
+    </div>
+ <!--end edit sss con-->
+
+<!--Modal edit phl health -->
+    <div class="modal fade bd-example-modal-sm" id="editPhilHealthContribution" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Edit PhilHealth Contribution</h5>
+          </div>
+          <div class="modal-body">
+            <span id="editPhilHealthContributionStatus"></span>
+            <input type="hidden" class="form-control" id="edit-philhealth-contribution-id">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="table-responsive">
+                        <form role="form" onsubmit="return false;">
+                            <div class="form-group">
+                                <label class="control-label">Range Of Compensation</label>
+                                <input type="text" class="form-control" id="edit-philhealth-contribution-range" placeholder="" disabled="disabled">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Employee Contribution</label>
+                                <input type="text" class="form-control" id="edit-philhealth-contribution-amount" placeholder="">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="editPhilHealthContributionBtn" onclick="editPhilHealthContributionRecord()">Update</button>
+          </div>
+        </div>
+      </div>
+    </div>
+<!--Modal end edit phl health -->
+
+<!--Modal edit pagibig con -->
+    <div class="modal fade bd-example-modal-sm" id="editPagibigContribution" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Edit Pag-IBIG Contribution</h5>
+          </div>
+          <div class="modal-body">
+            <span id="editPagibigContributionStatus"></span>
+            <input type="hidden" class="form-control" id="edit-pagibig-contribution-id">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="table-responsive">
+                        <form role="form" onsubmit="return false;">
+                            <div class="form-group">
+                                <label class="control-label">Range Of Compensation</label>
+                                <input type="text" class="form-control" id="edit-pagibig-contribution-range" placeholder="" disabled="disabled">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Employee Contribution</label>
+                                <input type="text" class="form-control" id="edit-pagibig-contribution-amount" placeholder="">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="editPagibigContributionBtn" onclick="editPagibigContributionRecord()">Update</button>
+          </div>
+        </div>
+      </div>
+    </div>
+<!--Modal end edit pagibig con -->
+
+<!--Modal edit tax -->
+    <div class="modal fade bd-example-modal-sm" id="editTaxContribution" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Edit Tax Contribution</h5>
+          </div>
+          <div class="modal-body">
+            <span id="editTaxContributionStatus"></span>
+            <input type="hidden" class="form-control" id="edit-tax-contribution-id">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="table-responsive">
+                        <form role="form" onsubmit="return false;">
+                            <div class="form-group">
+                                <label class="control-label">Range Of Compensation</label>
+                                <input type="text" class="form-control" id="edit-tax-contribution-range" placeholder="" disabled="disabled">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Employee Contribution</label>
+                                <input type="text" class="form-control" id="edit-tax-contribution-amount" placeholder="">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="editTaxContributionBtn" onclick="editTaxContributionRecord()">Update</button>
+          </div>
+        </div>
+      </div>
+    </div>
+<!--Modal end edit tax -->
+<!--Modal edit holiday -->
+    <div class="modal fade bd-example-modal-sm" id="editHoliday" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Edit Holiday</h5>
+          </div>
+          <div class="modal-body">
+            <span id="editHolidayStatus"></span>
+            <input type="hidden" class="form-control" id="edit-holiday-id">
+            <div class="row">
+                <div class="col-lg-12">
+                  <form role="form" onsubmit="return false;">
+                    <span id="addHolidayStatus"></span>
+                    <div class="form-group">
+                        <label class="control-label">Name</label>
+                        <input type="text" class="form-control" id="edit-holiday-name" placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Type</label>
+                        <select class="form-control" id="edit-holiday-type">
+                            <option value=""></option>
+                            <option value="1">Regular Holiday</option>
+                            <option value="2">Special Non-working Holiday</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="holidaydate3">
+                        <label class="control-label">Date (Don't mind the year, just pick a date)</label>
+                        <div class="input-group date" id="datePicker8">
+                            <input type="text" class="form-control" name="date" placeholder="" id="edit-holiday-date-1" autocomplete="off"/>
+                            <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+                        </div>
+                    </div>
+                    <div class="form-group" id="holidaydate4">
+                        <label class="control-label">Date</label>
+                        <div class="input-group date" id="datePicker9">
+                            <input type="text" class="form-control" name="date" placeholder="" id="edit-holiday-date-2" autocomplete="off"/>
+                            <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+                        </div>
+                    </div>
+                </form>
+                </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="editHolidayBtn" onclick="editHolidayRecord()">Update</button>
+          </div>
+        </div>
+      </div>
+    </div>
+<!--Modal end edit holiday-->
+
+<!--Modal edit tax -->
+    <div class="modal fade bd-example-modal-sm" id="editHolidayRate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Edit Holiday Rate</h5>
+          </div>
+          <div class="modal-body">
+            <span id="editHolidayRateStatus"></span>
+            <input type="hidden" class="form-control" id="edit-holiday-rate-id">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="table-responsive">
+                        <form role="form" onsubmit="return false;">
+                            <div class="form-group">
+                                <label class="control-label">Type</label>
+                                <input type="text" class="form-control" id="edit-holiday-rate-type" placeholder="" disabled="disabled">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Rate Percentage (%)</label>
+                                <input type="text" class="form-control" id="edit-holiday-rate-percentage" placeholder="">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="editHolidayRateBtn" onclick="editHolidayRateRecord()">Update</button>
+          </div>
+        </div>
+      </div>
+    </div>
+<!--Modal end edit tax -->
+
+
+<!--Modal delete holiday -->
+    <div class="modal fade bd-example-modal-sm" id="deleteHoliday" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Delete Holiday</h5>
+          </div>
+          <div class="modal-body">
+            <span id="deleteHolidayStatus"></span>
+            <input type="hidden" class="form-control" id="delete-holiday-id">
+            <p>Are you sure with this?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="deleteHolidayBtn" onclick="deleteHolidayRecord()">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+<!--Modal end delete holiday-->
    
     <!-- jQuery -->
     <script src="vendor/jquery/jquery.min.js"></script>
@@ -1760,18 +3690,27 @@ if(
       }
 
       function addEmployeeRecord() {
-        var name = _("add-employee-name").value;
+        var fname = _("add-employee-fname").value;
+        var mname = _("add-employee-mname").value;
+        var lname = _("add-employee-lname").value;
         var gender = _("add-employee-gender").value;
         var birthday = _("add-employee-birthday").value;
         var contact = _("add-employee-contact").value;
         var address = _("add-employee-address").value;
         var hired = _("add-employee-hired-date").value;
+        var start = _("add-employee-start-date").value;
+        var end = _("add-employee-end-date").value;
+        var tin = _("add-employee-tin").value;
+        var pagibig = _("add-employee-pagibig").value;
+        var philhealth = _("add-employee-philhealth").value;
+        var sss = _("add-employee-sss").value;
+        var emp_status = _("add-employee-status").value;
         var load = '<center><i class="fa fa-circle-o-notch fa-spin" style="color: #999; margin-bottom: 10px;"></i><center>';
         var error = '<div style="color: red; margin-bottom: 10px;">Incomplete Parameters.</div>';
         var status = _("addEmployeeStatus");
         var button = _("addEmployeeBtn");
         status.innerHTML = load;
-        if (name == "" || gender == "" || birthday == "" || contact == "" || address == "" || hired == "") {
+        if (fname == "" || mname == "" || lname == "" || gender == "" || birthday == "" || contact == "" || address == "" || hired == "" || emp_status == "") {
             status.innerHTML = error;
         } else {
             button.disabled = true;
@@ -1790,35 +3729,53 @@ if(
                   }
               }
             }
-          ajax.send("addemployeename="+name+"&addemployeegender="+gender+"&addemployeebirthday="+birthday+"&addemployeecontact="+contact+"&addemployeeaddress="+address+"&addemployeehired="+hired);
+          ajax.send("addemployeefname="+fname+"&addemployeemname="+mname+"&addemployeelname="+lname+"&addemployeegender="+gender+"&addemployeebirthday="+birthday+"&addemployeecontact="+contact+"&addemployeeaddress="+address+"&addemployeehired="+hired+"&addemployeestart="+start+"&addemployeeend="+end+"&addemployeeemp_status="+emp_status+"&addemployeetin="+tin+"&addemployeepagibig="+pagibig+"&addemployeephilhealth="+philhealth+"&addemployeesss="+sss);
         }
       }
 
-      function openEmployeeEditDialog(rid, name, gender, birthday, address, contact, datehired) {
-        $('#editEmployee').modal('show');
-        _("edit-employee-id").value = rid;
-        _("edit-employee-name").value = name;
-        _("edit-employee-gender").value = gender;
-        _("edit-employee-birthday").value = birthday;
-        _("edit-employee-address").value = address;
-        _("edit-employee-contact").value = contact;
-        _("edit-employee-hired-date").value = datehired;
+      function openEmployeeMore(empid, fullname, gender, bday, contact, address, hired, start, end, stats) {
+        $('#moreEmployee').modal('show');
+        _("moreempid").innerHTML = empid;
+        _("moreempname").innerHTML = fullname;
+        _("moreempgender").innerHTML = gender;
+        _("moreempbday").innerHTML = bday;
+        _("moreempcontact").innerHTML = contact;
+        _("moreempaddress").innerHTML = address;
+        _("moreemphired").innerHTML = hired;
+        _("moreempstart").innerHTML = start;
+        _("moreempend").innerHTML = end;
+        _("moreempstat").innerHTML = stats;
       }
 
-      function editEmployeeRecord() {
-        var rid = _("edit-employee-id").value;
-        var name = _("edit-employee-name").value;
-        var gender = _("edit-employee-gender").value;
-        var birthday = _("edit-employee-birthday").value;
-        var address = _("edit-employee-address").value;
-        var contact = _("edit-employee-contact").value;
-        var datehired = _("edit-employee-hired-date").value;
+      function openEmployeePayrollSettingsDialog(empid, eid, name, perhour, tax, pagibig, sss, philhealth, worked, paycheck1, paycheck2) {
+        $('#editPayrollSettings').modal('show');
+        _("payroll-settings-employee-id").value = empid;
+        _("payroll-settings-eid").value = eid;
+        _("payroll-settings-employee-name").value = name;
+        _("payroll-settings-salary-hour").value = perhour;
+        _("payroll-settings-tax").value = tax;
+        _("payroll-settings-pagibig").value = pagibig;
+        _("payroll-settings-sss").value = sss;
+        _("payroll-settings-philhealth").value = philhealth;
+        _("payroll-settings-worked").value = worked;
+        _("payroll-settings-paycheck-1").value = paycheck1;
+        _("payroll-settings-paycheck-2").value = paycheck2;
+      }
+
+      function editPayrollSettingsRecord() {
+        var empid = _("payroll-settings-employee-id").value;
+        var eid = _("payroll-settings-eid").value;
+        var salaryhour = _("payroll-settings-salary-hour").value;
+        var tax = _("payroll-settings-tax").value;
+        var pagibig = _("payroll-settings-pagibig").value;
+        var sss = _("payroll-settings-sss").value;
+        var philhealth = _("payroll-settings-philhealth").value;
         var load = '<center><i class="fa fa-circle-o-notch fa-spin" style="color: #999; margin-bottom: 10px;"></i><center>';
         var error = '<div style="color: red; margin-bottom: 10px;">Incomplete Parameters.</div>';
-        var status = _("editCompanyStatus");
-        var button = _("editCompanyBtn");
+        var status = _("editPayrollSettingsStatus");
+        var button = _("editPayrollSettingsBtn");
         status.innerHTML = load;
-        if (rid == "" || name == "" || gender == "" || birthday == "" || address == "" || contact == "" || datehired == "") {
+        if (empid == "" || salaryhour == "" || tax == "" || pagibig == "" || sss == "" || philhealth == "") {
             status.innerHTML = error;
         } else {
             button.disabled = true;
@@ -1834,7 +3791,71 @@ if(
                   }
               }
             }
-          ajax.send("editemployeeid="+rid+"&editemployeename="+name+"&editemployeegender="+gender+"&editemployeebirthday="+birthday+"&editemployeeaddress="+address+"&editemployeecontact="+contact+"&editemployeedatehired="+datehired);
+          ajax.send("editpayrollsettingsempid="+empid+"&editpayrollsettingseid="+eid+"&editpayrollsettingssalaryhour="+salaryhour+"&editpayrollsettingstax="+tax+"&editpayrollsettingspagibig="+pagibig+"&editpayrollsettingssss="+sss+"&editpayrollsettingsphilhealth="+philhealth);
+        }
+      }
+
+      function openEmployeeEditDialog(rid, empid, fname, mname, lname, gender, birthday, address, contact, datehired, datestart, dateend,stats,tin,pagibig,philhealth,sss) {
+        console.log(stats);
+        $('#editEmployee').modal('show');
+        _("edit-employee-eid").value = rid;
+        _("edit-employee-id").value = empid;
+        _("edit-employee-fname").value = fname;
+        _("edit-employee-mname").value = mname;
+        _("edit-employee-lname").value = lname;
+        _("edit-employee-gender").value = gender;
+        _("edit-employee-birthday").value = birthday;
+        _("edit-employee-address").value = address;
+        _("edit-employee-contact").value = contact;
+        _("edit-employee-hired-date").value = datehired;
+        _("edit-employee-start-date").value = datestart;
+        _("edit-employee-end-date").value = dateend;
+        _("edit-employee-status").value = stats;
+        _("edit-employee-tin").value = tin;
+        _("edit-employee-pagibig").value = pagibig;
+        _("edit-employee-philhealth").value = philhealth;
+        _("edit-employee-sss").value = sss;
+      }
+
+      function editEmployeeRecord() {
+        var rid = _("edit-employee-eid").value;
+        var fname = _("edit-employee-fname").value;
+        var mname = _("edit-employee-mname").value;
+        var lname = _("edit-employee-lname").value;
+        var gender = _("edit-employee-gender").value;
+        var birthday = _("edit-employee-birthday").value;
+        var address = _("edit-employee-address").value;
+        var contact = _("edit-employee-contact").value;
+        var datehired = _("edit-employee-hired-date").value;
+        var datestart = _("edit-employee-start-date").value;
+        var dateend = _("edit-employee-end-date").value;
+        var emp_status = _("edit-employee-status").value;
+        var tin = _("edit-employee-tin").value;
+        var pagibig = _("edit-employee-pagibig").value;
+        var philhealth = _("edit-employee-philhealth").value;
+        var sss = _("edit-employee-sss").value;
+        var load = '<center><i class="fa fa-circle-o-notch fa-spin" style="color: #999; margin-bottom: 10px;"></i><center>';
+        var error = '<div style="color: red; margin-bottom: 10px;">Incomplete Parameters.</div>';
+        var status = _("editEmployeeStatus");
+        var button = _("editEmployeeBtn");
+        status.innerHTML = load;
+        if (rid == "" || fname == "" || mname == "" || lname == "" || gender == "" || birthday == "" || address == "" || contact == "" || datehired == "" || emp_status == "") {
+            status.innerHTML = error;
+        } else {
+            button.disabled = true;
+            status.innerHTML = load;
+            var ajax = ajaxObj("POST", "parsers/account.php");
+            ajax.onreadystatechange = function() {
+              if(ajaxReturn(ajax) == true) {
+                  if (ajax.responseText == "successupdate"){
+                      window.location = "account.php?id=<?php echo $id; ?>&employee=focus&view=employee";
+                  } else {
+                      button.disabled = false;
+                      status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Unknown error! Error Details: '+ ajax.responseText +'</div>';
+                  }
+              }
+            }
+          ajax.send("editemployeeid="+rid+"&editemployeefname="+fname+"&editemployeemname="+mname+"&editemployeelname="+lname+"&editemployeegender="+gender+"&editemployeebirthday="+birthday+"&editemployeeaddress="+address+"&editemployeecontact="+contact+"&editemployeedatehired="+datehired+"&editemployeedatestart="+datestart+"&editemployeedateend="+dateend+"&editemployeestatus="+emp_status+"&editemployeetin="+tin+"&editemployeepagibig="+pagibig+"&editemployeephilhealth="+philhealth+"&editemployeesss="+sss);
         }
       }
 
@@ -1965,6 +3986,138 @@ if(
             });
       });
 
+      $(document).ready(function() {
+        $('#datePicker7')
+        .datepicker({
+          format: 'mm/dd/yyyy'
+        })
+        .on('changeDate', function(e) {
+              // Revalidate the date field
+              $('#eventForm').formValidation('revalidateField', 'date');
+            });
+      });
+
+      $(document).ready(function() {
+        $('#datePicker8')
+        .datepicker({
+          format: 'mm/dd/yyyy'
+        })
+        .on('changeDate', function(e) {
+              // Revalidate the date field
+              $('#eventForm').formValidation('revalidateField', 'date');
+            });
+      });
+
+      $(document).ready(function() {
+        $('#datePicker9')
+        .datepicker({
+          format: 'mm/dd/yyyy'
+        })
+        .on('changeDate', function(e) {
+              // Revalidate the date field
+              $('#eventForm').formValidation('revalidateField', 'date');
+            });
+      });
+
+      $(document).ready(function() {
+        $('#datePicker10')
+        .datepicker({
+          format: 'mm/dd/yyyy'
+        })
+        .on('changeDate', function(e) {
+              // Revalidate the date field
+              $('#eventForm').formValidation('revalidateField', 'date');
+            });
+      });
+
+      $(document).ready(function() {
+        $('#datePicker11')
+        .datepicker({
+          format: 'mm/dd/yyyy'
+        })
+        .on('changeDate', function(e) {
+              // Revalidate the date field
+              $('#eventForm').formValidation('revalidateField', 'date');
+            });
+      });
+
+      $(document).ready(function() {
+        $('#datePicker12')
+        .datepicker({
+          format: 'mm/dd/yyyy'
+        })
+        .on('changeDate', function(e) {
+              // Revalidate the date field
+              $('#eventForm').formValidation('revalidateField', 'date');
+            });
+      });
+
+      $(document).ready(function() {
+        $('#datePicker13')
+        .datepicker({
+          format: 'mm/dd/yyyy'
+        })
+        .on('changeDate', function(e) {
+              // Revalidate the date field
+              $('#eventForm').formValidation('revalidateField', 'date');
+            });
+      });
+
+      $(document).ready(function() {
+        $('#datePicker14')
+        .datepicker({
+          format: 'mm/dd/yyyy'
+        })
+        .on('changeDate', function(e) {
+              // Revalidate the date field
+              $('#eventForm').formValidation('revalidateField', 'date');
+            });
+      });
+
+      $(document).ready(function() {
+        $('#datePicker15')
+        .datepicker({
+          format: 'mm/dd/yyyy'
+        })
+        .on('changeDate', function(e) {
+              // Revalidate the date field
+              $('#eventForm').formValidation('revalidateField', 'date');
+            });
+      });
+
+      $(document).ready(function() {
+        $('#datePicker16')
+        .datepicker({
+          format: 'mm/dd/yyyy'
+        })
+        .on('changeDate', function(e) {
+              // Revalidate the date field
+              $('#eventForm').formValidation('revalidateField', 'date');
+            });
+      });
+
+      $(document).ready(function() {
+        $('#datePicker17')
+        .datepicker({
+          format: 'mm/dd/yyyy'
+        })
+        .on('changeDate', function(e) {
+              // Revalidate the date field
+              $('#eventForm').formValidation('revalidateField', 'date');
+            });
+      });
+
+      $(document).ready(function() {
+        $('#datePicker18')
+        .datepicker({
+          format: 'mm/dd/yyyy'
+        })
+        .on('changeDate', function(e) {
+              // Revalidate the date field
+              $('#eventForm').formValidation('revalidateField', 'date');
+            });
+      });
+
       $('#add-collectibles-total-amount').inputmask("numeric", {
             radixPoint: ".",
             groupSeparator: ",",
@@ -1974,7 +4127,6 @@ if(
             rightAlign: false,
             oncleared: function () { self.Value(''); }
       });
-
       $('#edit-collectibles-total-amount').inputmask("numeric", {
             radixPoint: ".",
             groupSeparator: ",",
@@ -1984,6 +4136,78 @@ if(
             rightAlign: false,
             oncleared: function () { self.Value(''); }
        });
+      $('#payroll-settings-salary-hour').inputmask("numeric", {
+            radixPoint: ".",
+            groupSeparator: ",",
+            digits: 2,
+            autoGroup: true,
+            prefix: '₱', //No Space, this will truncate the first character
+            rightAlign: false,
+            oncleared: function () { self.Value(''); }
+      });
+      $('#payroll-settings-paycheck-1').inputmask("numeric", {
+            radixPoint: ".",
+            groupSeparator: ",",
+            digits: 2,
+            autoGroup: true,
+            prefix: '₱', //No Space, this will truncate the first character
+            rightAlign: false,
+            oncleared: function () { self.Value(''); }
+      });
+      $('#payroll-settings-paycheck-2').inputmask("numeric", {
+            radixPoint: ".",
+            groupSeparator: ",",
+            digits: 2,
+            autoGroup: true,
+            prefix: '₱', //No Space, this will truncate the first character
+            rightAlign: false,
+            oncleared: function () { self.Value(''); }
+      });
+      $('#edit-sss-contribution-amount').inputmask("numeric", {
+            radixPoint: ".",
+            groupSeparator: ",",
+            digits: 2,
+            autoGroup: true,
+            prefix: '₱', //No Space, this will truncate the first character
+            rightAlign: false,
+            oncleared: function () { self.Value(''); }
+      });
+      $('#edit-philhealth-contribution-amount').inputmask("numeric", {
+            radixPoint: ".",
+            groupSeparator: ",",
+            digits: 2,
+            autoGroup: true,
+            prefix: '₱', //No Space, this will truncate the first character
+            rightAlign: false,
+            oncleared: function () { self.Value(''); }
+      });
+      $('#edit-pagibig-contribution-amount').inputmask("numeric", {
+            radixPoint: ".",
+            groupSeparator: ",",
+            digits: 2,
+            autoGroup: true,
+            prefix: '₱', //No Space, this will truncate the first character
+            rightAlign: false,
+            oncleared: function () { self.Value(''); }
+      });
+      $('#edit-tax-contribution-amount').inputmask("numeric", {
+            radixPoint: ".",
+            groupSeparator: ",",
+            digits: 2,
+            autoGroup: true,
+            prefix: '₱', //No Space, this will truncate the first character
+            rightAlign: false,
+            oncleared: function () { self.Value(''); }
+      });
+      $('#add-cash-amount').inputmask("numeric", {
+            radixPoint: ".",
+            groupSeparator: ",",
+            digits: 2,
+            autoGroup: true,
+            prefix: '₱', //No Space, this will truncate the first character
+            rightAlign: false,
+            oncleared: function () { self.Value(''); }
+      });
 
       $('#search-collectibles').keyup(function(e){  
             var txtSearch = $(this).val();
@@ -2058,19 +4282,106 @@ if(
 
           });
 
+        $("#select-filter").change(function () { //ITO
+            var filterValue = $("#select-filter").val();
+            if (filterValue == "name") {
+                $("#select-filter-search").show();
+                $("#select-filter-status").hide();
+            } else if (filterValue == "status") {
+                $("#select-filter-status").show();
+                $("#select-filter-search").hide();
+            }
+        });
+
+        $("#payrollType").change(function () { 
+                console.log($("#payrollType").val());      
+                if ($("#payrollType").val() == "1") {
+                    $('#payrollToDiv').show();
+                    if ($("#payrollTo").val() == "2") {
+                        $('#payrollEmpIDDiv').show();
+                    } else {
+                        $('#payrollEmpIDDiv').hide();
+                    }
+                    $('#payrollMonthDiv').show();
+                    $('#payrollCycleDiv').show();
+                    $('#payrollYearDiv').show();
+                } else if ($("#payrollType").val() == "2" || $("#payrollType").val() == "3") {
+                    $('#payrollToDiv').show();
+                    $('#payrollMonthDiv').hide();
+                    $('#payrollCycleDiv').hide();
+                    $('#payrollYearDiv').show();
+                }
+        });
+
+        function generatePaySlipPage() {
+            var type = _("payrollType").value;
+            var to = _("payrollTo").value;
+            var empid = _("payrollEmpID").value;
+            var month = _("payrollMonth").value;
+            var cycle = _("payrollCycle").value;
+            var year = _("payrollYear").value;
+            var error = '<div style="color: red; margin-bottom: 10px;">Incomplete Parameters.</div>';
+            var status = _("paySlipPageStatus");
+            var button = _("paySlipPageBtn");
+            if(type == "1") {
+                if(to == "1") {
+                    if (month == "" || cycle == "" || year == "") {
+                        status.innerHTML = error;
+                    } else {
+                        window.location = "account.php?id=<?php echo $id; ?>&payroll=focus&action=payslip&type="+type+"&to="+to+"&empid=0&month="+month+"&cycle="+cycle+"&year="+year;
+                    }
+                } else if(to == "2") {
+                    if (empid == "" || month == "" || cycle == "" || year == "") {
+                        status.innerHTML = error;
+                    } else {
+                        window.location = "account.php?id=<?php echo $id; ?>&payroll=focus&action=payslip&type="+type+"&to="+to+"&empid="+empid+"&month="+month+"&cycle="+cycle+"&year="+year;
+                    }
+                }
+            } else if(type == "2" || type == "3") {
+                if(to == "1") {
+                    if (year == "") {
+                        status.innerHTML = error;
+                    } else {
+                        window.location = "account.php?id=<?php echo $id; ?>&payroll=focus&action=payslip&type="+type+"&to="+to+"&empid=0&month=0&cycle=0&year="+year;
+                    }
+                } else if(to == "2") {
+                    if (empid == "" || year == "") {
+                        status.innerHTML = error;
+                    } else {
+                        window.location = "account.php?id=<?php echo $id; ?>&payroll=focus&action=payslip&type="+type+"&to="+to+"&empid="+empid+"&month=0&cycle=0&year="+year;
+                    }
+                }
+            } else {
+                status.innerHTML = error;
+            }
+        }
+
         $('#search-employee').keyup(function(e){  
             var txtSearch = $(this).val();
             console.log(txtSearch);
             $.ajax({ 
                 url:"parsers/searchemployee.php",  
                 method:"post",  
-                data:{search:txtSearch},  
+                data:{search:txtSearch,type:"1"},  
                 dataType:"text",  
                 success:function(data) {
                     $('#employee-search-result').html(data); 
                 }  
             });
-        });  
+        });
+
+        $('#select-status').change(function(e){  
+            var txtSearch = $("#select-status").val();
+            $.ajax({ 
+                url:"parsers/searchemployee.php",  
+                method:"post",  
+                data:{search:txtSearch,type:"2"},  
+                dataType:"text",  
+                success:function(data) {
+                    $('#employee-search-result').html(data); 
+                }  
+            });
+        });   
 
   
         $('#search-company').keyup(function(e){  
@@ -2089,6 +4400,299 @@ if(
       document.getElementById("importPayrollHiddenBtn").onchange = function () {
             document.getElementById("importPayrollFile").value = this.value;
       };
+
+      function openEditSSSContributionDialog(rid, range, amount) {
+        $('#editSSSContribution').modal('show');
+        _("edit-sss-contribution-id").value = rid;
+        _("edit-sss-contribution-range").value = range;
+        _("edit-sss-contribution-amount").value = amount;
+      }
+      function editSSSContributionRecord() {
+        var rid = _("edit-sss-contribution-id").value;
+        var amount = _("edit-sss-contribution-amount").value;
+        var load = '<center><i class="fa fa-circle-o-notch fa-spin" style="color: #999; margin-bottom: 10px;"></i><center>';
+        var error = '<div style="color: red; margin-bottom: 10px;">Incomplete Parameters.</div>';
+        var status = _("editSSSContributionStatus");
+        var button = _("editSSSContributionBtn");
+        status.innerHTML = load;
+        if (rid == "" || amount == "") {
+            status.innerHTML = error;
+        } else {
+            button.disabled = true;
+            status.innerHTML = load;
+            var ajax = ajaxObj("POST", "parsers/account.php");
+            ajax.onreadystatechange = function() {
+              if(ajaxReturn(ajax) == true) {
+                  if (ajax.responseText == "successupdate"){
+                      window.location = "account.php?id=<?php echo $id; ?>&payroll=focus&action=sss";
+                  } else {
+                      button.disabled = false;
+                      status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Unknown error! Error Details: '+ ajax.responseText +'</div>';
+                  }
+              }
+            }
+          ajax.send("editssscontributionid="+rid+"&editssscontributionamount="+amount);
+        }
+      }
+      function openEditPhilHealthContributionDialog(rid, range, amount) {
+        $('#editPhilHealthContribution').modal('show');
+        _("edit-philhealth-contribution-id").value = rid;
+        _("edit-philhealth-contribution-range").value = range;
+        _("edit-philhealth-contribution-amount").value = amount;
+      }
+      function editPhilHealthContributionRecord() {
+        var rid = _("edit-philhealth-contribution-id").value;
+        var amount = _("edit-philhealth-contribution-amount").value;
+        var load = '<center><i class="fa fa-circle-o-notch fa-spin" style="color: #999; margin-bottom: 10px;"></i><center>';
+        var error = '<div style="color: red; margin-bottom: 10px;">Incomplete Parameters.</div>';
+        var status = _("editPhilHealthContributionStatus");
+        var button = _("editPhilHealthContributionBtn");
+        status.innerHTML = load;
+        if (rid == "" || amount == "") {
+            status.innerHTML = error;
+        } else {
+            button.disabled = true;
+            status.innerHTML = load;
+            var ajax = ajaxObj("POST", "parsers/account.php");
+            ajax.onreadystatechange = function() {
+              if(ajaxReturn(ajax) == true) {
+                  if (ajax.responseText == "successupdate"){
+                      window.location = "account.php?id=<?php echo $id; ?>&payroll=focus&action=philhealth";
+                  } else {
+                      button.disabled = false;
+                      status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Unknown error! Error Details: '+ ajax.responseText +'</div>';
+                  }
+              }
+            }
+          ajax.send("editphilhealthcontributionid="+rid+"&editphilhealthcontributionamount="+amount);
+        }
+      }
+      function openEditPagibigContributionDialog(rid, range, amount) {
+        $('#editPagibigContribution').modal('show');
+        _("edit-pagibig-contribution-id").value = rid;
+        _("edit-pagibig-contribution-range").value = range;
+        _("edit-pagibig-contribution-amount").value = amount;
+      }
+      function editPagibigContributionRecord() {
+        var rid = _("edit-pagibig-contribution-id").value;
+        var amount = _("edit-pagibig-contribution-amount").value;
+        var load = '<center><i class="fa fa-circle-o-notch fa-spin" style="color: #999; margin-bottom: 10px;"></i><center>';
+        var error = '<div style="color: red; margin-bottom: 10px;">Incomplete Parameters.</div>';
+        var status = _("editPagibigContributionStatus");
+        var button = _("editPagibigContributionBtn");
+        var amountnew = amount.replace("₱","");
+        amountnew = amountnew.replace(",","");
+        amountnew = parseFloat(amountnew);
+        status.innerHTML = load;
+        if (rid == "" || amount == "") {
+            status.innerHTML = error;
+        } else {
+            if (amountnew > 100) {
+                status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Maximum contribution value is 100.</div>';
+            } else {
+                button.disabled = true;
+                status.innerHTML = load;
+                var ajax = ajaxObj("POST", "parsers/account.php");
+                ajax.onreadystatechange = function() {
+                  if(ajaxReturn(ajax) == true) {
+                      if (ajax.responseText == "successupdate"){
+                          window.location = "account.php?id=<?php echo $id; ?>&payroll=focus&action=pagibig";
+                      } else {
+                          button.disabled = false;
+                          status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Unknown error! Error Details: '+ ajax.responseText +'</div>';
+                      }
+                  }
+                }
+              ajax.send("editpagibigcontributionid="+rid+"&editpagibigcontributionamount="+amount);
+            }
+        }
+      }
+      function openEditTaxContributionDialog(rid, range, amount) {
+        $('#editTaxContribution').modal('show');
+        _("edit-tax-contribution-id").value = rid;
+        _("edit-tax-contribution-range").value = range;
+        _("edit-tax-contribution-amount").value = amount;
+      }
+      function editTaxContributionRecord() {
+        var rid = _("edit-tax-contribution-id").value;
+        var amount = _("edit-tax-contribution-amount").value;
+        var load = '<center><i class="fa fa-circle-o-notch fa-spin" style="color: #999; margin-bottom: 10px;"></i><center>';
+        var error = '<div style="color: red; margin-bottom: 10px;">Incomplete Parameters.</div>';
+        var status = _("editTaxContributionStatus");
+        var button = _("editTaxContributionBtn");
+        if (rid == "" || amount == "") {
+            status.innerHTML = error;
+        } else {
+                button.disabled = true;
+                status.innerHTML = load;
+                var ajax = ajaxObj("POST", "parsers/account.php");
+                ajax.onreadystatechange = function() {
+                  if(ajaxReturn(ajax) == true) {
+                      if (ajax.responseText == "successupdate"){
+                          window.location = "account.php?id=<?php echo $id; ?>&payroll=focus&action=tax";
+                      } else {
+                          button.disabled = false;
+                          status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Unknown error! Error Details: '+ ajax.responseText +'</div>';
+                      }
+                  }
+                }
+              ajax.send("edittaxcontributionid="+rid+"&edittaxcontributionamount="+amount);
+            
+        }
+      }
+      function addHolidayRecord() {
+        var name = _("add-holiday-name").value;
+        var type = _("add-holiday-type").value;
+        var date1 = _("add-holiday-date-1").value;
+        var date2 = _("add-holiday-date-2").value;
+        var load = '<center><i class="fa fa-circle-o-notch fa-spin" style="color: #999; margin-bottom: 10px;"></i><center>';
+        var error = '<div style="color: red; margin-bottom: 10px;">Incomplete Parameters.</div>';
+        var status = _("addHolidayStatus");
+        var button = _("addHolidayBtn");
+        status.innerHTML = load;
+        if (name == "" || type == "") {
+            status.innerHTML = error;
+        } else if (type == "1" && date1 == "") {
+            status.innerHTML = error;
+        } else if (type == "2" && date2 == "") {
+            status.innerHTML = error;
+        } else {
+            button.disabled = true;
+            status.innerHTML = load;
+            var ajax = ajaxObj("POST", "parsers/account.php");
+            ajax.onreadystatechange = function() {
+              if(ajaxReturn(ajax) == true) {
+                  if (ajax.responseText == "successinsert"){
+                      window.location = "account.php?id=<?php echo $id; ?>&payroll=focus&action=holidays";
+                  } else if (ajax.responseText == "exist"){
+                      button.disabled = false;
+                      status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Holiday is already exist!</div>';
+                  } else {
+                      button.disabled = false;
+                      status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Unknown error! Error Details: '+ ajax.responseText +'</div>';
+                  }
+              }
+            }
+          ajax.send("addholidayname="+name+"&addholidaytype="+type+"&addholidaydate1="+date1+"&addholidaydate2="+date2);
+        }
+      }
+      function openEditHolidayDialog(rid, name, type, date) {
+        $('#editHoliday').modal('show');
+        _("edit-holiday-id").value = rid;
+        _("edit-holiday-name").value = name;
+        _("edit-holiday-type").value = type;
+        if(type == "1") {
+            _("edit-holiday-date-1").value = date;
+            $('#holidaydate3').show();
+            $('#holidaydate4').hide();
+        } else if(type == "2") {
+            _("edit-holiday-date-2").value = date;
+            $('#holidaydate3').hide();
+            $('#holidaydate4').show();
+        }
+      }
+      function editHolidayRecord() {
+        var rid = _("edit-holiday-id").value;
+        var name = _("edit-holiday-name").value;
+        var type = _("edit-holiday-type").value;
+        var date1 = _("edit-holiday-date-1").value;
+        var date2 = _("edit-holiday-date-2").value;
+        var load = '<center><i class="fa fa-circle-o-notch fa-spin" style="color: #999; margin-bottom: 10px;"></i><center>';
+        var error = '<div style="color: red; margin-bottom: 10px;">Incomplete Parameters.</div>';
+        var status = _("editHolidayStatus");
+        var button = _("editHolidayBtn");
+        status.innerHTML = load;
+        if (name == "" || type == "") {
+            status.innerHTML = error;
+        } else if (type == "1" && date1 == "") {
+            status.innerHTML = error;
+        } else if (type == "2" && date2 == "") {
+            status.innerHTML = error;
+        } else {
+            button.disabled = true;
+            status.innerHTML = load;
+            var ajax = ajaxObj("POST", "parsers/account.php");
+            ajax.onreadystatechange = function() {
+              if(ajaxReturn(ajax) == true) {
+                  if (ajax.responseText == "successupdate"){
+                      window.location = "account.php?id=<?php echo $id; ?>&payroll=focus&action=holidays";
+                  } else if (ajax.responseText == "exist"){
+                      button.disabled = false;
+                      status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Same data found!</div>';
+                  } else {
+                      button.disabled = false;
+                      status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Unknown error! Error Details: '+ ajax.responseText +'</div>';
+                  }
+              }
+            }
+          ajax.send("editholidayid="+rid+"&editholidayname="+name+"&editholidaytype="+type+"&editholidaydate1="+date1+"&editholidaydate2="+date2);
+        }
+      }
+      function openEditHolidayRateDialog(rid, type, percentage) {
+        $('#editHolidayRate').modal('show');
+        _("edit-holiday-rate-type").value = type;
+        _("edit-holiday-rate-id").value = rid;
+        _("edit-holiday-rate-percentage").value = percentage;
+      }
+      function editHolidayRateRecord() {
+        var rid = _("edit-holiday-rate-id").value;
+        var percent = _("edit-holiday-rate-percentage").value;
+        var load = '<center><i class="fa fa-circle-o-notch fa-spin" style="color: #999; margin-bottom: 10px;"></i><center>';
+        var error = '<div style="color: red; margin-bottom: 10px;">Incomplete Parameters.</div>';
+        var status = _("editHolidayRateStatus");
+        var button = _("editHolidayRateBtn");
+        status.innerHTML = load;
+        if (rid == "" || percent == "") {
+            status.innerHTML = error;
+        } else if (parseInt(percent) < 1 || parseInt(percent) > 100) {
+            status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Rate must be between 1 and 100.</div>';
+        } else {
+            button.disabled = true;
+            status.innerHTML = load;
+            var ajax = ajaxObj("POST", "parsers/account.php");
+            ajax.onreadystatechange = function() {
+              if(ajaxReturn(ajax) == true) {
+                  if (ajax.responseText == "successupdate"){
+                      window.location = "account.php?id=<?php echo $id; ?>&payroll=focus&action=holidayrate";
+                  } else {
+                      button.disabled = false;
+                      status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Unknown error! Error Details: '+ ajax.responseText +'</div>';
+                  }
+              }
+            }
+          ajax.send("editholidayrateid="+rid+"&editholidayratepercent="+percent);
+        }
+      }
+      function openDeleteHolidayDialog(rid) {
+        $('#deleteHoliday').modal('show');
+        _("delete-holiday-id").value = rid;
+      }
+      function deleteHolidayRecord() {
+        var rid = _("delete-holiday-id").value;
+        var load = '<center><i class="fa fa-circle-o-notch fa-spin" style="color: #999; margin-bottom: 10px;"></i><center>';
+        var error = '<div style="color: red; margin-bottom: 10px;">Incomplete Parameters.</div>';
+        var status = _("deleteHolidayStatus");
+        var button = _("deleteHolidayBtn");
+        status.innerHTML = load;
+        if (rid == "") {
+            status.innerHTML = error;
+        } else {
+            button.disabled = true;
+            status.innerHTML = load;
+            var ajax = ajaxObj("POST", "parsers/account.php");
+            ajax.onreadystatechange = function() {
+              if(ajaxReturn(ajax) == true) {
+                  if (ajax.responseText == "successupdate"){
+                      window.location = "account.php?id=<?php echo $id; ?>&payroll=focus&action=holidays";
+                  } else {
+                      button.disabled = false;
+                      status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Unknown error! Error Details: '+ ajax.responseText +'</div>';
+                  }
+              }
+            }
+          ajax.send("deleteholidayid="+rid);
+        }
+      }
 
 
     </script>

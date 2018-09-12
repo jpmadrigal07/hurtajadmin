@@ -443,7 +443,7 @@ table.dataTable thead .sorting:after {
 
 @media (min-width: 992px) {
   .modal-lg {
-    width: 1400px !important;
+    width: 1200px !important;
   }
 }
 

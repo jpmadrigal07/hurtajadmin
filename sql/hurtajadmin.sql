@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.7
+-- version 4.8.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Aug 25, 2018 at 04:29 AM
--- Server version: 5.6.39-cll-lve
--- PHP Version: 5.6.30
+-- Host: 127.0.0.1
+-- Generation Time: Sep 12, 2018 at 04:40 PM
+-- Server version: 10.1.33-MariaDB
+-- PHP Version: 7.2.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -21,6 +21,78 @@ SET time_zone = "+00:00";
 --
 -- Database: `hurtajadmin`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `hurtajadmin_attendance`
+--
+
+CREATE TABLE `hurtajadmin_attendance` (
+  `id` int(11) NOT NULL,
+  `employee_id` varchar(255) NOT NULL,
+  `attendance_date_in_out` datetime NOT NULL,
+  `attendance_value` varchar(255) NOT NULL,
+  `attendance_date_added` datetime NOT NULL,
+  `attendance_status` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `hurtajadmin_attendance`
+--
+
+INSERT INTO `hurtajadmin_attendance` (`id`, `employee_id`, `attendance_date_in_out`, `attendance_value`, `attendance_date_added`, `attendance_status`) VALUES
+(1, '000001', '2018-01-15 07:58:50', '0', '2018-07-12 14:30:39', 1),
+(2, '000001', '2018-01-16 06:04:05', '0', '2018-07-12 14:30:39', 1),
+(3, '000001', '2018-01-17 08:03:46', '0', '2018-07-12 14:30:39', 1),
+(4, '000001', '2018-01-18 07:59:58', '0', '2018-07-12 14:30:39', 1),
+(5, '000001', '2018-01-19 07:56:47', '0', '2018-07-12 14:30:39', 1),
+(6, '000001', '2018-01-20 08:00:47', '0', '2018-07-12 14:30:39', 1),
+(7, '000001', '2018-01-20 18:23:13', '1', '2018-07-12 14:30:39', 1),
+(8, '000001', '2018-01-22 08:04:07', '0', '2018-07-12 14:30:39', 1),
+(9, '000001', '2018-01-23 08:00:14', '0', '2018-07-12 14:30:39', 1),
+(10, '000001', '2018-01-23 08:00:14', '0', '2018-07-12 14:30:39', 1),
+(11, '000001', '2018-01-23 18:30:28', '1', '2018-07-12 14:30:39', 1),
+(12, '000001', '2018-01-24 07:59:14', '0', '2018-07-12 14:30:39', 1),
+(13, '000001', '2018-01-25 08:04:25', '0', '2018-07-12 14:30:39', 1),
+(14, '000001', '2018-01-26 08:01:35', '0', '2018-07-12 14:30:39', 1),
+(15, '000001', '2018-01-26 18:36:22', '1', '2018-07-12 14:30:39', 1),
+(16, '000001', '2018-01-27 08:05:37', '0', '2018-07-12 14:30:39', 1),
+(17, '000001', '2018-01-29 08:03:51', '0', '2018-07-12 14:30:39', 1),
+(18, '000001', '2018-01-29 20:10:35', '1', '2018-07-12 14:30:39', 1),
+(19, '000001', '2018-01-30 08:04:17', '0', '2018-07-12 14:30:39', 1),
+(20, '000001', '2018-01-31 06:03:06', '0', '2018-07-12 14:30:39', 1),
+(21, '000001', '2018-01-31 20:33:57', '1', '2018-07-12 14:30:39', 1),
+(22, '000001', '2018-02-01 06:04:10', '0', '2018-07-12 14:30:39', 1),
+(23, '000001', '2018-02-02 07:59:33', '0', '2018-07-12 14:30:39', 1),
+(24, '000001', '2018-02-03 07:52:52', '0', '2018-07-12 14:30:39', 1),
+(25, '000001', '2018-02-05 08:03:00', '0', '2018-07-12 14:30:39', 1),
+(26, '000001', '2018-08-06 08:03:00', '0', '2018-08-12 14:30:39', 1),
+(27, '000001', '2018-08-06 06:03:00', '1', '2018-08-12 14:30:39', 1),
+(28, '000001', '2018-08-10 08:03:00', '0', '2018-08-12 14:30:39', 1),
+(29, '000001', '2018-08-10 06:03:00', '1', '2018-08-12 14:30:39', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `hurtajadmin_cash_loan_advance`
+--
+
+CREATE TABLE `hurtajadmin_cash_loan_advance` (
+  `id` int(11) NOT NULL,
+  `employee_id` varchar(255) NOT NULL,
+  `cash_loan_advance_type` int(11) NOT NULL,
+  `cash_loan_advance_amount` varchar(255) NOT NULL,
+  `cash_loan_advance_date` datetime NOT NULL,
+  `cash_loan_advance_status` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `hurtajadmin_cash_loan_advance`
+--
+
+INSERT INTO `hurtajadmin_cash_loan_advance` (`id`, `employee_id`, `cash_loan_advance_type`, `cash_loan_advance_amount`, `cash_loan_advance_date`, `cash_loan_advance_status`) VALUES
+(1, '000001', 1, '6000', '2018-07-04 11:29:26', 1);
 
 -- --------------------------------------------------------
 
@@ -212,9 +284,9 @@ INSERT INTO `hurtajadmin_collectibles` (`id`, `company_id`, `collectibles_total_
 (160, 25, 'â‚±15,200.00', 'PO00531', '1536', '2018-08-23 00:00:00', '2018-09-23 00:00:00', '2233', '2018-08-23 00:00:00', '', '', '0000-00-00 00:00:00', '2018-08-24 22:42:51', 1),
 (161, 5, 'â‚±45,000.00', '12356', '1537', '2018-08-23 00:00:00', '2018-09-23 00:00:00', '2235', '2018-08-23 00:00:00', '', '', '0000-00-00 00:00:00', '2018-08-24 22:44:59', 1),
 (162, 5, 'â‚±22,000.00', '12550', '1538', '2018-08-23 00:00:00', '2018-09-23 00:00:00', '2236', '2018-08-23 00:00:00', '', '', '0000-00-00 00:00:00', '2018-08-24 22:46:00', 1),
-(163, 5, 'â‚±30,400.00', '12707', '1539', '2018-08-23 00:00:00', '2018-09-23 00:00:00', '2238', '2018-08-23 00:00:00', '', '', '0000-00-00 00:00:00', '2018-08-24 22:47:37', 1),
+(163, 5, 'â‚±30,400.00', '12707', '1539', '2018-08-23 00:00:00', '2018-09-23 00:00:00', '2238', '2018-08-23 00:00:00', '', '', '1970-01-01 01:00:00', '2018-08-24 22:47:37', 1),
 (164, 10, 'â‚±43,400.00', 'PHM180863', '1542', '2018-08-24 00:00:00', '2018-09-24 00:00:00', '2223 / 2243', '2018-08-24 00:00:00', '', '', '0000-00-00 00:00:00', '2018-08-24 22:49:18', 1),
-(165, 10, 'â‚±80,100.00', 'PHM180724', '1543', '2018-08-24 00:00:00', '2018-09-24 00:00:00', '2244', '2018-08-24 00:00:00', '', '', '0000-00-00 00:00:00', '2018-08-24 22:51:04', 1);
+(165, 10, 'â‚±80,100.00', 'PHM180724', '1543', '2018-08-24 00:00:00', '2018-09-24 00:00:00', '2244', '2018-08-24 00:00:00', '', '', '0000-00-00 00:00:00', '2018-08-24 22:51:04', 2);
 
 -- --------------------------------------------------------
 
@@ -271,12 +343,16 @@ INSERT INTO `hurtajadmin_company` (`id`, `company_name`, `company_address`, `com
 CREATE TABLE `hurtajadmin_employee` (
   `id` int(11) NOT NULL,
   `employee_id` varchar(100) NOT NULL,
-  `employee_name` varchar(255) NOT NULL,
+  `employee_fname` varchar(255) NOT NULL,
+  `employee_mname` varchar(255) NOT NULL,
+  `employee_lname` varchar(255) NOT NULL,
   `employee_gender` int(11) NOT NULL,
   `employee_birthday` datetime NOT NULL,
   `employee_phone` varchar(255) NOT NULL,
   `employee_address` varchar(255) NOT NULL,
   `employee_date_hired` datetime NOT NULL,
+  `employee_date_start` datetime NOT NULL,
+  `employee_date_end` datetime NOT NULL,
   `employee_date_added` datetime NOT NULL,
   `employee_status` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -285,10 +361,33 @@ CREATE TABLE `hurtajadmin_employee` (
 -- Dumping data for table `hurtajadmin_employee`
 --
 
-INSERT INTO `hurtajadmin_employee` (`id`, `employee_id`, `employee_name`, `employee_gender`, `employee_birthday`, `employee_phone`, `employee_address`, `employee_date_hired`, `employee_date_added`, `employee_status`) VALUES
-(1, '0000001', 'VEYRA, BLESS MEDINA', 2, '1996-10-17 00:00:00', '09078017503', 'PUTOL STREET SAN ISIDRO CABUYAO LAGUNA', '2017-05-22 00:00:00', '2018-06-29 20:07:54', 2),
-(2, '0000002', 'OBOSA, FLORO TUQUERO JR.', 1, '1987-11-27 00:00:00', '09989577872', 'BLOCK 26 LOT 49 CENTENNIAL TOWN HOMES SAN ISIDRO CABUYAO LAGUNA', '2015-02-02 00:00:00', '2018-06-29 20:12:31', 2),
-(3, '0000003', 'DOLOR, LADY ANTHONETT RODRIGUEZ', 2, '2000-01-05 00:00:00', '09759158227', 'Barangay 1 Purok 8 PNR Site Crossing Calamba Laguna City', '2018-07-09 00:00:00', '2018-07-19 01:35:37', 2);
+INSERT INTO `hurtajadmin_employee` (`id`, `employee_id`, `employee_fname`, `employee_mname`, `employee_lname`, `employee_gender`, `employee_birthday`, `employee_phone`, `employee_address`, `employee_date_hired`, `employee_date_start`, `employee_date_end`, `employee_date_added`, `employee_status`) VALUES
+(1, '000001', 'John Patrick', 'Mecaller', 'Madrigal', 1, '2018-09-01 00:00:00', '09261428395', 'Cajumban St. Paete Laguna', '2018-09-01 00:00:00', '1970-01-01 01:00:00', '1970-01-01 01:00:00', '2018-09-11 21:59:10', 2),
+(2, '000002', 'Kyroz Patrick', 'Villamayor', 'Madrigal', 1, '2018-09-01 00:00:00', '09156540136', 'Cajumban St. Paete Laguna Talaga', '2018-09-01 00:00:00', '1970-01-01 01:00:00', '1970-01-01 01:00:00', '2018-09-11 22:51:13', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `hurtajadmin_employee_identification`
+--
+
+CREATE TABLE `hurtajadmin_employee_identification` (
+  `id` int(11) NOT NULL,
+  `employee_id` int(11) NOT NULL,
+  `emp_id` varchar(100) NOT NULL,
+  `employee_identification_tin` varchar(100) DEFAULT NULL,
+  `employee_identification_pagibig` varchar(100) DEFAULT NULL,
+  `employee_identification_philhealth` varchar(100) DEFAULT NULL,
+  `employee_identification_sss` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `hurtajadmin_employee_identification`
+--
+
+INSERT INTO `hurtajadmin_employee_identification` (`id`, `employee_id`, `emp_id`, `employee_identification_tin`, `employee_identification_pagibig`, `employee_identification_philhealth`, `employee_identification_sss`) VALUES
+(1, 1, '000001', NULL, NULL, NULL, NULL),
+(2, 2, '000002', NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -300,12 +399,135 @@ CREATE TABLE `hurtajadmin_employee_settings` (
   `id` int(11) NOT NULL,
   `employee_id` int(11) NOT NULL,
   `emp_id` varchar(100) NOT NULL,
-  `employee_settings_perhour` varchar(255) NOT NULL,
+  `employee_settings_perhour` varchar(255) DEFAULT NULL,
   `employee_settings_tax` int(11) NOT NULL,
   `employee_settings_pagibig` int(11) NOT NULL,
   `employee_settings_sss` int(11) NOT NULL,
   `employee_settings_philhealth` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `hurtajadmin_employee_settings`
+--
+
+INSERT INTO `hurtajadmin_employee_settings` (`id`, `employee_id`, `emp_id`, `employee_settings_perhour`, `employee_settings_tax`, `employee_settings_pagibig`, `employee_settings_sss`, `employee_settings_philhealth`) VALUES
+(1, 1, '000001', '600', 1, 1, 1, 1),
+(2, 2, '000002', '250', 2, 1, 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `hurtajadmin_holidays`
+--
+
+CREATE TABLE `hurtajadmin_holidays` (
+  `id` int(11) NOT NULL,
+  `holidays_name` varchar(255) NOT NULL,
+  `holidays_type` int(11) NOT NULL,
+  `holidays_date` datetime NOT NULL,
+  `holidays_date_added` datetime NOT NULL,
+  `holidays_status` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `hurtajadmin_holidays`
+--
+
+INSERT INTO `hurtajadmin_holidays` (`id`, `holidays_name`, `holidays_type`, `holidays_date`, `holidays_date_added`, `holidays_status`) VALUES
+(1, 'Jose Rizalss', 1, '2018-01-23 00:00:00', '2018-07-09 00:20:59', 1),
+(2, 'New Years', 1, '2018-01-01 00:00:00', '2018-07-20 22:01:22', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `hurtajadmin_holiday_rate`
+--
+
+CREATE TABLE `hurtajadmin_holiday_rate` (
+  `id` int(11) NOT NULL,
+  `holiday_rate_name` varchar(255) NOT NULL,
+  `holiday_rate_percent` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `hurtajadmin_holiday_rate`
+--
+
+INSERT INTO `hurtajadmin_holiday_rate` (`id`, `holiday_rate_name`, `holiday_rate_percent`) VALUES
+(1, 'regular', '80'),
+(2, 'special', '10');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `hurtajadmin_leave`
+--
+
+CREATE TABLE `hurtajadmin_leave` (
+  `id` int(11) NOT NULL,
+  `employee_id` varchar(11) NOT NULL,
+  `leave_type` int(11) NOT NULL,
+  `leave_start` datetime NOT NULL,
+  `leave_end` datetime NOT NULL,
+  `leave_date` datetime NOT NULL,
+  `leave_reason` varchar(255) NOT NULL,
+  `leave_remarks` varchar(255) DEFAULT NULL,
+  `leave_status` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `hurtajadmin_leave`
+--
+
+INSERT INTO `hurtajadmin_leave` (`id`, `employee_id`, `leave_type`, `leave_start`, `leave_end`, `leave_date`, `leave_reason`, `leave_remarks`, `leave_status`) VALUES
+(1, '000001', 2, '2018-09-07 00:00:00', '2018-09-22 00:00:00', '2018-09-07 00:00:00', 'Wow ang galing mo naman!', NULL, 3);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `hurtajadmin_leave_update_history`
+--
+
+CREATE TABLE `hurtajadmin_leave_update_history` (
+  `id` int(11) NOT NULL,
+  `leave_id` int(11) NOT NULL,
+  `leave_update_history_type` int(11) NOT NULL,
+  `leave_update_history_start` datetime NOT NULL,
+  `leave_update_history_end` datetime NOT NULL,
+  `leave_update_history_date` datetime NOT NULL,
+  `leave_update_history_reason` varchar(255) NOT NULL,
+  `leave_update_history_remarks` varchar(255) DEFAULT NULL,
+  `leave_update_history_status` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `hurtajadmin_leave_update_history`
+--
+
+INSERT INTO `hurtajadmin_leave_update_history` (`id`, `leave_id`, `leave_update_history_type`, `leave_update_history_start`, `leave_update_history_end`, `leave_update_history_date`, `leave_update_history_reason`, `leave_update_history_remarks`, `leave_update_history_status`) VALUES
+(1, 1, 2, '2018-09-07 00:00:00', '2018-09-22 00:00:00', '2018-09-08 00:36:25', 'Wow ang galing mo naman!', NULL, 2),
+(2, 1, 2, '2018-09-07 00:00:00', '2018-09-22 00:00:00', '2018-09-08 00:36:54', 'Wow ang galing mo naman!', '', 3);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `hurtajadmin_pagibig_contribution`
+--
+
+CREATE TABLE `hurtajadmin_pagibig_contribution` (
+  `id` int(11) NOT NULL,
+  `pagibig_contribution_range_from` varchar(255) NOT NULL,
+  `pagibig_contribution_range_to` varchar(255) NOT NULL,
+  `pagibig_contribution_contribution` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `hurtajadmin_pagibig_contribution`
+--
+
+INSERT INTO `hurtajadmin_pagibig_contribution` (`id`, `pagibig_contribution_range_from`, `pagibig_contribution_range_to`, `pagibig_contribution_contribution`) VALUES
+(1, '0', '1500', '50'),
+(2, '1501', '1000000', '100');
 
 -- --------------------------------------------------------
 
@@ -351,6 +573,132 @@ CREATE TABLE `hurtajadmin_payroll` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `hurtajadmin_philhealth_contribution`
+--
+
+CREATE TABLE `hurtajadmin_philhealth_contribution` (
+  `id` int(11) NOT NULL,
+  `philhealth_contribution_range_from` varchar(255) NOT NULL,
+  `philhealth_contribution_range_to` varchar(255) NOT NULL,
+  `philhealth_contribution_contribution` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `hurtajadmin_philhealth_contribution`
+--
+
+INSERT INTO `hurtajadmin_philhealth_contribution` (`id`, `philhealth_contribution_range_from`, `philhealth_contribution_range_to`, `philhealth_contribution_contribution`) VALUES
+(1, '0', '8999', '200'),
+(2, '9000', '9999', '225'),
+(3, '10000', '10999', '250'),
+(4, '11000', '11999', '275'),
+(5, '12000', '12999', '300'),
+(6, '13000', '13999', '325'),
+(7, '14000', '14999', '350'),
+(8, '15000', '15999', '375'),
+(9, '16000', '16999', '400'),
+(10, '17000', '17999', '425'),
+(11, '18000', '18999', '450'),
+(12, '19000', '19999', '475'),
+(13, '20000', '20999', '500'),
+(14, '9000', '9999', '525'),
+(15, '21000', '21999', '550'),
+(16, '22000', '22999', '575'),
+(17, '23000', '23999', '600'),
+(18, '24000', '24999', '625'),
+(19, '25000', '25999', '650'),
+(20, '26000', '26999', '675'),
+(21, '27000', '27999', '700'),
+(22, '28000', '28999', '725'),
+(23, '29000', '29999', '750'),
+(24, '30000', '30999', '775'),
+(25, '31000', '31999', '800'),
+(26, '32000', '32999', '825'),
+(27, '33000', '33999', '850'),
+(28, '34000', '34999', '875'),
+(29, '35000', '35999', '875'),
+(30, '36000', '36999', '875'),
+(31, '37000', '37999', '875'),
+(32, '38000', '38999', '875'),
+(33, '39000', '1000000', '875');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `hurtajadmin_sss_contribution`
+--
+
+CREATE TABLE `hurtajadmin_sss_contribution` (
+  `id` int(11) NOT NULL,
+  `sss_contribution_range_from` varchar(255) NOT NULL,
+  `sss_contribution_range_to` varchar(255) NOT NULL,
+  `sss_contribution_contribution` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `hurtajadmin_sss_contribution`
+--
+
+INSERT INTO `hurtajadmin_sss_contribution` (`id`, `sss_contribution_range_from`, `sss_contribution_range_to`, `sss_contribution_contribution`) VALUES
+(1, '1000', '1249', '110'),
+(2, '1250', '1749', '165'),
+(3, '1750', '2249', '220'),
+(4, '2250', '2749', '275'),
+(5, '2750', '3249', '330'),
+(6, '3250', '3749', '385'),
+(7, '3750', '4249', '440'),
+(8, '4250', '4749', '495'),
+(9, '4750', '5249', '550'),
+(10, '5250', '5749', '605'),
+(11, '5750', '6249', '660'),
+(12, '6250', '6749', '715'),
+(13, '6750', '7249', '770'),
+(14, '7250', '7749', '825'),
+(15, '7750', '8249', '880'),
+(16, '8250', '8749', '935'),
+(17, '8750', '9249', '990'),
+(18, '9250', '9749', '1045'),
+(19, '9750', '10249', '1100'),
+(20, '10250', '10749', '1155'),
+(21, '10750', '11249', '1210'),
+(22, '11250', '11749', '1265'),
+(23, '11750', '12249', '1320'),
+(24, '12250', '12749', '1375'),
+(25, '12750', '13249', '1430'),
+(26, '13250', '13749', '1485'),
+(27, '13750', '14249', '1540'),
+(28, '14259', '14749', '1595'),
+(29, '14750', '15249', '1650'),
+(30, '15250', '15749', '1705'),
+(31, '15750', '1000000', '1760');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `hurtajadmin_tax_contribution`
+--
+
+CREATE TABLE `hurtajadmin_tax_contribution` (
+  `id` int(11) NOT NULL,
+  `tax_contribution_range_from` varchar(255) NOT NULL,
+  `tax_contribution_range_to` varchar(255) NOT NULL,
+  `tax_contribution_contribution` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `hurtajadmin_tax_contribution`
+--
+
+INSERT INTO `hurtajadmin_tax_contribution` (`id`, `tax_contribution_range_from`, `tax_contribution_range_to`, `tax_contribution_contribution`) VALUES
+(1, '0', '10417', ''),
+(2, '10418', '16667', ''),
+(3, '16668', '33333', ''),
+(4, '33334', '83333', ''),
+(5, '83334', '333333', '');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `hurtajadmin_user`
 --
 
@@ -372,11 +720,23 @@ CREATE TABLE `hurtajadmin_user` (
 --
 
 INSERT INTO `hurtajadmin_user` (`id`, `user_email`, `user_pass`, `user_fname`, `user_lname`, `user_ip`, `user_date_created`, `user_last_login`, `user_level`, `user_status`) VALUES
-(1, 'admin', 'admin', 'Administrator', 'Administrator', 1, '2018-05-18 00:00:00', '2018-08-24 22:27:16', 1, 1);
+(1, 'admin', 'admin', 'Administrator', 'Administrator', 1, '2018-05-18 00:00:00', '2018-09-11 18:02:53', 1, 1);
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `hurtajadmin_attendance`
+--
+ALTER TABLE `hurtajadmin_attendance`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `hurtajadmin_cash_loan_advance`
+--
+ALTER TABLE `hurtajadmin_cash_loan_advance`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `hurtajadmin_collectibles`
@@ -397,15 +757,69 @@ ALTER TABLE `hurtajadmin_employee`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `hurtajadmin_employee_identification`
+--
+ALTER TABLE `hurtajadmin_employee_identification`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `hurtajadmin_employee_settings`
 --
 ALTER TABLE `hurtajadmin_employee_settings`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `hurtajadmin_holidays`
+--
+ALTER TABLE `hurtajadmin_holidays`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `hurtajadmin_holiday_rate`
+--
+ALTER TABLE `hurtajadmin_holiday_rate`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `hurtajadmin_leave`
+--
+ALTER TABLE `hurtajadmin_leave`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `hurtajadmin_leave_update_history`
+--
+ALTER TABLE `hurtajadmin_leave_update_history`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `hurtajadmin_pagibig_contribution`
+--
+ALTER TABLE `hurtajadmin_pagibig_contribution`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `hurtajadmin_payroll`
 --
 ALTER TABLE `hurtajadmin_payroll`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `hurtajadmin_philhealth_contribution`
+--
+ALTER TABLE `hurtajadmin_philhealth_contribution`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `hurtajadmin_sss_contribution`
+--
+ALTER TABLE `hurtajadmin_sss_contribution`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `hurtajadmin_tax_contribution`
+--
+ALTER TABLE `hurtajadmin_tax_contribution`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -417,6 +831,18 @@ ALTER TABLE `hurtajadmin_user`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `hurtajadmin_attendance`
+--
+ALTER TABLE `hurtajadmin_attendance`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+
+--
+-- AUTO_INCREMENT for table `hurtajadmin_cash_loan_advance`
+--
+ALTER TABLE `hurtajadmin_cash_loan_advance`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `hurtajadmin_collectibles`
@@ -434,19 +860,73 @@ ALTER TABLE `hurtajadmin_company`
 -- AUTO_INCREMENT for table `hurtajadmin_employee`
 --
 ALTER TABLE `hurtajadmin_employee`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `hurtajadmin_employee_identification`
+--
+ALTER TABLE `hurtajadmin_employee_identification`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `hurtajadmin_employee_settings`
 --
 ALTER TABLE `hurtajadmin_employee_settings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `hurtajadmin_holidays`
+--
+ALTER TABLE `hurtajadmin_holidays`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `hurtajadmin_holiday_rate`
+--
+ALTER TABLE `hurtajadmin_holiday_rate`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `hurtajadmin_leave`
+--
+ALTER TABLE `hurtajadmin_leave`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `hurtajadmin_leave_update_history`
+--
+ALTER TABLE `hurtajadmin_leave_update_history`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `hurtajadmin_pagibig_contribution`
+--
+ALTER TABLE `hurtajadmin_pagibig_contribution`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `hurtajadmin_payroll`
 --
 ALTER TABLE `hurtajadmin_payroll`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `hurtajadmin_philhealth_contribution`
+--
+ALTER TABLE `hurtajadmin_philhealth_contribution`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+
+--
+-- AUTO_INCREMENT for table `hurtajadmin_sss_contribution`
+--
+ALTER TABLE `hurtajadmin_sss_contribution`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+
+--
+-- AUTO_INCREMENT for table `hurtajadmin_tax_contribution`
+--
+ALTER TABLE `hurtajadmin_tax_contribution`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `hurtajadmin_user`
