@@ -812,5 +812,301 @@ if(isset($_POST["editholidayrateid"])) {
 
 }
 
+if(isset($_POST["addholidayname"])) {
+
+  include_once("../include/db_conn.php");
+  include_once("../include/loginstatus.php");
+
+  $name = $_POST['addholidayname'];
+  $type = $_POST['addholidaytype'];
+  $date1 = $_POST['addholidaydate1'];
+  $date2 = $_POST['addholidaydate2'];
+
+  $date1 = date("Y-m-d H:i:s", strtotime($date1));
+  $date2 = date("Y-m-d H:i:s", strtotime($date2));
+
+  if($type == "1") {
+
+    $sql = "SELECT * FROM hurtajadmin_holidays WHERE holidays_name='$name' AND holidays_type='$type' AND holidays_date='$date1' AND holidays_status = '1' LIMIT 1";
+    $query = mysqli_query($db_conn, $sql);
+    $check = mysqli_num_rows($query);
+
+  } else if($type == "2") {
+
+    $sql = "SELECT * FROM hurtajadmin_holidays WHERE holidays_name='$name' AND holidays_type='$type' AND holidays_date='$date2' AND holidays_status = '1' LIMIT 1";
+    $query = mysqli_query($db_conn, $sql);
+    $check = mysqli_num_rows($query);
+
+  }
+
+  if($check > 0) { 
+
+    echo "exist";
+
+  } else {
+
+    if($type == "1") {
+      $sql_code = "INSERT INTO hurtajadmin_holidays (holidays_name, holidays_type, holidays_date, holidays_date_added,   holidays_status)
+      VALUES ('$name','$type','$date1',NOW(),'1')";
+      $query = mysqli_query($db_conn, $sql_code);
+      echo "successinsert";
+    } else if($type == "2") {
+      $sql_code = "INSERT INTO hurtajadmin_holidays (holidays_name, holidays_type, holidays_date, holidays_date_added,   holidays_status)
+      VALUES ('$name','$type','$date2',NOW(),'1')";
+      $query = mysqli_query($db_conn, $sql_code);
+      echo "successinsert";
+    }
+
+  }
+
+  exit();
+
+}
+
+
+if(isset($_POST["editholidayid"])) {
+
+  include_once("../include/db_conn.php");
+  include_once("../include/loginstatus.php");
+
+  $rid = $_POST['editholidayid'];
+  $name = $_POST['editholidayname'];
+  $type = $_POST['editholidaytype'];
+  $date1 = $_POST['editholidaydate1'];
+  $date2 = $_POST['editholidaydate2'];
+
+  $date1 = date("Y-m-d H:i:s", strtotime($date1));
+  $date2 = date("Y-m-d H:i:s", strtotime($date2));
+
+  if($type == "1") {
+
+    $sql = "SELECT * FROM hurtajadmin_holidays WHERE holidays_name='$name' AND holidays_type='$type' AND holidays_date='$date1' AND holidays_status = '1' LIMIT 1";
+    $query = mysqli_query($db_conn, $sql);
+    $check = mysqli_num_rows($query);
+
+  } else if($type == "2") {
+
+    $sql = "SELECT * FROM hurtajadmin_holidays WHERE holidays_name='$name' AND holidays_type='$type' AND holidays_date='$date2' AND holidays_status = '1' LIMIT 1";
+    $query = mysqli_query($db_conn, $sql);
+    $check = mysqli_num_rows($query);
+
+  }
+
+  if($check > 0) { 
+
+    echo "exist";
+
+  } else {
+
+    if($type == "1") {
+      $sql1 = "UPDATE hurtajadmin_holidays SET holidays_name='$name', holidays_type='$type', holidays_date='$date1' WHERE id = '$rid' LIMIT 1";
+      $query1 = mysqli_query($db_conn, $sql1);
+      echo "successupdate";
+
+    } else if($type == "2") {
+      $sql1 = "UPDATE hurtajadmin_holidays SET holidays_name='$name', holidays_type='$type', holidays_date='$date2' WHERE id = '$rid' LIMIT 1";
+      $query1 = mysqli_query($db_conn, $sql1);
+      echo "successupdate";
+
+    }
+
+  }
+
+  
+  exit();
+
+}
+
+
+
+if(isset($_POST["deleteholidayid"])) {
+
+  include_once("../include/db_conn.php");
+  include_once("../include/loginstatus.php");
+
+  $rid = $_POST['deleteholidayid'];
+
+  $sql = "UPDATE hurtajadmin_holidays SET holidays_status='2' WHERE id='$rid' LIMIT 1";
+  $query = mysqli_query($db_conn, $sql);
+  echo "successupdate";
+
+  exit();
+
+}
+
+
+if(isset($_POST["deleteleaveeid"])) {
+
+  include_once("../include/db_conn.php");
+  include_once("../include/loginstatus.php");
+
+  $rid = $_POST['deleteleaveeid'];
+  $sql = "UPDATE hurtajadmin_leave SET leave_status='4' WHERE id='$rid' LIMIT 1";
+  $query = mysqli_query($db_conn, $sql);
+  echo "successupdate";
+
+  exit();
+
+}
+
+if(isset($_POST["approveleaveeid"])) {
+
+  include_once("../include/db_conn.php");
+  include_once("../include/loginstatus.php");
+
+  $rid = $_POST['approveleaveeid'];
+
+  $sql = "UPDATE hurtajadmin_leave SET leave_status='2' WHERE id='$rid' LIMIT 1";
+  $query = mysqli_query($db_conn, $sql);
+  echo "successupdate";
+
+  $sql2= "SELECT * FROM hurtajadmin_leave WHERE id = '$rid' LIMIT 1";
+  $query2 = mysqli_query($db_conn, $sql2);
+  while($row2 = mysqli_fetch_array($query2)) {  
+    $rid = $row2["employee_id"];
+    $empid = $row2['employee_id'];
+    $type = $row2['leave_type'];
+    $start = $row2['leave_start'];
+    $end = $row2['leave_end'];
+    $date = $row2['leave_date'];
+    $reason = $row2['leave_reason'];
+    $remarks = $row2['leave_remarks'];
+  }
+
+  $start = date("Y-m-d H:i:s", strtotime($start));
+  $end = date("Y-m-d H:i:s", strtotime($end));
+  $date = date("Y-m-d H:i:s", strtotime($date));
+
+  $sql3 = "INSERT INTO hurtajadmin_leave_update_history (leave_id, leave_update_history_type, leave_update_history_start, leave_update_history_end, leave_update_history_date, leave_update_history_reason, leave_update_history_remarks, leave_update_history_status)
+      VALUES ('$rid','$type','$start','$end', NOW(),'$reason','$remarks','2')";
+  $query3 = mysqli_query($db_conn, $sql3);
+
+  exit();
+
+}
+
+
+if(isset($_POST["declineleaveeid"])) {
+
+  include_once("../include/db_conn.php");
+  include_once("../include/loginstatus.php");
+
+  $rid = $_POST['declineleaveeid'];
+
+  $sql = "UPDATE hurtajadmin_leave SET leave_status='3' WHERE id='$rid' LIMIT 1";
+  $query = mysqli_query($db_conn, $sql);
+  echo "successupdate";
+
+  $sql2= "SELECT * FROM hurtajadmin_leave WHERE id = '$rid' LIMIT 1";
+  $query2 = mysqli_query($db_conn, $sql2);
+  while($row2 = mysqli_fetch_array($query2)) {  
+    $rid = $row2["employee_id"];
+    $empid = $row2['employee_id'];
+    $type = $row2['leave_type'];
+    $start = $row2['leave_start'];
+    $end = $row2['leave_end'];
+    $date = $row2['leave_date'];
+    $reason = $row2['leave_reason'];
+    $remarks = $row2['leave_remarks'];
+  }
+
+  $start = date("Y-m-d H:i:s", strtotime($start));
+  $end = date("Y-m-d H:i:s", strtotime($end));
+  $date = date("Y-m-d H:i:s", strtotime($date));
+
+  $sql3 = "INSERT INTO hurtajadmin_leave_update_history (leave_id, leave_update_history_type, leave_update_history_start, leave_update_history_end, leave_update_history_date, leave_update_history_reason, leave_update_history_remarks, leave_update_history_status)
+      VALUES ('$rid','$type','$start','$end', NOW(),'$reason','$remarks','3')";
+  $query3 = mysqli_query($db_conn, $sql3);
+
+  exit();
+
+}
+
+if(isset($_POST["addleaveempid"])) {
+
+  include_once("../include/db_conn.php");
+  include_once("../include/loginstatus.php");
+
+  $leaveempid = $_POST['addleaveempid'];
+  $leavelrtype = $_POST['addleavelrtype'];
+  $leavelrstart = $_POST['addleavelrstart'];
+  $leavelrend = $_POST['addleavelrend'];
+  $leavelrdate = $_POST['addleavelrdate'];
+  $leavelrreason = $_POST['addleavelrreason'];
+
+
+  $leavelrstart = date("Y-m-d H:i:s", strtotime($leavelrstart));
+  $leavelrend = date("Y-m-d H:i:s", strtotime($leavelrend));
+  $leavelrdate = date("Y-m-d H:i:s", strtotime($leavelrdate));
+
+  $sql = "SELECT employee_id FROM hurtajadmin_employee WHERE employee_id = '$leaveempid' LIMIT 1";
+  $query = mysqli_query($db_conn, $sql);
+  $check = mysqli_num_rows($query);
+
+  if($check != 1) { 
+
+    echo "nofound";
+    exit();
+
+  } else {
+
+    $sql_code = "INSERT INTO hurtajadmin_leave (employee_id, leave_type, leave_start, leave_end, leave_date, leave_reason, leave_status)
+    VALUES ('$leaveempid','$leavelrtype','$leavelrstart','$leavelrend','$leavelrdate','$leavelrreason','1')";
+    $query = mysqli_query($db_conn, $sql_code);
+
+    $sql2= "SELECT * FROM hurtajadmin_leave ORDER BY id DESC LIMIT 1";
+    $query2 = mysqli_query($db_conn, $sql2);
+    while($row2 = mysqli_fetch_array($query2)) {  
+      $rid = $row2["employee_id"];
+    }
+
+    $sql3 = "INSERT INTO hurtajadmin_leave_update_history (leave_id, leave_update_history_type, leave_update_history_start, leave_update_history_end, leave_update_history_date, leave_update_history_reason, leave_update_history_status)
+      VALUES ('$rid','$leavelrtype','$leavelrstart','$leavelrend', NOW(),'$leavelrreason','1')";
+    $query3 = mysqli_query($db_conn, $sql3);
+   
+   echo "successinsert";
+    exit();
+  }
+
+
+}
+
+if(isset($_POST["editleaveremarksrid"])) {
+
+  include_once("../include/db_conn.php");
+  include_once("../include/loginstatus.php");
+
+  $rid = $_POST['editleaveremarksrid'];
+  $remarks = $_POST['editleaveremarksremarks'];
+
+  $sql1 = "UPDATE hurtajadmin_leave SET leave_remarks='$remarks' WHERE id='$rid' LIMIT 1";
+  $query1 = mysqli_query($db_conn, $sql1);
+
+  $sql2 = "SELECT * FROM hurtajadmin_leave WHERE id='$rid'";
+  $query2 = mysqli_query($db_conn, $sql2);
+  while($row2 = mysqli_fetch_array($query2)) {  
+    $rid = $row2["employee_id"];
+    $empid = $row2['employee_id'];
+    $type = $row2['leave_type'];
+    $start = $row2['leave_start'];
+    $end = $row2['leave_end'];
+    $date = $row2['leave_date'];
+    $reason = $row2['leave_reason'];
+    $status = $row2['leave_status'];
+  }
+
+  $newDateStart = date("Y-m-d H:i:s", strtotime($start));
+  $newDateEnd = date("Y-m-d H:i:s", strtotime($end));
+
+  $sql3 = "INSERT INTO hurtajadmin_leave_update_history (leave_id, leave_update_history_type, leave_update_history_start, leave_update_history_end, leave_update_history_date, leave_update_history_reason, leave_update_history_remarks, leave_update_history_status)
+      VALUES ('$rid','$type','$newDateStart','$newDateEnd', NOW(),'$reason','$remarks','$status')";
+  $query3 = mysqli_query($db_conn, $sql3);
+
+  echo "successupdate";
+
+  exit();
+
+}
+
 
 ?>

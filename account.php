@@ -75,6 +75,7 @@ if(
     && !isset($_GET["ageing"])
     && !isset($_GET["employee"])
     && !isset($_GET["payroll"])     
+    && !isset($_GET["leave"]) 
     && !isset($_GET["settings"])     
     )
 
@@ -85,7 +86,9 @@ if(
 
   || (isset($_GET["employee"]) && trim($_GET["employee"]) != "focus") 
 
-  || (isset($_GET["payroll"]) && trim($_GET["payroll"]) != "focus") 
+  || (isset($_GET["payroll"]) && trim($_GET["payroll"]) != "focus")
+
+  || (isset($_GET["leave"]) && trim($_GET["leave"]) != "focus")  
 
   || (isset($_GET["settings"]) && trim($_GET["settings"]) != "focus") 
 
@@ -124,6 +127,12 @@ if(
   $pheading = "Holidays"; 
 } else if (isset($_GET["payroll"]) && isset($_GET["action"]) && trim($_GET["payroll"]) == "focus" && trim($_GET["action"]) == "holidayrate"){
   $pheading = "Holiday Rate"; 
+} else if (isset($_GET["leave"]) && isset($_GET["action"]) && trim($_GET["leave"]) == "focus" && trim($_GET["action"]) == "form"){
+  $pheading = "Generate Leave Form"; 
+} else if (isset($_GET["leave"]) && isset($_GET["action"]) && trim($_GET["leave"]) == "focus" && trim($_GET["action"]) == "request"){
+  $pheading = "Request Employee Leave"; 
+} else if (isset($_GET["leave"]) && isset($_GET["action"]) && trim($_GET["leave"]) == "focus" && trim($_GET["action"]) == "history"){
+  $pheading = "Employee Leave History"; 
 } else if (isset($_GET["settings"]) && trim($_GET["settings"]) == "focus"){
   $pheading = "Account Settings";
 } else {
@@ -284,6 +293,21 @@ if(
                                 </li>
                                 <li>
                                     <a href="account.php?id=<?php echo $id; ?>&payroll=focus&action=holidayrate">Holiday Rate</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-calendar fa-fw"></i> Leave Management<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="account.php?id=<?php echo $id; ?>&leave=focus&action=form">Generate Leave Form</a>
+                                </li>
+                                <li>
+                                    <a href="account.php?id=<?php echo $id; ?>&leave=focus&action=request">Request Employee Leave</a>
+                                </li>
+                                <li>
+                                    <a href="account.php?id=<?php echo $id; ?>&leave=focus&action=history">Employee Leave History</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->
@@ -1054,8 +1078,6 @@ if(
                                                     $pagibig = "";
                                                     $sss = "";
                                                     $philhealth = "";
-                                                    $insurancecont10 = "";
-                                                    $insurance = "";
                                                     $taxcont1 = 0;
                                                     $ssscont1 = 0;
                                                     $philhealthcont1 = 0;
@@ -1231,21 +1253,6 @@ if(
                                                     $otpay2 = $perhour * $xotcount2; // this is base on per hour not ot per hour
                                                     $bimonthsalary1 = $perhour*$hoursworked1+$otpay1;
                                                     $bimonthsalary2 = $perhour*$hoursworked2+$otpay2;
-                                                    if($insurancecont10 == '1') {
-                                                        $sql10 = "SELECT * FROM hurtajadmin_insurance ";
-                                                        $query10 = mysqli_query($db_conn, $sql10);
-                                                        $count10 = mysqli_num_rows($query10);
-                                                        if($count10 > 0) {
-                                                            while($row10 = mysqli_fetch_array($query10)) {  
-                                                                $insurance = $row10["insurance_fee"];
-                                                                if($insurance == "") {
-                                                                    $insurance = 0;
-                                                                }
-                                                            }
-                                                        }
-                                                    }else if($insurancecont10 == '2') {
-                                                        $insurance = 0;
-                                                    }
                                                     if($tax == '1') {
                                                         $sql2 = "SELECT * FROM hurtajadmin_tax_contribution WHERE $bimonthsalary1 >= tax_contribution_range_from AND $bimonthsalary1 <= tax_contribution_range_to";
                                                         $query2 = mysqli_query($db_conn, $sql2);
@@ -1376,8 +1383,8 @@ if(
                                                     }
 
                                                     $hoursworked = $hoursworked1+$hoursworked2;
-                                                    $deductions1 = (float)$taxcont1+(float)$pagibigcont1+(float)$ssscont1+(float)$philhealthcont1+(float)$insurance;
-                                                    $deductions2 = (float)$taxcont2+(float)$pagibigcont2+(float)$ssscont2+(float)$philhealthcont2+(float)$insurance;
+                                                    $deductions1 = (float)$taxcont1+(float)$pagibigcont1+(float)$ssscont1+(float)$philhealthcont1;
+                                                    $deductions2 = (float)$taxcont2+(float)$pagibigcont2+(float)$ssscont2+(float)$philhealthcont2;
                                                     $payroll_settings_paycheck_deducted_1 = 0;
                                                     $payroll_settings_paycheck_base_1 = 0;
                                                     $payroll_settings_paycheck_deducted_2 = 0;
@@ -1476,7 +1483,7 @@ if(
                             </div>
                         </div>
                         <br>
-            <?php } else if (isset($_GET["payroll"]) && isset($_GET["action"]) && trim($_GET["payroll"]) == "focus" && trim($_GET["action"]) == "payslip") { ?>
+            <?php } else if (isset($_GET["payroll"]) && isset($_GET["action"]) && !isset($_GET["type"]) && !isset($_GET["to"]) && !isset($_GET["empid"]) && !isset($_GET["month"]) && !isset($_GET["cycle"]) && !isset($_GET["year"]) && trim($_GET["payroll"]) == "focus" && trim($_GET["action"]) == "payslip") { ?>
                 <div class="row">
                         <div class="col-lg-12">
                             <h1 class="page-header"><?php echo $pheading; ?></h1>
@@ -1495,7 +1502,6 @@ if(
                                             <option value=""></option>
                                             <option value="1">Regular</option>
                                             <option value="2">13th month</option>
-                                            <option value="3">Service Incentive Leave (SIL)</option>
                                           </select>
                                         </div>
                                         <div class="form-group" hidden="true" id="payrollToDiv">
@@ -1532,8 +1538,8 @@ if(
                                             <label class="control-label">Cycle</label>
                                             <select class="form-control" name="payrollCycle" id="payrollCycle">
                                             <option value=""></option>
-                                            <option value="1">1-15</option>
-                                            <option value="2">16-30</option>
+                                            <option value="1">26-10</option>
+                                            <option value="2">11-25</option>
                                           </select>
                                         </div>
                                         <div class="form-group" hidden="true" id="payrollYearDiv">
@@ -1561,6 +1567,832 @@ if(
                             </div>
                         </div>
                     <br>
+            <?php } else if (isset($_GET["payroll"]) && isset($_GET["action"]) && isset($_GET["type"]) && isset($_GET["to"]) && isset($_GET["empid"]) && isset($_GET["month"]) && isset($_GET["cycle"]) && isset($_GET["year"]) && trim($_GET["payroll"]) == "focus" && trim($_GET["action"]) == "payslip") { ?>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1 class="page-header"><?php echo $pheading; ?></h1>
+                        </div>
+                        <!-- /.col-lg-12 -->
+                    </div>
+                    <?php
+
+                        $type = $_GET["type"];
+                        $to = $_GET["to"];
+                        $headerinfo = "";
+                        $printbtn = "";
+
+                        if($type == "1") {
+
+                            $empid = $_GET["empid"];
+                            $month = $_GET["month"];
+                            $cycle = $_GET["cycle"];
+                            $year = $_GET["year"];
+                            $monthtext = "";
+                            $prevmonthtext = "";
+                            $daytext1 = "";
+                            $daytext2 = "";
+
+                            $prevmonth = "";
+                            $prevyear = "";
+                            if($month == "1") {
+                               $prevmonth = "12";
+                               $prevyear = $year-1;
+                               $prevyear = ", ".$prevyear;
+                            } else {
+                               $prevmonth = $month-1; 
+                            }
+
+                            if($cycle == "1") {
+                                $daytext1 = "26";
+                                $daytext2 = "10";
+                            } else if($cycle == "2") {
+                                $daytext1 = "11";
+                                $daytext2 = "25";
+                            }
+
+                            if($month == "1") {
+                                $monthtext = "Jan";
+                            } else if($month == "2") {
+                                $monthtext = "Feb";
+                            } else if($month == "3") {
+                                $monthtext = "Mar";
+                            } else if($month == "4") {
+                                $monthtext = "Apr";
+                            } else if($month == "5") {
+                                $monthtext = "May";
+                            } else if($month == "6") {
+                                $monthtext = "Jun";
+                            } else if($month == "7") {
+                                $monthtext = "Jul";
+                            } else if($month == "8") {
+                                $monthtext = "Aug";
+                            } else if($month == "9") {
+                                $monthtext = "Sep";
+                            } else if($month == "10") {
+                                $monthtext = "Oct";
+                            } else if($month == "11") {
+                                $monthtext = "Nov";
+                            } else if($month == "12") {
+                                $monthtext = "Dec";
+                            }
+
+                            if($prevmonth == "1") {
+                                $prevmonthtext = "Jan";
+                            } else if($prevmonth == "2") {
+                                $prevmonthtext = "Feb";
+                            } else if($prevmonth == "3") {
+                                $prevmonthtext = "Mar";
+                            } else if($prevmonth == "4") {
+                                $prevmonthtext = "Apr";
+                            } else if($prevmonth == "5") {
+                                $prevmonthtext = "May";
+                            } else if($prevmonth == "6") {
+                                $prevmonthtext = "Jun";
+                            } else if($prevmonth == "7") {
+                                $prevmonthtext = "Jul";
+                            } else if($prevmonth == "8") {
+                                $prevmonthtext = "Aug";
+                            } else if($prevmonth == "9") {
+                                $prevmonthtext = "Sep";
+                            } else if($prevmonth == "10") {
+                                $prevmonthtext = "Oct";
+                            } else if($prevmonth == "11") {
+                                $prevmonthtext = "Nov";
+                            } else if($prevmonth == "12") {
+                                $prevmonthtext = "Dec";
+                            }
+
+                            if($month < 10) {
+                               $month = "0".$month;
+                            }
+
+                            if($prevmonth < 10) {
+                               $prevmonth = "0".$prevmonth;
+                            }
+
+                            if($to == "1") {
+
+                                if($cycle == "1") {
+
+                                    $headerinfo = '<div class="col-md-6"><span style="font-size: 22px;"><b>Date Cycle:</b> '.$prevmonthtext.' '.$daytext1.''.$prevyear.' - '.$monthtext.' '.$daytext2.', '.$year.'</span></div><div class="col-md-6"><span style="font-size: 22px;"><b>Type:</b> Regular</span></div>';
+
+                                    $printbtn = '<a type="button" class="btn btn-danger" href="payslip.php?type='.$type.'&to='.$to.'&empid=0&month='.$month.'&cycle='.$cycle.'&year='.$year.'" target="_blank">Print</a>';
+
+                                } else if($cycle == "2") {
+
+                                    $headerinfo = '<div class="col-md-6"><span style="font-size: 22px;"><b>Date Cycle:</b> '.$monthtext.' '.$daytext1.' - '.$monthtext.' '.$daytext2.', '.$year.'</span></div><div class="col-md-6"><span style="font-size: 22px;"><b>Type:</b> Regular</span></div>';
+
+                                    $printbtn = '<a type="button" class="btn btn-danger" href="payslip.php?type='.$type.'&to='.$to.'&empid=0&month='.$month.'&cycle='.$cycle.'&year='.$year.'" target="_blank">Print</a>';
+
+                                }
+
+
+                            } else if($to == "2") {
+
+                                $headerinfo = '<div class="col-md-6"><span style="font-size: 22px;"><b>Date Cycle:</b> '.$prevmonthtext.' '.$daytext1.''.$prevyear.' - '.$monthtext.' '.$daytext2.', '.$year.'</span></div><div class="col-md-3"><span style="font-size: 22px;"><b>Employee ID:</b> '.$empid.'</span></div><div class="col-md-3"><span style="font-size: 22px;"><b>Type:</b> Regular</span></div>';
+
+                                $printbtn = '<a type="button" class="btn btn-danger" href="payslip.php?type='.$type.'&to='.$to.'&empid='.$empid.'&month='.$month.'&cycle='.$cycle.'&year='.$year.'" target="_blank">Print</a>';
+
+                            }
+
+                        } else if($type == "2") {
+                            $empid = $_GET["empid"];
+                            $year = $_GET["year"];
+
+                            if($to == "1") {
+
+                                $headerinfo = '<div class="col-md-6"><span style="font-size: 22px;"><b>Year:</b> '.$year.'</span></div><div class="col-md-6"><span style="font-size: 22px;"><b>Type:</b> 13th Month</span></div>';
+
+                                $printbtn = '<a type="button" class="btn btn-danger" href="payslip.php?type='.$type.'&to='.$to.'&empid=0&month=0&cycle=0&year='.$year.'" target="_blank">Print</a>';
+
+                            } else if($to == "2") {
+
+                                $headerinfo = '<div class="col-md-4"><span style="font-size: 22px;"><b>Year:</b> '.$year.'</span></div>
+                                        <div class="col-md-4"><span style="font-size: 22px;"><b>Employee ID:</b> '.$empid.'</span></div><div class="col-md-4"><span style="font-size: 22px;"><b>Type:</b> 13th Month</span></div>';
+
+                                $printbtn = '<a type="button" class="btn btn-danger" href="payslip.php?type='.$type.'&to='.$to.'&empid='.$empid.'&month=0&cycle=0&year='.$year.'" target="_blank">Print</a>';
+
+                            }
+                        }
+
+                        
+                    ?>
+
+                    <div class="row">
+                    <div class="col-lg-12">
+                        <div id="my-request" class="panel panel-default">
+                            <div class="panel-heading"><a type="button" class="btn btn-default" href="account.php?id=<?php echo $log_id; ?>&payroll=focus&action=payslip">Back</a> <?php echo $printbtn; ?></div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <?php echo $headerinfo; ?>
+                                </div>
+                                
+                                <hr>
+                                    <table class="table table-bordered">
+                                            <thead>
+                                            <?php if($type == "1") { ?>
+                                              <tr>
+                                                <th>Employee ID</th>
+                                                <th>Name</th>
+                                                <th>Basic Pay</th>
+                                                <th>Overtime Pay</th>
+                                                <th>Deductions</th>
+                                              </tr>
+                                            <?php } else if($type == "2") { ?>
+                                                <tr>
+                                                <th>Employee ID</th>
+                                                <th>Name</th>
+                                                <th>Basic Pay</th>
+                                                <th>Overtime Pay</th>
+                                                <th>13th Month Pay</th>
+                                              </tr>
+                                            <?php } ?>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+
+                                            if($type == "1") {
+                                                if($to == "1") {
+                                                    $sql = "SELECT * FROM hurtajadmin_employee ORDER BY id DESC";
+                                                } else if($to == "2") {
+                                                    $sql = "SELECT * FROM hurtajadmin_employee WHERE employee_id = '$empid' ORDER BY id DESC";
+                                                }
+                                                $query = mysqli_query($db_conn, $sql);
+                                                $count = 0;
+                                                while($row = mysqli_fetch_array($query)) {  
+                                                    $count++; 
+                                                    $recid = $row["id"];
+                                                    $empid = $row["employee_id"];
+                                                    $fname = $row["employee_fname"];
+                                                    $mname = $row["employee_mname"];
+                                                    $lname = $row["employee_lname"];
+                                                    $gender = $row["employee_gender"];
+                                                    $birthday = $row["employee_birthday"];
+                                                    $address = $row["employee_address"];
+                                                    $contact = $row["employee_phone"];
+                                                    $datehired = $row["employee_date_hired"];
+                                                    $datestart = $row["employee_date_start"];
+                                                    $dateend = $row["employee_date_end"];
+                                                    $stats = $row["employee_status"];
+                                                    
+                                                    $mnameinitial = substr($mname, 0, 1);
+
+                                                    if($birthday == "0000-00-00 00:00:00" || $birthday == "1970-01-01 00:00:00" || $birthday == "1970-01-01 01:00:00") {
+                                                        $birthday = "";
+                                                    } else {
+                                                        $birthday = date("m/d/Y", strtotime($birthday));
+                                                    }
+                                                    
+                                                    if($datehired == "0000-00-00 00:00:00" || $datehired == "1970-01-01 00:00:00" || $datehired == "1970-01-01 01:00:00") {
+                                                        $datehired = "";
+                                                    } else {
+                                                        $datehired = date("m/d/Y", strtotime($datehired));
+                                                    }
+
+                                                    if($datestart == "0000-00-00 00:00:00" || $datestart == "1970-01-01 00:00:00" || $datestart == "1970-01-01 01:00:00") {
+                                                        $datestart = "";
+                                                    } else {
+                                                        $datestart = date("m/d/Y", strtotime($datestart));
+                                                    }
+
+                                                    if($dateend == "0000-00-00 00:00:00" || $dateend == "1970-01-01 00:00:00" || $dateend == "1970-01-01 01:00:00") {
+                                                        $dateend = "";
+                                                    } else {
+                                                        $dateend = date("m/d/Y", strtotime($dateend));
+                                                    }
+                                                    
+                                                    $gendertext = "";
+
+                                                    if($gender == "1") {
+                                                        $gendertext = "Male";
+                                                    } else if($gender == "2") {
+                                                        $gendertext = "Female";
+                                                    }
+
+                                                    $statstext = "";
+
+                                                    if($stats == "1") {
+                                                        $statstext = "Active";
+                                                    } else if($stats == "2") {
+                                                        $statstext = "Resigned";
+                                                    } else if($stats == "3") {
+                                                        $statstext = "Terminated";
+                                                    } else if($stats == "4") {
+                                                        $statstext = "AWOL";
+                                                    }
+
+                                                    $mnameinitial = substr($mname, 0, 1);
+                                                    $perhour = 0;
+                                                    $tax = "";
+                                                    $pagibig = "";
+                                                    $sss = "";
+                                                    $philhealth = "";
+                                                    $taxcont1 = 0;
+                                                    $ssscont1 = 0;
+                                                    $philhealthcont1 = 0;
+                                                    $pagibigcont1 = 0;
+                                                    $taxcont2 = 0;
+                                                    $ssscont2 = 0;
+                                                    $philhealthcont2 = 0;
+                                                    $pagibigcont2 = 0;
+                                                    $hoursworked1 = 0;
+                                                    $hoursworked2 = 0;
+                                                    $otcount1 = 0;
+                                                    $utcount1 = 0;
+                                                    $otcount2 = 0;
+                                                    $xotcount1 = 0;
+                                                    $xotcount2 = 0;
+                                                    $utcount2 = 0;
+                                                    $dailycount1 = 0;
+                                                    $dailycount2 = 0;
+                                                    $disabled = "";
+                                                    $currentprevyear = "";
+                                                    if($month == "1") {
+                                                        $currentprevyear = $year-1;
+                                                    } else {
+                                                        $currentprevyear = $year;
+                                                    }
+                                                    $cashadvancefirstcycle = 0;
+                                                    $cashadvancesecondcycle = 0;
+                                                    $holidayfirstcycle = 0;
+                                                    $holidaysecondcycle = 0;
+
+                                                    $firstcycledate1 = $prevmonth."/26/".$currentprevyear;
+                                                    $firstcycledate2 = $month."/11/".$year;
+                                                    // $firstcycledate1 = "12/26/2017"; //this is cycle 25 to 10
+                                                    // $firstcycledate2 = "1/11/2018";
+                                                    $firstcycledate1 = date("Y-m-d H:i:s", strtotime($firstcycledate1));
+                                                    $firstcycledate2 = date("Y-m-d H:i:s", strtotime($firstcycledate2));
+                                                    $secondcycledate1 = $month."/11/".$year;
+                                                    $secondcycledate2 = $month."/26/".$year;
+                                                    // $secondcycledate1 = "1/11/2018"; //this is cycle 11 to 25
+                                                    // $secondcycledate2 = "1/26/2018";
+                                                    $secondcycledate1 = date("Y-m-d H:i:s", strtotime($secondcycledate1));
+                                                    $secondcycledate2 = date("Y-m-d H:i:s", strtotime($secondcycledate2));
+                                                    $sql01 = "SELECT DISTINCT DATE(attendance_date_in_out), attendance_date_in_out, attendance_value FROM hurtajadmin_attendance WHERE employee_id = '$empid' AND attendance_date_in_out >= '$firstcycledate1' AND attendance_date_in_out < '$firstcycledate2' AND attendance_value = '0' AND attendance_status = '1'";
+                                                    $query01 = mysqli_query($db_conn, $sql01);
+                                                    $count01 = mysqli_num_rows($query01);
+                                                    while($row01 = mysqli_fetch_array($query01)) {
+                                                        $datein = $row01["attendance_date_in_out"];
+                                                        $sqlout = "SELECT id, attendance_date_in_out FROM hurtajadmin_attendance WHERE employee_id = '$empid' AND DATE(attendance_date_in_out) = DATE('$datein') AND attendance_value = '1' AND attendance_status = '1'";
+                                                        $queryout = mysqli_query($db_conn, $sqlout);
+                                                        $countout = mysqli_num_rows($queryout);
+                                                        if($countout > 0) {
+                                                            while($rowout = mysqli_fetch_array($queryout)) {
+                                                                $attendanceidout = $rowout["id"];  
+                                                                $dateout = $rowout["attendance_date_in_out"];
+                                                            }
+                                                            $hourdiff = round((strtotime($dateout) - strtotime($datein))/3600, 1);
+                                                               
+                                                            if($hourdiff > 8){ // this is for overtime 
+                                                                $otcount1 = $hourdiff - 8;
+                                                                $dailycount1 = $hourdiff - $otcount1;
+                                                            }else if($hourdiff < 8){ // this is for undertime
+                                                                $utcount1 = $hourdiff;
+                                                                $dailycount1 = $hourdiff;
+                                                            }else{
+                                                                $dailycount1 = $hourdiff;
+                                                            }
+                                                            $xotcount1 = $xotcount1 + $otcount1;
+                                                            $hoursworked1 = $hoursworked1+$dailycount1;
+                                                            $sqlhol1 = "SELECT id FROM hurtajadmin_holidays WHERE DATE(holidays_date) = DATE('$datein') AND holidays_type = '1' AND holidays_status = '1'";
+                                                            $queryhol1 = mysqli_query($db_conn, $sqlhol1);
+                                                            $counthol1 = mysqli_num_rows($queryhol1);
+                                                            if($counthol1 > 0) {
+                                                                $sqlholrate = "SELECT * FROM hurtajadmin_holiday_rate WHERE id = '1'";
+                                                                $queryholrate = mysqli_query($db_conn, $sqlholrate);
+                                                                $holratepercentage = 0;
+                                                                while($rowholrate = mysqli_fetch_array($queryholrate)) {
+                                                                    $holratepercentage = $rowholrate["holiday_rate_percent"];  
+                                                                }
+                                                            
+                                                                $holidaybonus = ($holratepercentage / 100) * $hourdiff;
+                                                                $hoursworked1 = $hoursworked1+$holidaybonus;
+                                                            }
+                                                            $sqlhol2 = "SELECT id FROM hurtajadmin_holidays WHERE DATE(holidays_date) = DATE('$datein') AND holidays_type = '2' AND holidays_status = '1'";
+                                                            $queryhol2 = mysqli_query($db_conn, $sqlhol2);
+                                                            $counthol2 = mysqli_num_rows($queryhol2);
+                                                            if($counthol2 > 0) {
+                                                                $sqlholrate = "SELECT * FROM hurtajadmin_holiday_rate WHERE id = '2'";
+                                                                $queryholrate = mysqli_query($db_conn, $sqlholrate);
+                                                                $holratepercentage = 0;
+                                                                while($rowholrate = mysqli_fetch_array($queryholrate)) {
+                                                                    $holratepercentage = $rowholrate["holiday_rate_percent"];  
+                                                                }
+                                                            
+                                                                $holidaybonus = ($holratepercentage / 100) * $hourdiff;
+                                                                $hoursworked1 = $hoursworked1+$holidaybonus;
+                                                            }
+                                                        } 
+                                                    }
+                                                    $sql02 = "SELECT DISTINCT DATE(attendance_date_in_out), attendance_date_in_out, attendance_value FROM hurtajadmin_attendance WHERE employee_id = '$empid' AND attendance_date_in_out >= '$secondcycledate1' AND attendance_date_in_out < '$secondcycledate2' AND attendance_value = '0' AND attendance_status = '1'";
+                                                    $query02 = mysqli_query($db_conn, $sql02);
+                                                    $count02 = mysqli_num_rows($query02);
+                                                    while($row02 = mysqli_fetch_array($query02)) {
+                                                        $datein = $row02["attendance_date_in_out"];
+                                                        $sqlout = "SELECT id, attendance_date_in_out FROM hurtajadmin_attendance WHERE employee_id = '$empid' AND DATE(attendance_date_in_out) = DATE('$datein') AND attendance_value = '1' AND attendance_status = '1'";
+                                                        $queryout = mysqli_query($db_conn, $sqlout);
+                                                        $countout = mysqli_num_rows($queryout);
+                                                        if($countout > 0) {
+                                                            while($rowout = mysqli_fetch_array($queryout)) {
+                                                                $attendanceidout = $rowout["id"];  
+                                                                $dateout = $rowout["attendance_date_in_out"];
+                                                            }
+                                                            $hourdiff = round((strtotime($dateout) - strtotime($datein))/3600, 1);
+                                                              
+                                                            if($hourdiff > 8){ // this is for overtime 
+                                                                $otcount2 = $hourdiff - 8;
+                                                                $dailycount2 = $hourdiff - $otcount2;
+                                                            }else if($hourdiff < 8){ // this is for undertime
+                                                                $utcount2 = $hourdiff;
+                                                                $dailycount2 = $hourdiff;
+                                                            }else{
+                                                                $dailycount2 = $hourdiff;
+                                                            }
+                                                            
+                                                            $xotcount2 = $xotcount2 + $otcount2;
+                                                            $hoursworked2 = $hoursworked2+$dailycount2;
+                                                            $sqlhol1 = "SELECT id FROM hurtajadmin_holidays WHERE DATE(holidays_date) = DATE('$datein') AND holidays_type = '1' AND holidays_status = '1'";
+                                                            $queryhol1 = mysqli_query($db_conn, $sqlhol1);
+                                                            $counthol1 = mysqli_num_rows($queryhol1);
+                                                            if($counthol1 > 0) {
+                                                                $sqlholrate = "SELECT * FROM hurtajadmin_holiday_rate WHERE id = '1'";
+                                                                $queryholrate = mysqli_query($db_conn, $sqlholrate);
+                                                                $holratepercentage = 0;
+                                                                while($rowholrate = mysqli_fetch_array($queryholrate)) {
+                                                                    $holratepercentage = $rowholrate["holiday_rate_percent"];  
+                                                                }
+                                                            
+                                                                $holidaybonus = ($holratepercentage / 100) * $hourdiff;
+                                                                $hoursworked2 = $hoursworked2+$holidaybonus;
+                                                            }
+                                                            $sqlhol2 = "SELECT id FROM hurtajadmin_holidays WHERE DATE(holidays_date) = DATE('$datein') AND holidays_type = '2' AND holidays_status = '1'";
+                                                            $queryhol2 = mysqli_query($db_conn, $sqlhol2);
+                                                            $counthol2 = mysqli_num_rows($queryhol2);
+                                                            if($counthol2 > 0) {
+                                                                $sqlholrate = "SELECT * FROM hurtajadmin_holiday_rate WHERE id = '2'";
+                                                                $queryholrate = mysqli_query($db_conn, $sqlholrate);
+                                                                $holratepercentage = 0;
+                                                                while($rowholrate = mysqli_fetch_array($queryholrate)) {
+                                                                    $holratepercentage = $rowholrate["holiday_rate_percent"];  
+                                                                }
+                                                            
+                                                                $holidaybonus = ($holratepercentage / 100) * $hourdiff;
+                                                                $hoursworked2 = $hoursworked2+$holidaybonus;
+                                                            }
+                                                        } 
+                                                    }
+                                                    $sql1 = "SELECT * FROM hurtajadmin_employee_settings WHERE employee_id = '$empid'";
+                                                    $query1 = mysqli_query($db_conn, $sql1);
+                                                    $count1 = mysqli_num_rows($query1);
+                                                    if($count1 > 0) {
+                                                        while($row1 = mysqli_fetch_array($query1)) {  
+                                                            $perhour = $row1["employee_settings_perhour"];
+                                                            $tax = $row1["employee_settings_tax"];
+                                                            $pagibig = $row1["employee_settings_pagibig"];
+                                                            $sss = $row1["employee_settings_sss"];
+                                                            $philhealth = $row1["employee_settings_philhealth"];
+                                                        }
+                                                    }
+                                                    // 160 hours worked from attendance
+                                                    // $bimonthsalary = $perhour*$hoursworked;
+                                                    $otpay1 = $perhour * $xotcount1; // this is base on per hour not ot per hour
+                                                    $otpay2 = $perhour * $xotcount2; // this is base on per hour not ot per hour
+                                                    $bimonthsalary1 = $perhour*$hoursworked1+$otpay1;
+                                                    $bimonthsalary2 = $perhour*$hoursworked2+$otpay2;
+                                                    if($tax == '1') {
+                                                        $sql2 = "SELECT * FROM hurtajadmin_tax_contribution WHERE $bimonthsalary1 >= tax_contribution_range_from AND $bimonthsalary1 <= tax_contribution_range_to";
+                                                        $query2 = mysqli_query($db_conn, $sql2);
+                                                        $count2 = mysqli_num_rows($query2);
+                                                        if($count2 > 0) {
+                                                            while($row2 = mysqli_fetch_array($query2)) {  
+                                                                $taxcont1 = $row2["tax_contribution_contribution"];
+                                                                if($taxcont1 == "") {
+                                                                    $taxcont1 = 0;
+                                                                }
+                                                            }
+                                                        }
+                                                        $sql21 = "SELECT * FROM hurtajadmin_tax_contribution WHERE $bimonthsalary2 >= tax_contribution_range_from AND $bimonthsalary2 <= tax_contribution_range_to";
+                                                        $query21 = mysqli_query($db_conn, $sql21);
+                                                        $count21 = mysqli_num_rows($query21);
+                                                        if($count21 > 0) {
+                                                            while($row21 = mysqli_fetch_array($query21)) {  
+                                                                $taxcont2 = $row21["tax_contribution_contribution"];
+                                                                if($taxcont2 == "") {
+                                                                    $taxcont2 = 0;
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    if($sss == '1') {
+                                                        $sql3 = "SELECT * FROM hurtajadmin_sss_contribution WHERE $bimonthsalary1 >= sss_contribution_range_from AND $bimonthsalary1 <= sss_contribution_range_to";
+                                                        $query3 = mysqli_query($db_conn, $sql3);
+                                                        $count3 = mysqli_num_rows($query3);
+                                                        if($count3 > 0) {
+                                                            while($row3 = mysqli_fetch_array($query3)) {  
+                                                                $ssscont1 = $row3["sss_contribution_contribution"];
+                                                                if($ssscont1 == "") {
+                                                                    $ssscont1 = 0;
+                                                                }
+                                                            }
+                                                        }
+                                                        $sql31 = "SELECT * FROM hurtajadmin_sss_contribution WHERE $bimonthsalary2 >= sss_contribution_range_from AND $bimonthsalary2 <= sss_contribution_range_to";
+                                                        $query31 = mysqli_query($db_conn, $sql31);
+                                                        $count31 = mysqli_num_rows($query31);
+                                                        if($count31 > 0) {
+                                                            while($row31 = mysqli_fetch_array($query31)) {  
+                                                                $ssscont2 = $row31["sss_contribution_contribution"];
+                                                                if($ssscont2 == "") {
+                                                                    $ssscont2 = 0;
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    if($philhealth == '1') {
+                                                        $sql4 = "SELECT * FROM hurtajadmin_philhealth_contribution WHERE $bimonthsalary1 >= philhealth_contribution_range_from AND $bimonthsalary1 <= philhealth_contribution_range_to";
+                                                        $query4 = mysqli_query($db_conn, $sql4);
+                                                        $count4 = mysqli_num_rows($query4);
+                                                        if($count4 > 0) {
+                                                            while($row4 = mysqli_fetch_array($query4)) {  
+                                                                $philhealthcont1 = $row4["philhealth_contribution_contribution"];
+                                                                if($philhealthcont1 == "") {
+                                                                    $philhealthcont1 = 0;
+                                                                }
+                                                            }
+                                                        }
+                                                        $sql41 = "SELECT * FROM hurtajadmin_philhealth_contribution WHERE $bimonthsalary2 >= philhealth_contribution_range_from AND $bimonthsalary2 <= philhealth_contribution_range_to";
+                                                        $query41 = mysqli_query($db_conn, $sql41);
+                                                        $count41 = mysqli_num_rows($query41);
+                                                        if($count41 > 0) {
+                                                            while($row41 = mysqli_fetch_array($query41)) {  
+                                                                $philhealthcont2 = $row41["philhealth_contribution_contribution"];
+                                                                if($philhealthcont2 == "") {
+                                                                    $philhealthcont2 = 0;
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    if($pagibig == '1') {
+                                                        $sql5 = "SELECT * FROM hurtajadmin_pagibig_contribution WHERE $bimonthsalary1 >= pagibig_contribution_range_from AND $bimonthsalary1 <= pagibig_contribution_range_to";
+                                                        $query5 = mysqli_query($db_conn, $sql5);
+                                                        $count5 = mysqli_num_rows($query5);
+                                                        if($count5 > 0) {
+                                                            while($row5 = mysqli_fetch_array($query5)) {  
+                                                                $pagibigcont1 = $row5["pagibig_contribution_contribution"];
+                                                                if($pagibigcont1 == "") {
+                                                                    $pagibigcont1 = 0;
+                                                                }
+                                                            }
+                                                        }
+                                                        $sql51 = "SELECT * FROM hurtajadmin_pagibig_contribution WHERE $bimonthsalary2 >= pagibig_contribution_range_from AND $bimonthsalary2 <= pagibig_contribution_range_to";
+                                                        $query51 = mysqli_query($db_conn, $sql51);
+                                                        $count51 = mysqli_num_rows($query51);
+                                                        if($count51 > 0) {
+                                                            while($row51 = mysqli_fetch_array($query51)) {  
+                                                                $pagibigcont2 = $row51["pagibig_contribution_contribution"];
+                                                                if($pagibigcont2 == "") {
+                                                                    $pagibigcont2 = 0;
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    $sql6 = "SELECT * FROM hurtajadmin_cash_loan_advance WHERE cash_loan_advance_date >= '$firstcycledate1' AND cash_loan_advance_date < '$firstcycledate2' AND employee_id = '$empid' AND cash_loan_advance_type = '2'";
+                                                    $query6 = mysqli_query($db_conn, $sql6);
+                                                    $count6 = mysqli_num_rows($query6);
+                                                    if($count6 > 0) {
+                                                        while($row6 = mysqli_fetch_array($query6)) {  
+                                                            $cashadvancefirstcycle = $cashadvancefirstcycle+$row6["cash_loan_advance_amount"];
+                                                        }
+                                                    }
+                                                    $sql7 = "SELECT * FROM hurtajadmin_cash_loan_advance WHERE cash_loan_advance_date >= '$secondcycledate1' AND cash_loan_advance_date < '$secondcycledate2' AND employee_id = '$empid' AND cash_loan_advance_type = '2'";
+                                                    $query7 = mysqli_query($db_conn, $sql7);
+                                                    $count7 = mysqli_num_rows($query7);
+                                                    if($count7 > 0) {
+                                                        while($row7 = mysqli_fetch_array($query7)) {  
+                                                            $cashadvancesecondcycle = $cashadvancesecondcycle+$row7["cash_loan_advance_amount"];
+                                                        }
+                                                    }
+                                                    $sql8 = "SELECT SUM(id) AS regularholidaytotal FROM hurtajadmin_holidays WHERE holidays_date >= '$firstcycledate1' AND holidays_date < '$firstcycledate2' AND holidays_type = '1' AND holidays_status = '1'";
+                                                    $query8 = mysqli_query($db_conn, $sql8);
+                                                    $count8 = mysqli_num_rows($query8);
+                                                    if($count8 > 0) {
+                                                        while($row8 = mysqli_fetch_array($query8)) {  
+                                                            $holidayfirstcycle = $row8["regularholidaytotal"];
+                                                        }
+                                                    }
+                                                    $sql9 = "SELECT SUM(id) AS regularholidaytotal FROM hurtajadmin_holidays WHERE holidays_date >= '$secondcycledate1' AND holidays_date < '$secondcycledate2' AND holidays_type = '1' AND holidays_status = '1'";
+                                                    $query9 = mysqli_query($db_conn, $sql9);
+                                                    $count9 = mysqli_num_rows($query9);
+                                                    if($count9 > 0) {
+                                                        while($row9 = mysqli_fetch_array($query9)) {  
+                                                            $holidaysecondcycle = $row9["regularholidaytotal"];
+                                                        }
+                                                    }
+
+                                                    $hoursworked = $hoursworked1+$hoursworked2;
+                                                    $deductions1 = (float)$taxcont1+(float)$pagibigcont1+(float)$ssscont1+(float)$philhealthcont1;
+                                                    $deductions2 = (float)$taxcont2+(float)$pagibigcont2+(float)$ssscont2+(float)$philhealthcont2;
+                                                    $payroll_settings_paycheck_deducted_1 = 0;
+                                                    $payroll_settings_paycheck_base_1 = 0;
+                                                    $payroll_settings_paycheck_deducted_2 = 0;
+                                                    $payroll_settings_paycheck_base_2= 0;
+                                                    
+                                                    if($perhour > 0) {
+                                                        if($deductions1 > 0 && $cashadvancefirstcycle > 0 && $hoursworked1 > 0) { 
+                                                            $payroll_settings_paycheck_deducted_1 = ($perhour*$hoursworked1+$perhour*$xotcount1)-$deductions1-$cashadvancefirstcycle;
+                                                            $payroll_settings_paycheck_base_1 = $perhour*$hoursworked1+$perhour*$xotcount1;
+                                                        } else if($deductions1 > 0 && $cashadvancefirstcycle < 1 && $hoursworked1 > 0) {
+                                                            $payroll_settings_paycheck_deducted_1 = ($perhour*$hoursworked1+$perhour*$xotcount1)-$deductions1;
+                                                            $payroll_settings_paycheck_base_1 = $perhour*$hoursworked1+$perhour*$xotcount1;
+                                                        } else if($deductions1 < 1 && $cashadvancefirstcycle > 0  && $hoursworked1 > 0) { 
+                                                            $payroll_settings_paycheck_deducted_1 = ($perhour*$hoursworked1+$perhour*$xotcount1)-$cashadvancefirstcycle;
+                                                            $payroll_settings_paycheck_base_1 = $perhour*$hoursworked1+$perhour*$xotcount1;
+                                                        } else if($deductions1 < 1 && $cashadvancefirstcycle < 1  && $hoursworked1 > 0) { 
+                                                            $payroll_settings_paycheck_deducted_1 = $perhour*$hoursworked1+$perhour*$xotcount1;
+                                                            $payroll_settings_paycheck_base_1 = $perhour*$hoursworked1+$perhour*$xotcount1;
+                                                        } else {
+                                                            $payroll_settings_paycheck_deducted_1 = "0";
+                                                        }
+                                                    } else {
+                                                        $payroll_settings_paycheck_deducted_1 = "0";
+                                                    }
+
+                                                    if($perhour > 0) {
+                                                        if($deductions2 > 0 && $cashadvancesecondcycle > 0 && $hoursworked2 > 0) { 
+                                                            $payroll_settings_paycheck_deducted_2 = ($perhour*$hoursworked2+$perhour*$xotcount2)-$deductions2-$cashadvancesecondcycle;
+                                                            $payroll_settings_paycheck_base_2 = $perhour*$hoursworked2+$perhour*$xotcount2;
+                                                        } else if($deductions2 > 0 && $cashadvancesecondcycle < 1 && $hoursworked2 > 0) { 
+                                                            $payroll_settings_paycheck_deducted_2 = ($perhour*$hoursworked2+$perhour*$xotcount2)-$deductions2;
+                                                            $payroll_settings_paycheck_base_2 = $perhour*$hoursworked2+$perhour*$xotcount2;
+                                                        } else if($deductions2 < 1 && $cashadvancesecondcycle > 0 && $hoursworked2 > 0) { 
+                                                            $payroll_settings_paycheck_deducted_2 = ($perhour*$hoursworked2+$perhour*$xotcount2)-$cashadvancesecondcycle;
+                                                            $payroll_settings_paycheck_base_2 = $perhour*$hoursworked2+$perhour*$xotcount2;
+                                                        } else if($deductions2 < 1 && $cashadvancesecondcycle < 1 && $hoursworked2 > 0) { 
+                                                            $payroll_settings_paycheck_deducted_2 = $perhour*$hoursworked2+$perhour*$xotcount2;
+                                                            $payroll_settings_paycheck_base_2 = $perhour*$hoursworked2+$perhour*$xotcount2;
+                                                        } else {
+                                                            $payroll_settings_paycheck_deducted_2 = "0";
+                                                        }
+                                                    } else {
+                                                        $payroll_settings_paycheck_deducted_2 = "0";
+                                                    }
+
+                                                    $bimonthdeductedsalaryfinal = "";
+                                                    $bimonthbasesalaryfinal = "";
+                                                    $otpayfinal = "";
+
+                                                    $taxcontfinal = "0";
+                                                    $pagibigcontfinal = "0";
+                                                    $ssscontfinal = "0";
+                                                    $philhealthcontfinal = "0";
+
+                                                    if($cycle == "1") {
+                                                        $bimonthdeductedsalaryfinal = $payroll_settings_paycheck_deducted_1;
+                                                        $bimonthbasesalaryfinal = $payroll_settings_paycheck_base_1;
+                                                        $otpayfinal = $otpay1;
+
+                                                        if($bimonthdeductedsalaryfinal != 0) {
+                                                            $taxcontfinal = $taxcont1;
+                                                            $pagibigcontfinal = $pagibigcont1;
+                                                            $ssscontfinal = $ssscont1;
+                                                            $philhealthcontfinal = $philhealthcont1;
+                                                        }
+                                                    } else if($cycle == "2") {
+                                                        $bimonthdeductedsalaryfinal = $payroll_settings_paycheck_deducted_2;
+                                                        $bimonthbasesalaryfinal = $payroll_settings_paycheck_base_2;
+                                                        $otpayfinal = $otpay2;
+
+                                                        if($bimonthdeductedsalaryfinal != 0) {
+                                                            $taxcontfinal = $taxcont2;
+                                                            $pagibigcontfinal = $pagibigcont2;
+                                                            $ssscontfinal = $ssscont2;
+                                                            $philhealthcontfinal = $philhealthcont2;
+                                                        }
+                                                    }
+
+                                                    echo '
+                                                        <tr>
+                                                            <td>'.$empid.'</td>
+                                                            <td>'.$fname.' '.$mnameinitial.'. '.$lname.'</td>
+                                                            <td>₱'.number_format($bimonthbasesalaryfinal-$otpayfinal, 2, '.', ',').'</td>
+                                                            <td>₱'.number_format($otpayfinal, 2, '.', ',').'</td>
+                                                            <td><a href="javascript:void(0)" onclick="showModalViewDeduction(\''.$taxcontfinal.'\',\''.$pagibigcontfinal.'\',\''.$ssscontfinal.'\',\''.$philhealthcontfinal.'\');">View</a></td>
+                                                        </tr>
+                                                    ';
+                                                }
+                                            } else if($type == "2") {
+                                                if($to == "1") {
+                                                    $sql = "SELECT * FROM hurtajadmin_employee ORDER BY id DESC";
+                                                } else if($to == "2") {
+                                                    $sql = "SELECT * FROM hurtajadmin_employee WHERE employee_id = '$empid' ORDER BY id DESC";
+                                                }
+                                                        $query = mysqli_query($db_conn, $sql);
+                                                        $count = 0;
+                                                        while($row = mysqli_fetch_array($query)) {  
+                                                            $count++; 
+                                                            $recid = $row["id"];
+                                                            $empid = $row["employee_id"];
+                                                            $fname = $row["employee_fname"];
+                                                            $mname = $row["employee_mname"];
+                                                            $lname = $row["employee_lname"];
+                                                            $gender = $row["employee_gender"];
+                                                            $birthday = $row["employee_birthday"];
+                                                            $address = $row["employee_address"];
+                                                            $contact = $row["employee_phone"];
+                                                            $datehired = $row["employee_date_hired"];
+                                                            $datestart = $row["employee_date_start"];
+                                                            $dateend = $row["employee_date_end"];
+                                                            $stats = $row["employee_status"];
+                                                            
+                                                            $mnameinitial = substr($mname, 0, 1);
+
+                                                            if($birthday == "0000-00-00 00:00:00" || $birthday == "1970-01-01 00:00:00" || $birthday == "1970-01-01 01:00:00") {
+                                                                $birthday = "";
+                                                            } else {
+                                                                $birthday = date("m/d/Y", strtotime($birthday));
+                                                            }
+                                                            
+                                                            if($datehired == "0000-00-00 00:00:00" || $datehired == "1970-01-01 00:00:00" || $datehired == "1970-01-01 01:00:00") {
+                                                                $datehired = "";
+                                                            } else {
+                                                                $datehired = date("m/d/Y", strtotime($datehired));
+                                                            }
+
+                                                            if($datestart == "0000-00-00 00:00:00" || $datestart == "1970-01-01 00:00:00" || $datestart == "1970-01-01 01:00:00") {
+                                                                $datestart = "";
+                                                            } else {
+                                                                $datestart = date("m/d/Y", strtotime($datestart));
+                                                            }
+
+                                                            if($dateend == "0000-00-00 00:00:00" || $dateend == "1970-01-01 00:00:00" || $dateend == "1970-01-01 01:00:00") {
+                                                                $dateend = "";
+                                                            } else {
+                                                                $dateend = date("m/d/Y", strtotime($dateend));
+                                                            }
+                                                            
+                                                            $gendertext = "";
+
+                                                            if($gender == "1") {
+                                                                $gendertext = "Male";
+                                                            } else if($gender == "2") {
+                                                                $gendertext = "Female";
+                                                            }
+
+                                                            $statstext = "";
+
+                                                            if($stats == "1") {
+                                                                $statstext = "Active";
+                                                            } else if($stats == "2") {
+                                                                $statstext = "Resigned";
+                                                            } else if($stats == "3") {
+                                                                $statstext = "Terminated";
+                                                            } else if($stats == "4") {
+                                                                $statstext = "AWOL";
+                                                            }
+                                                            
+                                                            $mnameinitial = substr($mname, 0, 1);
+                                                            $perhour = 0;
+                                                            $hoursworked = 0;
+                                                            $otcount = 0;
+                                                            $utcount= 0;
+                                                            $xotcount = 0;
+                                                            $dailycount = 0;
+
+                                                            $firstcycledate1 = "01/01/".$year;
+                                                            $firstcycledate2 = "12/31/".$year;
+                                                            $firstcycledate1 = date("Y-m-d H:i:s", strtotime($firstcycledate1));
+                                                            $firstcycledate2 = date("Y-m-d H:i:s", strtotime($firstcycledate2));
+                                                            $sql01 = "SELECT DISTINCT DATE(attendance_date_in_out), attendance_date_in_out, attendance_value FROM hurtajadmin_attendance WHERE employee_id = '$empid' AND attendance_date_in_out >= '$firstcycledate1' AND attendance_date_in_out < '$firstcycledate2' AND attendance_value = '0' AND attendance_status = '1'";
+                                                            $query01 = mysqli_query($db_conn, $sql01);
+                                                            $count = mysqli_num_rows($query01);
+                                                            while($row01 = mysqli_fetch_array($query01)) {
+                                                                $datein = $row01["attendance_date_in_out"];
+                                                                $sqlout = "SELECT id, attendance_date_in_out FROM hurtajadmin_attendance WHERE employee_id = '$empid' AND DATE(attendance_date_in_out) = DATE('$datein') AND attendance_value = '1' AND attendance_status = '1'";
+                                                                $queryout = mysqli_query($db_conn, $sqlout);
+                                                                $countout = mysqli_num_rows($queryout);
+                                                                if($countout > 0) {
+                                                                    while($rowout = mysqli_fetch_array($queryout)) {
+                                                                        $attendanceidout = $rowout["id"];  
+                                                                        $dateout = $rowout["attendance_date_in_out"];
+                                                                    }
+                                                                    $hourdiff = round((strtotime($dateout) - strtotime($datein))/3600, 1);
+
+                                                            if($hourdiff > 8){ // this is for overtime 
+                                                                $otcount = $hourdiff - 8;
+                                                                $dailycount = $hourdiff - $otcount;
+                                                            }else if($hourdiff < 8){ // this is for undertime
+                                                                $utcount = $hourdiff;
+                                                                $dailycount = $hourdiff;
+                                                            }else{
+                                                                $dailycount = $hourdiff;
+                                                            }
+                                                            $xotcount = $xotcount + $otcount;
+                                                            $hoursworked = $hoursworked+$dailycount;
+                                                            $sqlhol1 = "SELECT id FROM hurtajadmin_holidays WHERE DATE(holidays_date) = DATE('$datein') AND holidays_type = '1' AND holidays_status = '1'";
+                                                            $queryhol1 = mysqli_query($db_conn, $sqlhol1);
+                                                            $counthol1 = mysqli_num_rows($queryhol1);
+                                                            if($counthol1 > 0) {
+                                                                $sqlholrate = "SELECT * FROM hurtajadmin_holiday_rate WHERE id = '1'";
+                                                                $queryholrate = mysqli_query($db_conn, $sqlholrate);
+                                                                $holratepercentage = 0;
+                                                                while($rowholrate = mysqli_fetch_array($queryholrate)) {
+                                                                    $holratepercentage = $rowholrate["holiday_rate_percent"];  
+                                                                }
+
+                                                                $holidaybonus = ($holratepercentage / 100) * $hourdiff;
+                                                                $hoursworked = $hoursworked+$holidaybonus;
+                                                            }
+                                                            $sqlhol2 = "SELECT id FROM hurtajadmin_holidays WHERE DATE(holidays_date) = DATE('$datein') AND holidays_type = '2' AND holidays_status = '1'";
+                                                            $queryhol2 = mysqli_query($db_conn, $sqlhol2);
+                                                            $counthol2 = mysqli_num_rows($queryhol2);
+                                                            if($counthol2 > 0) {
+                                                                $sqlholrate = "SELECT * FROM hurtajadmin_holiday_rate WHERE id = '2'";
+                                                                $queryholrate = mysqli_query($db_conn, $sqlholrate);
+                                                                $holratepercentage = 0;
+                                                                while($rowholrate = mysqli_fetch_array($queryholrate)) {
+                                                                    $holratepercentage = $rowholrate["holiday_rate_percent"];  
+                                                                }
+
+                                                                $holidaybonus = ($holratepercentage / 100) * $hourdiff;
+                                                                $hoursworked = $hoursworked+$holidaybonus;
+                                                            }
+                                                        } 
+                                                    }
+
+
+                                                    $sql1 = "SELECT * FROM hurtajadmin_employee_settings WHERE employee_id = '$empid'";
+                                                    $query1 = mysqli_query($db_conn, $sql1);
+                                                    $count1 = mysqli_num_rows($query1);
+                                                    if($count1 > 0) {
+                                                        while($row1 = mysqli_fetch_array($query1)) {  
+                                                            $perhour = $row1["employee_settings_perhour"];
+                                                        }
+                                                    }
+                                            
+                                                    // 160 hours worked from attendance
+                                                    // $bimonthsalary = $perhour*$hoursworked;
+                                                    $otpay = $perhour * $xotcount; // this is base on per hour not ot per hour
+                                                    $tertint = $perhour*$hoursworked+$otpay;
+                                                 
+                                                    echo '
+                                                    <tr>
+                                                    <td>'.$empid.'</td>
+                                                    <td>'.$fname.' '.$mnameinitial.'. '.$lname.'</td>
+                                                    <td>₱'.number_format($tertint-$otpay, 2, '.', ',').'</td>
+                                                    <td>₱'.number_format($otpay, 2, '.', ',').'</td>
+                                                    <td>₱'.number_format($tertint/12, 2, '.', ',').'</td>
+                                                    </tr>
+                                                    ';
+                                                }
+                                            }
+                                                ?>
+                                        </tbody>
+                                    </table>
+                            </div>
+                        </div>
+                    </div><!-- /.col-->
+                </div><!-- /.row -->
+                <br>
             <?php } else if (isset($_GET["payroll"]) && isset($_GET["action"]) && trim($_GET["payroll"]) == "focus" && trim($_GET["action"]) == "sss") { ?>
                     <div class="row">
                         <div class="col-lg-12">
@@ -2529,7 +3361,304 @@ if(
                         </table>
                     </div>
                 </div>
-                    <br>
+                <br>
+            <?php } else if (isset($_GET["leave"]) && isset($_GET["action"]) && !isset($_GET["updatehistoryid"]) && trim($_GET["leave"]) == "focus" && trim($_GET["action"]) == "request") { ?>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1 class="page-header"><?php echo $pheading; ?></h1>
+                        </div>
+                        <!-- /.col-lg-12 -->
+                    </div>
+                    <div class="row">
+                    <div class="col-lg-12">
+                        <div id="my-request" class="panel panel-default">
+                            <div class="panel-heading"><a type="button" class="btn btn-danger" href="account.php?id=<?php echo $id; ?>&leave=focus&action=history">View History</a> <a type="button" class="btn btn-danger" href="account.php?id=<?php echo $id; ?>&leave=focus&action=form">Generate Leave Form</a></div>
+                            <div class="panel-body">
+                                <div class="col-md-6 col-md-offset-3">
+                                    <form id="loginForm" onsubmit="return false;">
+                                        <span id="addLeaveStatus"></span>
+                                        <div class="form-group">
+                                                <label class="control-label">Employee ID</label>
+                                                <input type="text" class="form-control" name="date" id="leave-request-employee-id"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Type</label>
+                                            <select class="form-control" id="leave-request-type">
+                                                <option value=""></option>
+                                                <option value="1">Sick</option>
+                                                <option value="2">Vacation</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Leave Start</label>
+                                            <div class="date">
+                                                <div class="input-group date" id="datePicker19">
+                                                    <input type="text" class="form-control" name="date" id="leave-request-start" autocomplete="off"/>
+                                                    <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Leave End</label>
+                                            <div class="date">
+                                                <div class="input-group date" id="datePicker20">
+                                                    <input type="text" class="form-control" name="date" id="leave-request-end" autocomplete="off"/>
+                                                    <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Date Filed</label>
+                                            <div class="date">
+                                                <div class="input-group date" id="datePicker21">
+                                                    <input type="text" class="form-control" name="date" id="leave-request-date" autocomplete="off"/>
+                                                    <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                                <label class="control-label">Reason</label>
+                                                <textarea class="form-control" rows="5" id="leave-request-reason"></textarea>
+                                        </div>
+                                        
+                                        <button type="button" class="btn btn-primary" id="encodeLeaveBtn" style="width: 100%" onclick="addLeaveRecord()">Request</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- /.col-->
+                </div><!-- /.row -->
+<!--leave view -->
+                <?php } else if (isset($_GET["leave"]) && isset($_GET["action"]) && !isset($_GET["updatehistoryid"]) && trim($_GET["leave"]) == "focus" && trim($_GET["action"]) == "history") { ?>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1 class="page-header"><?php echo $pheading; ?></h1>
+                        </div>
+                        <!-- /.col-lg-12 -->
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div id="my-request" class="panel panel-default">
+                                <div class="panel-heading"><a type="button" class="btn btn-danger" href="account.php?id=<?php echo $id; ?>&leave=focus&action=request">Request Employee Leave</a> <a type="button" class="btn btn-danger" href="account.php?id=<?php echo $id; ?>&leave=focus&action=form">Generate Leave Form</a></div>
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                            <select class="form-control" id="select-filter-leave">
+                                                <option value="">Select Filter</option>
+                                                <option value="nameleave">Filter by Name</option>
+                                                <option value="dateleave">Filter by Date</option>
+                                            </select>
+                                        </div>
+                                    <div class="form-group" id="text-search-leave" hidden="true">  
+                                      <input type="text" name="record-search-text" value="" id="search-leave" placeholder="Search Employee ID or Name..." class="form-control" autofocus />  
+                                    </div>
+                                    <div class="form-group" id="select-filter-date-leave" hidden="true">
+                                                <div class="input-group date" id="datePicker22">
+                                                <input type="text" class="form-control" name="date" id="select-date-leave"  autocomplete="off"/>
+                                                <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+                                              </div>
+                                    </div>
+                                    <hr>
+                                    <div id="leave-search-result">
+                                    <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Employee ID</th>
+                                                    <th>Name</th>
+                                                    <th>Date Filed</th>
+                                                    <th>Status</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+                                                $sql = "SELECT * FROM hurtajadmin_leave WHERE leave_status = '1' OR leave_status = '2' OR leave_status = '3' ORDER BY id DESC";
+                                                $query = mysqli_query($db_conn, $sql);
+                                                $count = 0;
+                                                while($row = mysqli_fetch_array($query)) {  
+                                                    $count++; 
+                                                    $recid = $row["id"];
+                                                    $empid = $row["employee_id"];
+                                                    $ltype = $row["leave_type"];
+                                                    $ldate = $row["leave_date"];
+                                                    $lstart = $row["leave_start"];
+                                                    $lend = $row["leave_end"];
+                                                    $lreason = $row["leave_reason"];
+                                                    $lremarks = $row["leave_remarks"];
+                                                    $lstatus = $row["leave_status"];
+                                                    $editldate = date("F d, Y", strtotime($ldate));
+                                                    $editlstart = date("m/d/Y", strtotime($lstart));
+                                                    $editlend = date("m/d/Y", strtotime($lend));
+                                                    
+                                                    $sql_l = "SELECT * FROM hurtajadmin_employee WHERE employee_id = '$empid' ORDER BY id DESC";
+                                                    $query_l = mysqli_query($db_conn, $sql_l);
+                                                    while($rowl = mysqli_fetch_array($query_l)) {
+                                                    $lfname = $rowl["employee_fname"];
+                                                    $lmname = $rowl["employee_mname"];
+                                                    $llname = $rowl["employee_lname"];
+                                                    }
+                                                    $typetext = "";
+                                                    if($ltype == "1") {
+                                                        $typetext = "Sick";
+                                                    } else if($ltype == "2") {
+                                                        $typetext = "Vacation";
+                                                    }
+                                                    $statstext = "";
+                                                    $leave_link = "";
+                                                    if($lstatus == "1") {
+                                                        $statstext = "Pending";
+                                                        $leave_link = '<a href="javascript:void(0)" onclick="openLeaveViewDialog(\''.$recid.'\',\''.$editlstart.'\',\''.$editlend.'\',\''.$ltype.'\',\''.$lreason.'\',\''.$lfname.'\',\''.$lmname.'\',\''.$llname.'\',\''.$empid.'\',\''.$lstatus.'\')">Details</a> | <a href="javascript:void(0)" onclick="openLeaveRemarksDialog(\''.$recid.'\',\''.$lremarks.'\')">Remarks</a> | <a href="account.php?id='.$log_id.'&leave=focus&action=history&updatehistoryid='.$recid.'">Update History</a> | <a href="javascript:void(0)" onclick="openLeaveApproveDialog('.$recid.')">Approve</a> | <a href="javascript:void(0)"  onclick="openLeaveDeclineDialog('.$recid.')">Decline</a> | <a href="javascript:void(0)" onclick="openLeaveDeleteDialog('.$recid.')">Delete</a>';
+                                                    } else if($lstatus == "2") {
+                                                        $statstext = "Approved";
+                                                        $leave_link = '<a href="javascript:void(0)" onclick="openLeaveViewDialog(\''.$recid.'\',\''.$editlstart.'\',\''.$editlend.'\',\''.$ltype.'\',\''.$lreason.'\',\''.$lfname.'\',\''.$lmname.'\',\''.$llname.'\',\''.$empid.'\',\''.$lstatus.'\')">Details</a> | <a href="javascript:void(0)" onclick="openLeaveRemarksDialog(\''.$recid.'\',\''.$lremarks.'\')">Remarks</a> | <a href="account.php?id='.$log_id.'&leave=focus&action=history&updatehistoryid='.$recid.'">Update History</a> | <a href="javascript:void(0)" onclick="openLeaveDeleteDialog('.$recid.')">Delete</a>';
+                                                    } else if($lstatus == "3") {
+                                                        $statstext = "Declined";
+                                                        $leave_link = '<a href="javascript:void(0)" onclick="openLeaveViewDialog(\''.$recid.'\',\''.$editlstart.'\',\''.$editlend.'\',\''.$ltype.'\',\''.$lreason.'\',\''.$lfname.'\',\''.$lmname.'\',\''.$llname.'\',\''.$empid.'\',\''.$lstatus.'\')">Details</a> | <a href="javascript:void(0)" onclick="openLeaveRemarksDialog(\''.$recid.'\',\''.$lremarks.'\')">Remarks</a> | <a href="account.php?id='.$log_id.'&leave=focus&action=history&updatehistoryid='.$recid.'">Update History</a> | <a href="javascript:void(0)" onclick="openLeaveDeleteDialog('.$recid.')">Delete</a>';
+                                                    }
+                                                    $lmnameinitial = substr($lmname, 0, 1);
+                                                        
+                                                    echo '
+                                                    <tr>
+                                                    <td>'.$empid.'</td>
+                                                    <td>'.$lfname.' '.$lmnameinitial.'. '.$llname.'</td>
+                                                    <td>'.$editldate.'</td>       
+                                                    <td>'.$statstext.'</td>   
+                                                    <td>'.$leave_link.'</td>
+                                                    </tr>
+                                                    ';   
+                                                  }
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                       </div>
+                                </div>
+                            </div>
+                        </div><!-- /.col-->
+                    </div><!-- /.row -->
+                <?php } else if (isset($_GET["leave"]) && isset($_GET["action"]) && !isset($_GET["updatehistoryid"]) && trim($_GET["leave"]) == "focus" && trim($_GET["action"]) == "form") { ?>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1 class="page-header"><?php echo $pheading; ?></h1>
+                        </div>
+                        <!-- /.col-lg-12 -->
+                    </div>
+                    <div class="row">
+                    <div class="col-lg-12">
+                        <div id="my-request" class="panel panel-default">
+                            <div class="panel-heading"><a type="button" class="btn btn-danger" href="account.php?id=<?php echo $id; ?>&leave=focus&action=history">View History</a> <a type="button" class="btn btn-danger" href="account.php?id=<?php echo $id; ?>&leave=focus&action=request">Request Employee Leave</a></div>
+                            <div class="panel-body">
+                                <div class="col-md-6 col-md-offset-3">
+                                    <form id="loginForm" onsubmit="return false;">
+                                        <span id="leaveFormStatus"></span>
+                                        <div class="form-group">
+                                                <label class="control-label">Form Count</label>
+                                                <input type="number" class="form-control" name="date" id="leave-form-count"/>
+                                        </div>
+                                        <button type="button" class="btn btn-primary" id="encodeLeaveBtn" style="width: 100%" onclick="openLeaveForm()">Generate/Print</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- /.col-->
+                </div><!-- /.row -->
+            <?php } else if (isset($_GET["leave"]) && isset($_GET["action"]) && isset($_GET["updatehistoryid"]) && trim($_GET["leave"]) == "focus" && trim($_GET["action"]) == "history") { ?>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1 class="page-header"><?php echo $pheading; ?></h1>
+                        </div>
+                        <!-- /.col-lg-12 -->
+                    </div>
+                    <div class="row">
+                    <div class="col-lg-12">
+                        <div id="my-request" class="panel panel-default">
+                            <div class="panel-heading"><a type="button" class="btn btn-default" href="#" onclick="goBack()">Back</a></div>
+                            <div class="panel-body">
+                                <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Employee ID</th>
+                                                    <th>Name</th>
+                                                    <th>Date Updated</th>
+                                                    <th>Status</th>
+                                                    <th>Action</th>
+                                                    <th>Record Mark</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+                                                $leaveid = $_GET["updatehistoryid"];
+                                                $sql0 = "SELECT * FROM hurtajadmin_leave WHERE id = '$leaveid' LIMIT 1";
+                                                $query0 = mysqli_query($db_conn, $sql0);
+                                                while($row0 = mysqli_fetch_array($query0)) { 
+                                                    $empid = $row0["employee_id"]; 
+                                                }
+                                                $sql = "SELECT * FROM hurtajadmin_leave_update_history WHERE leave_id = '$leaveid' ORDER BY id DESC";
+                                                $query = mysqli_query($db_conn, $sql);
+                                                $count = 0;
+                                                while($row = mysqli_fetch_array($query)) {  
+                                                    $count++; 
+                                                    $recid = $row["id"];
+                                                    $ltype = $row["leave_update_history_type"];
+                                                    $ldate = $row["leave_update_history_date"];
+                                                    $lstart = $row["leave_update_history_start"];
+                                                    $lend = $row["leave_update_history_end"];
+                                                    $lreason = $row["leave_update_history_reason"];
+                                                    $lremarks = $row["leave_update_history_remarks"];
+                                                    $lstatus = $row["leave_update_history_status"];
+                                                    $editldate = date("F d, Y | h:i:s A", strtotime($ldate));
+                                                    $editlstart = date("m/d/Y", strtotime($lstart));
+                                                    $editlend = date("m/d/Y", strtotime($lend));
+                                                    
+                                                    $sql_l = "SELECT * FROM hurtajadmin_employee WHERE employee_id = '$empid' ORDER BY id DESC";
+                                                    $query_l = mysqli_query($db_conn, $sql_l);
+                                                    while($rowl = mysqli_fetch_array($query_l)) {
+                                                    $lfname = $rowl["employee_fname"];
+                                                    $lmname = $rowl["employee_mname"];
+                                                    $llname = $rowl["employee_lname"];
+                                                    }
+                                                    $typetext = "";
+                                                    if($ltype == "1") {
+                                                        $typetext = "Sick";
+                                                    } else if($ltype == "2") {
+                                                        $typetext = "Vacation";
+                                                    }
+                                                    $statstext = "";
+                                                    $leave_link = "";
+                                                    if($lstatus == "1") {
+                                                        $statstext = "Pending";
+                                                        $leave_link = '<a href="javascript:void(0)" onclick="openLeaveViewDialog2(\''.$recid.'\',\''.$editlstart.'\',\''.$editlend.'\',\''.$ltype.'\',\''.$lreason.'\',\''.$lfname.'\',\''.$lmname.'\',\''.$llname.'\',\''.$empid.'\',\''.$lstatus.'\')">Details</a> | <a href="javascript:void(0)" onclick="openLeaveRemarksDialog2(\''.$recid.'\',\''.$lremarks.'\')">Remarks</a>';
+                                                    } else if($lstatus == "2") {
+                                                        $statstext = "Approved";
+                                                        $leave_link = '<a href="javascript:void(0)" onclick="openLeaveViewDialog2(\''.$recid.'\',\''.$editlstart.'\',\''.$editlend.'\',\''.$ltype.'\',\''.$lreason.'\',\''.$lfname.'\',\''.$lmname.'\',\''.$llname.'\',\''.$empid.'\',\''.$lstatus.'\')">Details</a> | <a href="javascript:void(0)" onclick="openLeaveRemarksDialog2(\''.$recid.'\',\''.$lremarks.'\')">Remarks</a>';
+                                                    } else if($lstatus == "3") {
+                                                        $statstext = "Declined";
+                                                        $leave_link = '<a href="javascript:void(0)" onclick="openLeaveViewDialog2(\''.$recid.'\',\''.$editlstart.'\',\''.$editlend.'\',\''.$ltype.'\',\''.$lreason.'\',\''.$lfname.'\',\''.$lmname.'\',\''.$llname.'\',\''.$empid.'\',\''.$lstatus.'\')">Details</a> | <a href="javascript:void(0)" onclick="openLeaveRemarksDialog2(\''.$recid.'\',\''.$lremarks.'\')">Remarks</a>';
+                                                    }
+                                                    $lmnameinitial = substr($lmname, 0, 1);
+
+                                                    $recordmark = "Old";
+
+                                                    if($count == 1) {
+                                                        $recordmark = "Updated";
+                                                    }
+                                                        
+                                                    echo '
+                                                    <tr>
+                                                    <td>'.$empid.'</td>
+                                                    <td>'.$lfname.' '.$lmnameinitial.'. '.$llname.'</td>
+                                                    <td>'.$editldate.'</td>       
+                                                    <td>'.$statstext.'</td>   
+                                                    <td>'.$leave_link.'</td>   
+                                                    <td>'.$recordmark.'</td>
+                                                    </tr>
+                                                    ';   
+                                                    }
+                                                ?>
+                                            </tbody>
+                                        </table>
+                            </div>
+                        </div>
+                    </div><!-- /.col-->
+                </div><!-- /.row -->
             <?php } else if (isset($_GET["settings"]) && trim($_GET["settings"]) == "focus") { ?>
                     <div class="row">
                         <div class="col-lg-12">
@@ -2735,7 +3864,41 @@ if(
         </div>
       </div>
     </div>
+    <!-- Modal more employee -->
+    <div class="modal fade bd-example-modal-md" id="viewDeductions" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Deductions</h5>
+          </div>
+          <div class="modal-body">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Tax</th>
+                        <th>Pag-IBIG</th>
+                        <th>SSS</th>
+                        <th>Philhealth</th>
+                    </tr>
+                </thead>
+                <tbody>
 
+                    <tr>
+                        <td id="viewdedtax"></td>
+                        <td id="viewdedpagibig"></td>     
+                        <td id="viewdedsss"></td> 
+                        <td id="viewdedphilhealth"></td>   
+                    </tr>     
+
+                </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- Modal -->
     <div class="modal fade bd-example-modal-sm" id="markPaidCollectibles" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-sm" role="document">
@@ -3351,6 +4514,210 @@ if(
         </div>
       </div>
     </div>
+<!--view modal leave-->
+    <div class="modal fade bd-example-modal-md" id="viewLeave" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Leave Details</h5>
+              </div>
+              <div class="modal-body">
+                <span id="updateLeaveStatus"></span>
+                <input type="hidden" class="form-control" id="view-leave-id">
+                <div class="form-group">
+                    <label class="control-label">Employee ID</label>
+                    <input type="text" class="form-control" name="" id="view-leave-empid" disabled="disabled">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Employee Name</label>
+                    <input type="text" class="form-control" name="" id="view-leave-name" disabled="disabled">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Leave Start</label>
+                    <div class="date">
+                        <div class="input-group date" id="datePicker22">
+                            <input type="text" class="form-control" name="date" id="view-leave-start" placeholder="">
+                            <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Leave End</label>
+                    <div class="date">
+                        <div class="input-group date" id="datePicker23">
+                            <input type="text" class="form-control" name="date" id="view-leave-end" placeholder="">
+                            <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Type</label>
+                    <select class="form-control" id="view-leave-type">
+                        <option value=""></option>
+                        <option value="1">Sick</option>
+                        <option value="2">Vacation</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Reason</label>
+                    <input type="textarea" class="form-control" name="" id="view-leave-reason">
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="updateLeaveBtn" onclick="updateLeaveRecord()">Update</button>
+              </div>
+            </div>
+          </div>
+        </div>
+    <div class="modal fade bd-example-modal-md" id="viewLeave2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Leave Details</h5>
+              </div>
+              <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label">Employee ID</label>
+                    <input type="text" class="form-control" name="" id="view-leave-empid-2" disabled="disabled">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Employee Name</label>
+                    <input type="text" class="form-control" name="" id="view-leave-name-2" disabled="disabled">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Leave Start</label>
+                    <div class="date">
+                        <div class="input-group date" id="datePicker22">
+                            <input type="text" class="form-control" name="date" id="view-leave-start-2" placeholder="" disabled="disabled">
+                            <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Leave End</label>
+                    <div class="date">
+                        <div class="input-group date" id="datePicker23">
+                            <input type="text" class="form-control" name="date" id="view-leave-end-2" placeholder="" disabled="disabled">
+                            <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Type</label>
+                    <select class="form-control" id="view-leave-type-2" disabled="disabled">
+                        <option value=""></option>
+                        <option value="1">Sick</option>
+                        <option value="2">Vacation</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Reason</label>
+                    <input type="textarea" class="form-control" name="" id="view-leave-reason-2" disabled="disabled">
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+    <div class="modal fade bd-example-modal-md" id="viewLeaveRemarks" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Leave Remarks</h5>
+              </div>
+              <div class="modal-body">
+                <span id="updateLeaveRemarksStatus"></span>
+                <input type="hidden" class="form-control" id="view-leave-remarks-id">
+                <div class="form-group">
+                    <label class="control-label">Remarks</label>
+                    <textarea class="form-control" name="" id="view-leave-remarks-remarks"></textarea>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="updateLeaveRemarksBtn" onclick="updateLeaveRemarksRecord()">Update</button>
+              </div>
+            </div>
+          </div>
+        </div>
+    <div class="modal fade bd-example-modal-md" id="viewLeaveRemarks2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Leave Remarks</h5>
+              </div>
+              <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label">Remarks</label>
+                    <textarea class="form-control" name="" id="view-leave-remarks-remarks-2" disabled="disabled"></textarea>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--modal delete leave-->
+    <div class="modal fade bd-example-modal-sm" id="deleteLeave" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete Leave</h5>
+              </div>
+              <div class="modal-body">
+                <span id="deleteLeaveStatus"></span>
+                <input type="hidden" class="form-control" id="delete-leave-id">
+                <p>Are you sure with this?</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="deleteLeaveBtn" onclick="deleteLeaveRecord()">Yes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+<!--modal approve leave-->
+    <div class="modal fade bd-example-modal-sm" id="approveLeave" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Approve Leave</h5>
+              </div>
+              <div class="modal-body">
+                <span id="approveLeaveStatus"></span>
+                <input type="hidden" class="form-control" id="approve-leave-id">
+                <p>Are you sure you would like to approve this leave?</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="approveLeaveBtn" onclick="approveLeaveRecord()">Yes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+<!--modal decline leave-->
+    <div class="modal fade bd-example-modal-sm" id="declineLeave" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Decline Leave</h5>
+              </div>
+              <div class="modal-body">
+                <span id="declineLeaveStatus"></span>
+                <input type="hidden" class="form-control" id="decline-leave-id">
+                <p>Are you sure with this?</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="declineLeaveBtn" onclick="declineLeaveRecord()">Yes</button>
+              </div>
+            </div>
+          </div>
+        </div>
 <!--Modal end delete holiday-->
    
     <!-- jQuery -->
@@ -4118,6 +5485,276 @@ if(
             });
       });
 
+      $(document).ready(function() {
+        $('#datePicker19')
+        .datepicker({
+          format: 'mm/dd/yyyy'
+        })
+        .on('changeDate', function(e) {
+              // Revalidate the date field
+              $('#eventForm').formValidation('revalidateField', 'date');
+            });
+      });
+
+      $(document).ready(function() {
+        $('#datePicker20')
+        .datepicker({
+          format: 'mm/dd/yyyy'
+        })
+        .on('changeDate', function(e) {
+              // Revalidate the date field
+              $('#eventForm').formValidation('revalidateField', 'date');
+            });
+      });
+
+      $(document).ready(function() {
+        $('#datePicker21')
+        .datepicker({
+          format: 'mm/dd/yyyy'
+        })
+        .on('changeDate', function(e) {
+              // Revalidate the date field
+              $('#eventForm').formValidation('revalidateField', 'date');
+            });
+      });
+
+      $(document).ready(function() {
+        $('#datePicker22')
+        .datepicker({
+          format: 'mm/dd/yyyy'
+        })
+        .on('changeDate', function(e) {
+              // Revalidate the date field
+              $('#eventForm').formValidation('revalidateField', 'date');
+            });
+      });
+
+      function openLeaveDeleteDialog(rid) {
+        $('#deleteLeave').modal('show');
+        _("delete-leave-id").value = rid;
+        }
+      function deleteLeaveRecord() {
+        var rid = _("delete-leave-id").value;
+        var load = '<center><i class="fa fa-circle-o-notch fa-spin" style="color: #999; margin-bottom: 10px;"></i><center>';
+        var error = '<div style="color: red; margin-bottom: 10px;">Incomplete Parameters.</div>';
+        var status = _("deleteLeaveStatus");
+        var button = _("deleteLeaveBtn");
+        status.innerHTML = load;
+        if (rid == "") {
+            status.innerHTML = error;
+        } else {
+            button.disabled = true;
+            status.innerHTML = load;
+            var ajax = ajaxObj("POST", "parsers/account.php");
+            ajax.onreadystatechange = function() {
+              if(ajaxReturn(ajax) == true) {
+                  if (ajax.responseText == "successupdate"){
+                      window.location = "account.php?id=<?php echo $id; ?>&leave=focus&action=history";
+                  } else {
+                      button.disabled = false;
+                      status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Unknown error! Error Details: '+ ajax.responseText +'</div>';
+                  }
+              }
+            }
+          ajax.send("deleteleaveeid="+rid);
+        }
+      }
+    function openLeaveViewDialog(rid,lstart,lend,ltype,lreason,lfname,lmname,llname,empid,lstatus) { //new to improve
+        $('#viewLeave').modal('show');
+        _("view-leave-id").value = rid;
+        _("view-leave-name").value = lfname+" "+lmname+" "+llname;
+        _("view-leave-empid").value = empid;
+        _("view-leave-start").value = lstart;
+        _("view-leave-end").value = lend;
+        _("view-leave-type").value = ltype;
+        _("view-leave-reason").value = lreason;
+        if(lstatus == "1" || lstatus == "3") {
+            _("updateLeaveBtn").disabled = true;
+        } else {
+            _("updateLeaveBtn").disabled = false;
+        }
+    }
+    function openLeaveViewDialog2(rid,lstart,lend,ltype,lreason,lfname,lmname,llname,empid,lstatus) { //new to improve
+        $('#viewLeave2').modal('show');
+        _("view-leave-name-2").value = lfname+" "+lmname+" "+llname;
+        _("view-leave-empid-2").value = empid;
+        _("view-leave-start-2").value = lstart;
+        _("view-leave-end-2").value = lend;
+        _("view-leave-type-2").value = ltype;
+        _("view-leave-reason-2").value = lreason;
+    }
+    function updateLeaveRecord() {
+        var rid = _("view-leave-id").value;
+        var start = _("view-leave-start").value;
+        var end = _("view-leave-end").value;
+        var type = _("view-leave-type").value;
+        var reason = _("view-leave-reason").value;
+        var load = '<center><i class="fa fa-circle-o-notch fa-spin" style="color: #999; margin-bottom: 10px;"></i><center>';
+        var error = '<div style="color: red; margin-bottom: 10px;">Incomplete Parameters.</div>';
+        var status = _("updateLeaveStatus");
+        var button = _("updateLeaveBtn");
+        status.innerHTML = load;
+        if (start == "" || end == "" || type == "" || reason == "") {
+            status.innerHTML = error;
+        } else {
+            button.disabled = true;
+            status.innerHTML = load;
+            var ajax = ajaxObj("POST", "parsers/account.php");
+            ajax.onreadystatechange = function() {
+              if(ajaxReturn(ajax) == true) {
+                  if (ajax.responseText == "successupdate"){
+                      window.location = "account.php?id=<?php echo $id; ?>&leave=focus&action=history";
+                  } else {
+                      button.disabled = false;
+                      status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Unknown error! Error Details: '+ ajax.responseText +'</div>';
+                  }
+              }
+            }
+          ajax.send("editleaverid="+rid+"&editleavestart="+start+"&editleaveend="+end+"&editleavetype="+type+"&editleavereason="+reason);
+        }
+      }
+      function openLeaveRemarksDialog(rid,lremarks) { //new to improve
+        $('#viewLeaveRemarks').modal('show');
+        _("view-leave-remarks-id").value = rid;
+        _("view-leave-remarks-remarks").value = lremarks;
+      }
+      function openLeaveRemarksDialog2(rid, lremarks) { //new to improve
+        $('#viewLeaveRemarks2').modal('show');
+        _("view-leave-remarks-remarks-2").value = lremarks;
+      }
+      function updateLeaveRemarksRecord() {
+        var rid = _("view-leave-remarks-id").value;
+        var remarks = _("view-leave-remarks-remarks").value;
+        var load = '<center><i class="fa fa-circle-o-notch fa-spin" style="color: #999; margin-bottom: 10px;"></i><center>';
+        var error = '<div style="color: red; margin-bottom: 10px;">Incomplete Parameters.</div>';
+        var status = _("updateLeaveRemarksStatus");
+        var button = _("updateLeaveRemarksBtn");
+        status.innerHTML = load;
+        if (remarks == "") {
+            status.innerHTML = error;
+        } else {
+            button.disabled = true;
+            status.innerHTML = load;
+            var ajax = ajaxObj("POST", "parsers/account.php");
+            ajax.onreadystatechange = function() {
+              if(ajaxReturn(ajax) == true) {
+                  if (ajax.responseText == "successupdate"){
+                      window.location = "account.php?id=<?php echo $id; ?>&leave=focus&action=history";
+                  } else {
+                      button.disabled = false;
+                      status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Unknown error! Error Details: '+ ajax.responseText +'</div>';
+                  }
+              }
+            }
+          ajax.send("editleaveremarksrid="+rid+"&editleaveremarksremarks="+remarks);
+        }
+      }
+    function openLeaveApproveDialog(rid) {
+        $('#approveLeave').modal('show');
+        _("approve-leave-id").value = rid;
+    }
+      function approveLeaveRecord() {
+        var rid = _("approve-leave-id").value;
+        var load = '<center><i class="fa fa-circle-o-notch fa-spin" style="color: #999; margin-bottom: 10px;"></i><center>';
+        var error = '<div style="color: red; margin-bottom: 10px;">Incomplete Parameters.</div>';
+        var status = _("approveLeaveStatus");
+        var button = _("approveLeaveBtn");
+        status.innerHTML = load;
+        if (rid == "") {
+            status.innerHTML = error;
+        } else {
+            button.disabled = true;
+            status.innerHTML = load;
+            var ajax = ajaxObj("POST", "parsers/account.php");
+            ajax.onreadystatechange = function() {
+              if(ajaxReturn(ajax) == true) {
+                  if (ajax.responseText == "successupdate"){
+                      window.location = "account.php?id=<?php echo $id; ?>&leave=focus&action=history";
+                  } else {
+                      button.disabled = false;
+                      status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Unknown error! Error Details: '+ ajax.responseText +'</div>';
+                  }
+              }
+            }
+          ajax.send("approveleaveeid="+rid);
+        }
+      }
+    function openLeaveDeclineDialog(rid) {
+        $('#declineLeave').modal('show');
+        _("decline-leave-id").value = rid;
+        }
+      function declineLeaveRecord() {
+        var rid = _("decline-leave-id").value;
+        var load = '<center><i class="fa fa-circle-o-notch fa-spin" style="color: #999; margin-bottom: 10px;"></i><center>';
+        var error = '<div style="color: red; margin-bottom: 10px;">Incomplete Parameters.</div>';
+        var status = _("declineLeaveStatus");
+        var button = _("declineLeaveBtn");
+        status.innerHTML = load;
+        if (rid == "") {
+            status.innerHTML = error;
+        } else {
+            button.disabled = true;
+            status.innerHTML = load;
+            var ajax = ajaxObj("POST", "parsers/account.php");
+            ajax.onreadystatechange = function() {
+              if(ajaxReturn(ajax) == true) {
+                  if (ajax.responseText == "successupdate"){
+                      window.location = "account.php?id=<?php echo $id; ?>&leave=focus&action=history";
+                  } else {
+                      button.disabled = false;
+                      status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Unknown error! Error Details: '+ ajax.responseText +'</div>';
+                  }
+              }
+            }
+          ajax.send("declineleaveeid="+rid);
+        }
+      }
+      
+      function addLeaveRecord() {
+        var empid = _("leave-request-employee-id").value;
+        var lrtype = _("leave-request-type").value;
+        var lrstart = _("leave-request-start").value;
+        var lrend = _("leave-request-end").value;
+        var lrdate = _("leave-request-date").value;
+        var lrreason = _("leave-request-reason").value;
+        var load = '<center><i class="fa fa-circle-o-notch fa-spin" style="color: #999; margin-bottom: 10px;"></i><center>';
+        var error = '<div style="color: red; margin-bottom: 10px;">Incomplete Parameters.</div>';
+        var status = _("addLeaveStatus");
+        var button = _("encodeLeaveBtn");
+        status.innerHTML = load;
+        if (empid == "" || lrtype == "" || lrstart == "" || lrend == "" || lrdate == "" || lrreason == "" ) {
+            status.innerHTML = error;
+        } else {
+            button.disabled = true;
+            status.innerHTML = load;
+            var ajax = ajaxObj("POST", "parsers/account.php");
+            ajax.onreadystatechange = function() {
+              if(ajaxReturn(ajax) == true) {
+                  if (ajax.responseText == "successinsert"){
+                      window.location = "account.php?id=<?php echo $id; ?>&leave=focus&action=history";
+                  } else if (ajax.responseText == "nofound"){
+                      button.disabled = false;
+                      status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Employee ID connot be found!</div>';
+                  }  else {
+                      button.disabled = false;
+                      status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Unknown error! Error Details: '+ ajax.responseText +'</div>';
+                  }
+              }
+            }
+          ajax.send("addleaveempid="+empid+"&addleavelrtype="+lrtype+"&addleavelrstart="+lrstart+"&addleavelrend="+lrend+"&addleavelrdate="+lrdate+"&addleavelrreason="+lrreason);
+        }
+      }
+
+      function openLeaveForm() {
+        var formcount = _("leave-form-count").value;
+        var status = _("leaveFormStatus");
+        if (formcount == "") {
+            status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Incomplete Parameters.</div>';
+        } else {
+            window.open("leaveform.php?count="+formcount, '_blank');
+        }
+      }
+
       $('#add-collectibles-total-amount').inputmask("numeric", {
             radixPoint: ".",
             groupSeparator: ",",
@@ -4221,7 +5858,49 @@ if(
                     $('#collectibles-search-result').html(data); 
                 }  
             });
-       });  
+       });
+
+        $('#search-leave').keyup(function(e){  
+            var txtleaveSearch = $(this).val();
+            console.log(txtleaveSearch);
+            $.ajax({ 
+                url:"parsers/searchleave.php", 
+                method:"post",  
+                data:{search:txtleaveSearch},  
+                dataType:"text",  
+                success:function(data) {
+                    $('#leave-search-result').html(data); 
+                }  
+            });
+        });
+
+       $('#select-date-leave').change(function(e){ 
+            var dateValue = $("#select-date-leave").val();
+            console.log(dateValue);
+            $.ajax({ 
+                url:"parsers/searchleave.php",  
+                method:"post",  
+                data:{datepicker:dateValue},  
+                dataType:"text",  
+                success:function(data) {
+                    $('#leave-search-result').html(data); 
+                }  
+            });
+        });
+
+        $("#select-filter-leave").change(function () { 
+                    var filterleaveValue = $("#select-filter-leave").val();
+         
+                    if (filterleaveValue == "") {
+                        window.location = "account.php?id=<?php echo $id; ?>&leave=focus&action=history";
+                    }else if (filterleaveValue == "nameleave") {
+                        $("#text-search-leave").show();
+                        $("#select-filter-date-leave").hide();
+                    } else if (filterleaveValue == "dateleave") {
+                        $("#select-filter-date-leave").show();
+                        $("#text-search-leave").hide();
+                    } 
+        });  
 
       $('#search-paid-collectibles').keyup(function(e){  
             var txtSearch = $(this).val();
@@ -4305,11 +5984,19 @@ if(
                     $('#payrollMonthDiv').show();
                     $('#payrollCycleDiv').show();
                     $('#payrollYearDiv').show();
-                } else if ($("#payrollType").val() == "2" || $("#payrollType").val() == "3") {
+                } else if ($("#payrollType").val() == "2") {
                     $('#payrollToDiv').show();
                     $('#payrollMonthDiv').hide();
                     $('#payrollCycleDiv').hide();
                     $('#payrollYearDiv').show();
+                }
+        });
+
+        $("#payrollTo").change(function () {    
+                if ($("#payrollTo").val() == "2") {
+                    $('#payrollEmpIDDiv').show();
+                } else {
+                    $('#payrollEmpIDDiv').hide();
                 }
         });
 
@@ -4354,6 +6041,14 @@ if(
             } else {
                 status.innerHTML = error;
             }
+        }
+
+        function showModalViewDeduction(tax, pagibig, sss, philhealth) {
+            $("#viewDeductions").modal("show");
+            _("viewdedtax").innerHTML = "₱"+tax;
+            _("viewdedpagibig").innerHTML = "₱"+pagibig;
+            _("viewdedsss").innerHTML = "₱"+sss;
+            _("viewdedphilhealth").innerHTML = "₱"+philhealth;
         }
 
         $('#search-employee').keyup(function(e){  
@@ -4694,6 +6389,9 @@ if(
         }
       }
 
+      function goBack() {
+        window.history.back();
+      }
 
     </script>
 </body>
