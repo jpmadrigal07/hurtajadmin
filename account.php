@@ -1109,12 +1109,12 @@ if(
                                                     $disabled = "";
                                                     $currentprevyear = "";
                                                     $previousmonth = date("m", strtotime("-1 months"));
-                                                    $month = date("m");
-                                                    $year = date("Y");
-                                                    if($month == "1") {
-                                                        $currentprevyear = $year-1;
+                                                    $currentmonth = date("m");
+                                                    $currentyear = date("Y");
+                                                    if($currentmonth == "1") {
+                                                        $currentprevyear = $currentyear-1;
                                                     } else {
-                                                        $currentprevyear = $year;
+                                                        $currentprevyear = $currentyear;
                                                     }
                                                     $cashloanfirstcycle = 0;
                                                     $cashloansecondcycle = 0;
@@ -1123,16 +1123,16 @@ if(
                                                     $holidayfirstcycle = 0;
                                                     $holidaysecondcycle = 0;
 
-                                                    // $firstcycledate1 = $previousmonth."/26/".$currentyear;
-                                                    // $firstcycledate2 = $currentmonth."/11/".$currentyear;
-                                                    $firstcycledate1 = "12/26/2017"; //this is cycle 25 to 10
-                                                    $firstcycledate2 = "1/11/2018";
+                                                    $firstcycledate1 = $previousmonth."/26/".$currentyear;
+                                                    $firstcycledate2 = $currentmonth."/11/".$currentyear;
+                                                    // $firstcycledate1 = "12/26/2017"; //this is cycle 25 to 10
+                                                    // $firstcycledate2 = "1/11/2018";
                                                     $firstcycledate1 = date("Y-m-d H:i:s", strtotime($firstcycledate1));
                                                     $firstcycledate2 = date("Y-m-d H:i:s", strtotime($firstcycledate2));
-                                                    // $secondcycledate1 = $currentmonth."/11/".$currentyear;
-                                                    // $secondcycledate2 = $currentmonth."/26/".$currentyear;
-                                                    $secondcycledate1 = "1/11/2018"; //this is cycle 11 to 25
-                                                    $secondcycledate2 = "1/26/2018";
+                                                    $secondcycledate1 = $currentmonth."/11/".$currentyear;
+                                                    $secondcycledate2 = $currentmonth."/26/".$currentyear;
+                                                    // $secondcycledate1 = "1/11/2018"; //this is cycle 11 to 25
+                                                    // $secondcycledate2 = "1/26/2018";
                                                     $secondcycledate1 = date("Y-m-d H:i:s", strtotime($secondcycledate1));
                                                     $secondcycledate2 = date("Y-m-d H:i:s", strtotime($secondcycledate2));
                                                     $sql01 = "SELECT DISTINCT DATE(attendance_date_in_out), attendance_date_in_out, attendance_value FROM hurtajadmin_attendance WHERE employee_id = '$empid' AND attendance_date_in_out >= '$firstcycledate1' AND attendance_date_in_out < '$firstcycledate2' AND attendance_value = '0' AND attendance_status = '1'";
@@ -1367,7 +1367,7 @@ if(
                                                                 if($countoutsd1 > 0) {
                                                                     while($rowoutsd1 = mysqli_fetch_array($queryoutsd1)) {
                                                                         $attendanceidoutsd1 = $rowoutsd1["id"];  
-                                                                        $dateoutsd = $rowoutsd1["attendance_date_in_out"];
+                                                                        $dateoutsd1 = $rowoutsd1["attendance_date_in_out"];
                                                                     }
 
                                                                     $hourdiff1 = round((strtotime($dateoutsd1) - strtotime($dateinsd1))/3600, 1);
