@@ -50,17 +50,6 @@ if($search == "") {
     $philhealthid = "";
     $sssid = "";
 
-    $sqlempid = "SELECT * FROM hurtajadmin_employee_identification WHERE employee_id = '$empid' LIMIT 1";
-    $queryempid = mysqli_query($db_conn, $sqlempid);
-    while($rowempid = mysqli_fetch_array($queryempid)) {
-      $tinid = $rowempid["employee_identification_tin"];
-      $pagibigid = $rowempid["employee_identification_pagibig"];
-      $philhealthid = $rowempid["employee_identification_philhealth"];
-      $sssid = $rowempid["employee_identification_sss"];
-    }
-
-    $mnameinitial = substr($mname, 0, 1);
-
     if($birthday == "0000-00-00 00:00:00" || $birthday == "1970-01-01 00:00:00" || $birthday == "1970-01-01 01:00:00") {
       $birthday = "";
     } else {
@@ -86,15 +75,12 @@ if($search == "") {
     }
 
     $gendertext = "";
-
     if($gender == "1") {
       $gendertext = "Male";
     } else if($gender == "2") {
       $gendertext = "Female";
     }
-
     $statstext = "";
-
     if($stats == "1") {
       $statstext = "Active";
     } else if($stats == "2") {
@@ -104,14 +90,22 @@ if($search == "") {
     } else if($stats == "4") {
       $statstext = "AWOL";
     }
-
+    $mnameinitial = substr($mname, 0, 1);
     $perhour = 0;
     $tax = "";
     $pagibig = "";
     $sss = "";
     $philhealth = "";
-    $insurancecont10 = "";
-    $insurance = "";
+    $sundayhoursworked1 = 0;
+    $sundayhoursworked2 = 0;
+    $firstcycleholidayhoursworked1 = 0;
+    $firstcycleholidayhoursworked2 = 0;
+    $firstcycleholidaybonushours1 = 0;
+    $firstcycleholidaybonushours2 = 0;
+    $secondcycleholidayhoursworked1 = 0;
+    $secondcycleholidayhoursworked2 = 0;
+    $secondcycleholidaybonushours1 = 0;
+    $secondcycleholidaybonushours2 = 0;
     $taxcont1 = 0;
     $ssscont1 = 0;
     $philhealthcont1 = 0;
@@ -126,18 +120,31 @@ if($search == "") {
     $utcount1 = 0;
     $otcount2 = 0;
     $xotcount1 = 0;
+    $xotcountbase1 = 0;
     $xotcount2 = 0;
+    $xotcountbase2 = 0;
     $utcount2 = 0;
     $dailycount1 = 0;
     $dailycount2 = 0;
+    $latecount1 = 0;
+    $latecount2 = 0;
     $disabled = "";
+    $currentprevyear = "";
     $previousmonth = date("m", strtotime("-1 months"));
-    $currentmonth = date("m");
-    $currentyear = date("Y");
+    $month = date("m");
+    $year = date("Y");
+    if($month == "1") {
+      $currentprevyear = $year-1;
+    } else {
+      $currentprevyear = $year;
+    }
+    $cashloanfirstcycle = 0;
+    $cashloansecondcycle = 0;
     $cashadvancefirstcycle = 0;
     $cashadvancesecondcycle = 0;
     $holidayfirstcycle = 0;
     $holidaysecondcycle = 0;
+
     // $firstcycledate1 = $previousmonth."/26/".$currentyear;
     // $firstcycledate2 = $currentmonth."/11/".$currentyear;
     $firstcycledate1 = "12/26/2017"; //this is cycle 25 to 10
@@ -155,6 +162,15 @@ if($search == "") {
     $count01 = mysqli_num_rows($query01);
     while($row01 = mysqli_fetch_array($query01)) {
       $datein = $row01["attendance_date_in_out"];
+
+      $dateindate = date("Y-m-d", strtotime($datein));
+
+      $latecount1 = $latecount1 + round((strtotime($datein) - strtotime($dateindate." 08:00:00"))/3600, 1);
+
+      if($latecount1 < 0.01) {
+        $latecount1 = 0;
+      }
+
       $sqlout = "SELECT id, attendance_date_in_out FROM hurtajadmin_attendance WHERE employee_id = '$empid' AND DATE(attendance_date_in_out) = DATE('$datein') AND attendance_value = '1' AND attendance_status = '1'";
       $queryout = mysqli_query($db_conn, $sqlout);
       $countout = mysqli_num_rows($queryout);
@@ -164,61 +180,96 @@ if($search == "") {
           $dateout = $rowout["attendance_date_in_out"];
         }
         $hourdiff = round((strtotime($dateout) - strtotime($datein))/3600, 1);
+
     if($hourdiff > 8){ // this is for overtime 
       $otcount1 = $hourdiff - 8;
       $dailycount1 = $hourdiff - $otcount1;
-    }else if($hourdiff < 8){ // this is for undertime
+    } else if($hourdiff < 8){ // this is for undertime
       $utcount1 = $hourdiff;
       $dailycount1 = $hourdiff;
-    }else{
+    } else {
       $dailycount1 = $hourdiff;
     }
-    $xotcount1 = $xotcount1 + $otcount1;
+
     $hoursworked1 = $hoursworked1+$dailycount1;
-    if($hourdiff > 0){
-      $sqlhol1 = "SELECT id FROM hurtajadmin_holidays WHERE DATE(holidays_date) = DATE('$datein') AND holidays_type = '1' AND holidays_status = '1'";
-      $queryhol1 = mysqli_query($db_conn, $sqlhol1);
-      $counthol1 = mysqli_num_rows($queryhol1);
-      if($counthol1 > 0) {
-        $sqlholrate = "SELECT * FROM hurtajadmin_holiday_rate WHERE id = '1'";
-        $queryholrate = mysqli_query($db_conn, $sqlholrate);
-        $holratepercentage = 0;
-        while($rowholrate = mysqli_fetch_array($queryholrate)) {
-          $holratepercentage = $rowholrate["holiday_rate_percent"];  
-        }
-        $holidaybonus = ($holratepercentage / 100) * $hourdiff;
-        $hoursworked1 = $hoursworked1+$holidaybonus;
+    $sqlhol1 = "SELECT id FROM hurtajadmin_holidays WHERE DATE(holidays_date) = DATE('$datein') AND holidays_type = '1' AND holidays_status = '1'";
+    $queryhol1 = mysqli_query($db_conn, $sqlhol1);
+    $counthol1 = mysqli_num_rows($queryhol1);
+    if($counthol1 > 0) {
+      $sqlholrate = "SELECT * FROM hurtajadmin_holiday_rate WHERE id = '1'";
+      $queryholrate = mysqli_query($db_conn, $sqlholrate);
+      $holratepercentage = 0;
+      while($rowholrate = mysqli_fetch_array($queryholrate)) {
+        $holratepercentage = $rowholrate["holiday_rate_percent"];  
       }
-      $sqlhol2 = "SELECT id FROM hurtajadmin_holidays WHERE DATE(holidays_date) = DATE('$datein') AND holidays_type = '2' AND holidays_status = '1'";
-      $queryhol2 = mysqli_query($db_conn, $sqlhol2);
-      $counthol2 = mysqli_num_rows($queryhol2);
-      if($counthol2 > 0) {
-        $sqlholrate = "SELECT * FROM hurtajadmin_holiday_rate WHERE id = '2'";
-        $queryholrate = mysqli_query($db_conn, $sqlholrate);
-        $holratepercentage = 0;
-        while($rowholrate = mysqli_fetch_array($queryholrate)) {
-          $holratepercentage = $rowholrate["holiday_rate_percent"];  
-        }
-        $holidaybonus = ($holratepercentage / 100) * $hourdiff;
-        $hoursworked1 = $hoursworked1+$holidaybonus;
+
+      $xotcountbase1 = $xotcount1 + $otcount1;
+
+      $xotcount1 = $xotcount1 + $otcount1 + ($otcount1 * 0.30);
+
+      $firstcycleholidaybonus1 = ($holratepercentage / 100) * $hourdiff;
+      $firstcycleholidayhoursworked1 = $firstcycleholidayhoursworked1+$hourdiff;
+      if($firstcycleholidayhoursworked1 > 8) {
+        $firstcycleholidayhoursworked1 = 8;
       }
+      $firstcycleholidaybonushours1 = $firstcycleholidayhoursworked1+$firstcycleholidaybonus1;
+    // $hoursworked1 = $hoursworked1+$firstcycleholidaybonus1;
+    } 
+    $sqlhol2 = "SELECT id FROM hurtajadmin_holidays WHERE DATE(holidays_date) = DATE('$datein') AND holidays_type = '2' AND holidays_status = '1'";
+    $queryhol2 = mysqli_query($db_conn, $sqlhol2);
+    $counthol2 = mysqli_num_rows($queryhol2);
+    if($counthol2 > 0) {
+      $sqlholrate = "SELECT * FROM hurtajadmin_holiday_rate WHERE id = '2'";
+      $queryholrate = mysqli_query($db_conn, $sqlholrate);
+      $holratepercentage = 0;
+      while($rowholrate = mysqli_fetch_array($queryholrate)) {
+        $holratepercentage = $rowholrate["holiday_rate_percent"];  
+      }
+
+      $xotcountbase1 = $xotcount1 + $otcount1;
+
+      $xotcount1 = $xotcount1 + $otcount1 + ($otcount1 * 0.30);
+
+      $firstcycleholidaybonus2 = ($holratepercentage / 100) * $hourdiff;
+      $firstcycleholidayhoursworked2 = $firstcycleholidayhoursworked2+$hourdiff;
+      if($firstcycleholidayhoursworked2 > 8) {
+        $firstcycleholidayhoursworked2 = 8;
+      }
+      $firstcycleholidaybonushours2 = $firstcycleholidayhoursworked2+$firstcycleholidaybonus2;
+    // $hoursworked1 = $hoursworked1+$firstcycleholidaybonus2;
     }
-  } 
-}
-$sql02 = "SELECT DISTINCT DATE(attendance_date_in_out), attendance_date_in_out, attendance_value FROM hurtajadmin_attendance WHERE employee_id = '$empid' AND attendance_date_in_out >= '$secondcycledate1' AND attendance_date_in_out < '$secondcycledate2' AND attendance_value = '0' AND attendance_status = '1'";
-$query02 = mysqli_query($db_conn, $sql02);
-$count02 = mysqli_num_rows($query02);
-while($row02 = mysqli_fetch_array($query02)) {
-  $datein = $row02["attendance_date_in_out"];
-  $sqlout = "SELECT id, attendance_date_in_out FROM hurtajadmin_attendance WHERE employee_id = '$empid' AND DATE(attendance_date_in_out) = DATE('$datein') AND attendance_value = '1' AND attendance_status = '1'";
-  $queryout = mysqli_query($db_conn, $sqlout);
-  $countout = mysqli_num_rows($queryout);
-  if($countout > 0) {
-    while($rowout = mysqli_fetch_array($queryout)) {
-      $attendanceidout = $rowout["id"];  
-      $dateout = $rowout["attendance_date_in_out"];
+
+    if($counthol1 < 1 && $counthol2 < 1) {
+      $xotcountbase1 = $xotcount1 + $otcount1;
+      $xotcount1 = $xotcount1 + $otcount1;
     }
-    $hourdiff = round((strtotime($dateout) - strtotime($datein))/3600, 1);
+
+    } 
+    }
+    $sql02 = "SELECT DISTINCT DATE(attendance_date_in_out), attendance_date_in_out, attendance_value FROM hurtajadmin_attendance WHERE employee_id = '$empid' AND attendance_date_in_out >= '$secondcycledate1' AND attendance_date_in_out < '$secondcycledate2' AND attendance_value = '0' AND attendance_status = '1'";
+    $query02 = mysqli_query($db_conn, $sql02);
+    $count02 = mysqli_num_rows($query02);
+    while($row02 = mysqli_fetch_array($query02)) {
+      $datein = $row02["attendance_date_in_out"];
+
+      $dateindate = date("Y-m-d", strtotime($datein));
+
+      $latecount2 = $latecount2 + round((strtotime($datein) - strtotime($dateindate." 08:00:00"))/3600, 1);
+
+      if($latecount2 < 0.01) {
+        $latecount2 = 0;
+      }
+
+      $sqlout = "SELECT id, attendance_date_in_out FROM hurtajadmin_attendance WHERE employee_id = '$empid' AND DATE(attendance_date_in_out) = DATE('$datein') AND attendance_value = '1' AND attendance_status = '1'";
+      $queryout = mysqli_query($db_conn, $sqlout);
+      $countout = mysqli_num_rows($queryout);
+      if($countout > 0) {
+        while($rowout = mysqli_fetch_array($queryout)) {
+          $attendanceidout = $rowout["id"];  
+          $dateout = $rowout["attendance_date_in_out"];
+        }
+        $hourdiff = round((strtotime($dateout) - strtotime($datein))/3600, 1);
+
     if($hourdiff > 8){ // this is for overtime 
       $otcount2 = $hourdiff - 8;
       $dailycount2 = $hourdiff - $otcount2;
@@ -228,7 +279,7 @@ while($row02 = mysqli_fetch_array($query02)) {
     }else{
       $dailycount2 = $hourdiff;
     }
-    $xotcount2 = $xotcount2 + $otcount2;
+
     $hoursworked2 = $hoursworked2+$dailycount2;
     $sqlhol1 = "SELECT id FROM hurtajadmin_holidays WHERE DATE(holidays_date) = DATE('$datein') AND holidays_type = '1' AND holidays_status = '1'";
     $queryhol1 = mysqli_query($db_conn, $sqlhol1);
@@ -240,9 +291,21 @@ while($row02 = mysqli_fetch_array($query02)) {
       while($rowholrate = mysqli_fetch_array($queryholrate)) {
         $holratepercentage = $rowholrate["holiday_rate_percent"];  
       }
-      $holidaybonus = ($holratepercentage / 100) * $hourdiff;
-      $hoursworked2 = $hoursworked2+$holidaybonus;
+
+      $xotcountbase2 = $xotcount2 + $otcount2;
+
+      $xotcount2 = $xotcount2 + $otcount2 + ($otcount2 * 0.30);
+
+      $secondcycleholidaybonus1 = ($holratepercentage / 100) * $dailycount2;
+      $secondcycleholidayhoursworked1 = $secondcycleholidayhoursworked1+$hourdiff;
+      if($secondcycleholidayhoursworked1 > 8) {
+        $secondcycleholidayhoursworked1 = 8;
+      }
+      $secondcycleholidaybonushours1 = $secondcycleholidaybonushours1+$secondcycleholidaybonus1;
+    // $hoursworked2 = $hoursworked2+$secondcycleholidaybonus1;
+
     }
+
     $sqlhol2 = "SELECT id FROM hurtajadmin_holidays WHERE DATE(holidays_date) = DATE('$datein') AND holidays_type = '2' AND holidays_status = '1'";
     $queryhol2 = mysqli_query($db_conn, $sqlhol2);
     $counthol2 = mysqli_num_rows($queryhol2);
@@ -253,44 +316,131 @@ while($row02 = mysqli_fetch_array($query02)) {
       while($rowholrate = mysqli_fetch_array($queryholrate)) {
         $holratepercentage = $rowholrate["holiday_rate_percent"];  
       }
-      $holidaybonus = ($holratepercentage / 100) * $hourdiff;
-      $hoursworked2 = $hoursworked2+$holidaybonus;
+
+      $xotcountbase2 = $xotcount2 + $otcount2;
+
+      $xotcount2 = $xotcount2 + $otcount2 + ($otcount2 * 0.30);
+
+      $secondcycleholidaybonus2 = ($holratepercentage / 100) * $dailycount2;
+      $secondcycleholidayhoursworked2 = $secondcycleholidayhoursworked2+$hourdiff;
+      if($secondcycleholidayhoursworked2 > 8) {
+        $secondcycleholidayhoursworked2 = 8;
+      }
+      $secondcycleholidaybonushours2 = $secondcycleholidaybonushours2+$secondcycleholidaybonus2;
+    // $hoursworked2 = $hoursworked2+$secondcycleholidaybonus2;
     }
-  } 
-}
-$sql1 = "SELECT * FROM hurtajadmin_employee_settings WHERE employee_id = '$empid'";
-$query1 = mysqli_query($db_conn, $sql1);
-$count1 = mysqli_num_rows($query1);
-if($count1 > 0) {
-  while($row1 = mysqli_fetch_array($query1)) {  
-    $perhour = $row1["employee_settings_perhour"];
-    $tax = $row1["employee_settings_tax"];
-    $pagibig = $row1["employee_settings_pagibig"];
-    $sss = $row1["employee_settings_sss"];
-    $philhealth = $row1["employee_settings_philhealth"];
-  }
-}
-    // 160 hours worked from attendance
-    // $bimonthsalary = $perhour*$hoursworked;
-    $otpay1 = $perhour * $xotcount1; // this is base on per hour not ot per hour
-    $otpay2 = $perhour * $xotcount2; // this is base on per hour not ot per hour
-    $bimonthsalary1 = $perhour*$hoursworked1+$otpay1;
-    $bimonthsalary2 = $perhour*$hoursworked2+$otpay2;
-    if($insurancecont10 == '1') {
-      $sql10 = "SELECT * FROM hurtajadmin_insurance ";
-      $query10 = mysqli_query($db_conn, $sql10);
-      $count10 = mysqli_num_rows($query10);
-      if($count10 > 0) {
-        while($row10 = mysqli_fetch_array($query10)) {  
-          $insurance = $row10["insurance_fee"];
-          if($insurance == "") {
-            $insurance = 0;
+
+    if($counthol1 < 1 && $counthol2 < 1) {
+      $xotcountbase2 = $xotcount2 + $otcount2;
+      $xotcount2 = $xotcount2 + $otcount2;
+    }
+
+
+
+    } 
+    }
+    $sql1 = "SELECT * FROM hurtajadmin_employee_settings WHERE employee_id = '$empid'";
+    $query1 = mysqli_query($db_conn, $sql1);
+    $count1 = mysqli_num_rows($query1);
+    if($count1 > 0) {
+      while($row1 = mysqli_fetch_array($query1)) {  
+        $perhour = $row1["employee_settings_perhour"];
+        $tax = $row1["employee_settings_tax"];
+        $pagibig = $row1["employee_settings_pagibig"];
+        $sss = $row1["employee_settings_sss"];
+        $philhealth = $row1["employee_settings_philhealth"];
+      }
+    }
+
+    $sundayStartDate1 = date('Y-m-d', strtotime($firstcycledate1));
+    $sundayEndDate1 = date('Y-m-d', strtotime($firstcycledate2));
+
+    $sundayStartDate2 = date('Y-m-d', strtotime($secondcycledate1));
+    $sundayEndDate2 = date('Y-m-d', strtotime($secondcycledate2));
+
+
+    $sundays1 = array();
+
+    while ($sundayStartDate1 <= $sundayEndDate1) {
+      if (date('w', strtotime($sundayStartDate1)) == 0) {
+        $sundays1[] = date('Y-m-d', strtotime($sundayStartDate1));
+      }
+
+      $sundayStartDate1 = date('Y-m-d H:i:s', strtotime($sundayStartDate1 . ' +1 day'));
+    }
+
+    if(count($sundays1) > 0) {
+      for($i = 0; $i < count($sundays1); $i++) {
+        $sundaydate1 = $sundays1[$i];
+        $sqlsd1 = "SELECT DISTINCT DATE(attendance_date_in_out), attendance_date_in_out, attendance_value FROM hurtajadmin_attendance WHERE employee_id = '$empid' AND date(attendance_date_in_out) = '$sundaydate1' AND attendance_value = '0' AND attendance_status = '1' LIMIT 1";
+        $querysd1 = mysqli_query($db_conn, $sqlsd1);
+        $countsd1 = mysqli_num_rows($querysd1);
+        while($rowsd1 = mysqli_fetch_array($querysd1)) {
+          $dateinsd1 = $rowsd1["attendance_date_in_out"];
+          $sqloutsd1 = "SELECT id, attendance_date_in_out FROM hurtajadmin_attendance WHERE employee_id = '$empid' AND DATE(attendance_date_in_out) = DATE('$dateinsd1') AND attendance_value = '1' AND attendance_status = '1' LIMIT 1";
+          $queryoutsd1 = mysqli_query($db_conn, $sqloutsd1);
+          $countoutsd1 = mysqli_num_rows($queryoutsd1);
+          if($countoutsd1 > 0) {
+            while($rowoutsd1 = mysqli_fetch_array($queryoutsd1)) {
+              $attendanceidoutsd1 = $rowoutsd1["id"];  
+              $dateoutsd = $rowoutsd1["attendance_date_in_out"];
+            }
+
+            $hourdiff1 = round((strtotime($dateoutsd1) - strtotime($dateinsd1))/3600, 1);
+            if($hourdiff1 > 8) {
+              $hourdiff1 = 8;
+            }
+            $sundayhoursworked1 = $sundayhoursworked1 + $hourdiff1;
           }
+
         }
       }
-    }else if($insurancecont10 == '2') {
-      $insurance = 0;
     }
+
+    $sundays2 = array();
+
+    while ($sundayStartDate2 <= $sundayEndDate2) {
+      if (date('w', strtotime($sundayStartDate2)) == 0) {
+        $sundays2[] = date('Y-m-d', strtotime($sundayStartDate2));
+      }
+
+      $sundayStartDate2 = date('Y-m-d H:i:s', strtotime($sundayStartDate2 . ' +1 day'));
+    }
+
+    if(count($sundays2) > 0) {
+      for($i = 0; $i < count($sundays2); $i++) {
+        $sundaydate2 = $sundays2[$i];
+        $sqlsd2 = "SELECT DISTINCT DATE(attendance_date_in_out), attendance_date_in_out, attendance_value FROM hurtajadmin_attendance WHERE employee_id = '$empid' AND date(attendance_date_in_out) = '$sundaydate2' AND attendance_value = '0' AND attendance_status = '1' LIMIT 1";
+        $querysd2 = mysqli_query($db_conn, $sqlsd2);
+        $countsd2 = mysqli_num_rows($querysd2);
+        while($rowsd2 = mysqli_fetch_array($querysd2)) {
+          $dateinsd2 = $rowsd2["attendance_date_in_out"];
+          $sqloutsd2 = "SELECT id, attendance_date_in_out FROM hurtajadmin_attendance WHERE employee_id = '$empid' AND DATE(attendance_date_in_out) = DATE('$dateinsd2') AND attendance_value = '1' AND attendance_status = '1' LIMIT 1";
+          $queryoutsd2 = mysqli_query($db_conn, $sqloutsd2);
+          $countoutsd2 = mysqli_num_rows($queryoutsd2);
+          if($countoutsd2 > 0) {
+            while($rowoutsd2 = mysqli_fetch_array($queryoutsd2)) {
+              $attendanceidoutsd2 = $rowoutsd2["id"];  
+              $dateoutsd2 = $rowoutsd2["attendance_date_in_out"];
+            }
+
+            $hourdiff2 = round((strtotime($dateoutsd2) - strtotime($dateinsd2))/3600, 1);
+            if($hourdiff2 > 8) {
+              $hourdiff2 = 8;
+            }
+            $sundayhoursworked2 = $sundayhoursworked2 + $hourdiff2;
+          }
+
+        }
+      }
+    }
+
+    $otpay1 = $perhour * $xotcount1; // this is base on per hour not ot per hour
+    $otpay2 = $perhour * $xotcount2; // this is base on per hour not ot per hour
+    $bimonthsalary1 = (($hoursworked1-$sundayhoursworked1-$firstcycleholidayhoursworked1-$firstcycleholidayhoursworked2)*$perhour)+($xotcount1*$perhour)+($sundayhoursworked1*$perhour)+(($firstcycleholidayhoursworked1+$firstcycleholidaybonushours1)*$perhour)+(($firstcycleholidayhoursworked2+$firstcycleholidaybonushours2)*$perhour);
+
+    $bimonthsalary2 = (($hoursworked2-$sundayhoursworked2-$secondcycleholidayhoursworked1-$secondcycleholidayhoursworked2)*$perhour)+($xotcount2*$perhour)+($sundayhoursworked2*$perhour)+(($secondcycleholidayhoursworked1+$secondcycleholidaybonushours1)*$perhour)+(($secondcycleholidayhoursworked2+$secondcycleholidaybonushours2)*$perhour);
+
     if($tax == '1') {
       $sql2 = "SELECT * FROM hurtajadmin_tax_contribution WHERE $bimonthsalary1 >= tax_contribution_range_from AND $bimonthsalary1 <= tax_contribution_range_to";
       $query2 = mysqli_query($db_conn, $sql2);
@@ -387,20 +537,31 @@ if($count1 > 0) {
         }
       }
     }
-    $sql6 = "SELECT * FROM hurtajadmin_cash_loan_advance WHERE cash_loan_advance_date >= '$firstcycledate1' AND cash_loan_advance_date < '$firstcycledate2' AND employee_id = '$empid' AND cash_loan_advance_type = '2'";
+    $sql6 = "SELECT * FROM hurtajadmin_cash_loan_advance WHERE cash_loan_advance_date >= '$firstcycledate1' AND cash_loan_advance_date < '$firstcycledate2' AND employee_id = '$empid'";
     $query6 = mysqli_query($db_conn, $sql6);
     $count6 = mysqli_num_rows($query6);
     if($count6 > 0) {
       while($row6 = mysqli_fetch_array($query6)) {  
-        $cashadvancefirstcycle = $cashadvancefirstcycle+$row6["cash_loan_advance_amount"];
+        $cltype = $row6["cash_loan_advance_type"];
+        if($cltype == "1") {
+          $cashloanfirstcycle = $cashloanfirstcycle+$row6["cash_loan_advance_amount"];
+        } else if($cltype == "2") {
+          $cashadvancefirstcycle = $cashadvancefirstcycle+$row6["cash_loan_advance_amount"];
+        }
+
       }
     }
-    $sql7 = "SELECT * FROM hurtajadmin_cash_loan_advance WHERE cash_loan_advance_date >= '$secondcycledate1' AND cash_loan_advance_date < '$secondcycledate2' AND employee_id = '$empid' AND cash_loan_advance_type = '2'";
+    $sql7 = "SELECT * FROM hurtajadmin_cash_loan_advance WHERE cash_loan_advance_date >= '$secondcycledate1' AND cash_loan_advance_date < '$secondcycledate2' AND employee_id = '$empid'";
     $query7 = mysqli_query($db_conn, $sql7);
     $count7 = mysqli_num_rows($query7);
     if($count7 > 0) {
       while($row7 = mysqli_fetch_array($query7)) {  
-        $cashadvancesecondcycle = $cashadvancesecondcycle+$row7["cash_loan_advance_amount"];
+        $cltype = $row7["cash_loan_advance_type"];
+        if($cltype == "1") {
+          $cashloansecondcycle = $cashloansecondcycle+$row7["cash_loan_advance_amount"];
+        } else if($cltype == "2") {
+          $cashadvancesecondcycle = $cashadvancesecondcycle+$row7["cash_loan_advance_amount"];
+        }
       }
     }
     $sql8 = "SELECT SUM(id) AS regularholidaytotal FROM hurtajadmin_holidays WHERE holidays_date >= '$firstcycledate1' AND holidays_date < '$firstcycledate2' AND holidays_type = '1' AND holidays_status = '1'";
@@ -419,24 +580,26 @@ if($count1 > 0) {
         $holidaysecondcycle = $row9["regularholidaytotal"];
       }
     }
-    $hoursworked = $hoursworked1+$hoursworked2;
-    $deductions1 = (float)$taxcont1+(float)$pagibigcont1+(float)$ssscont1+(float)$philhealthcont1+(float)$insurance;
-    $deductions2 = (float)$taxcont2+(float)$pagibigcont2+(float)$ssscont2+(float)$philhealthcont2+(float)$insurance;
+
+    $hoursworked = $hoursworked1+$hoursworked2+$xotcountbase1+$xotcountbase2; 
+    $deductions1 = (float)$taxcont1+(float)$pagibigcont1+(float)$ssscont1+(float)$philhealthcont1;
+    $deductions2 = (float)$taxcont2+(float)$pagibigcont2+(float)$ssscont2+(float)$philhealthcont2;
     $payroll_settings_paycheck_deducted_1 = 0;
     $payroll_settings_paycheck_base_1 = 0;
     $payroll_settings_paycheck_deducted_2 = 0;
     $payroll_settings_paycheck_base_2= 0;
+
     if($perhour > 0) {
-      if($deductions1 > 0 && $cashadvancefirstcycle > 0 && $hoursworked1 > 0) { 
-        $payroll_settings_paycheck_deducted_1 = ($perhour*$hoursworked1+$perhour*$xotcount1)-$deductions1-$cashadvancefirstcycle;
+      if($deductions1 > 0 && ($cashloanfirstcycle > 0 || $cashadvancefirstcycle > 0) && $hoursworked1 > 0) { 
+        $payroll_settings_paycheck_deducted_1 = ($perhour*$hoursworked1+$perhour*$xotcount1)-$deductions1-$cashloanfirstcycle-$cashadvancefirstcycle;
         $payroll_settings_paycheck_base_1 = $perhour*$hoursworked1+$perhour*$xotcount1;
-      } else if($deductions1 > 0 && $cashadvancefirstcycle < 1 && $hoursworked1 > 0) {
+      } else if($deductions1 > 0 && $cashloanfirstcycle < 1 && $cashadvancefirstcycle < 1 && $hoursworked1 > 0) {
         $payroll_settings_paycheck_deducted_1 = ($perhour*$hoursworked1+$perhour*$xotcount1)-$deductions1;
         $payroll_settings_paycheck_base_1 = $perhour*$hoursworked1+$perhour*$xotcount1;
-      } else if($deductions1 < 1 && $cashadvancefirstcycle > 0  && $hoursworked1 > 0) { 
-        $payroll_settings_paycheck_deducted_1 = ($perhour*$hoursworked1+$perhour*$xotcount1)-$cashadvancefirstcycle;
+      } else if($deductions1 < 1 && ($cashloanfirstcycle > 0 || $cashadvancefirstcycle > 0)  && $hoursworked1 > 0) { 
+        $payroll_settings_paycheck_deducted_1 = ($perhour*$hoursworked1+$perhour*$xotcount1)-$cashloanfirstcycle-$cashadvancefirstcycle;
         $payroll_settings_paycheck_base_1 = $perhour*$hoursworked1+$perhour*$xotcount1;
-      } else if($deductions1 < 1 && $cashadvancefirstcycle < 1  && $hoursworked1 > 0) { 
+      } else if($deductions1 < 1 && $cashloanfirstcycle < 1 && $cashadvancefirstcycle < 1  && $hoursworked1 > 0) { 
         $payroll_settings_paycheck_deducted_1 = $perhour*$hoursworked1+$perhour*$xotcount1;
         $payroll_settings_paycheck_base_1 = $perhour*$hoursworked1+$perhour*$xotcount1;
       } else {
@@ -445,17 +608,18 @@ if($count1 > 0) {
     } else {
       $payroll_settings_paycheck_deducted_1 = "0";
     }
+
     if($perhour > 0) {
-      if($deductions2 > 0 && $cashadvancesecondcycle > 0 && $hoursworked2 > 0) { 
-        $payroll_settings_paycheck_deducted_2 = ($perhour*$hoursworked2+$perhour*$xotcount2)-$deductions2-$cashadvancesecondcycle;
+      if($deductions2 > 0 && ($cashloansecondcycle > 0 || $cashadvancesecondcycle > 0) && $hoursworked2 > 0) { 
+        $payroll_settings_paycheck_deducted_2 = ($perhour*$hoursworked2+$perhour*$xotcount2)-$deductions2-$cashloansecondcycle-$cashadvancesecondcycle;
         $payroll_settings_paycheck_base_2 = $perhour*$hoursworked2+$perhour*$xotcount2;
-      } else if($deductions2 > 0 && $cashadvancesecondcycle < 1 && $hoursworked2 > 0) { 
+      } else if($deductions2 > 0 && $cashloansecondcycle < 1 && $cashadvancesecondcycle < 1 && $hoursworked2 > 0) { 
         $payroll_settings_paycheck_deducted_2 = ($perhour*$hoursworked2+$perhour*$xotcount2)-$deductions2;
         $payroll_settings_paycheck_base_2 = $perhour*$hoursworked2+$perhour*$xotcount2;
-      } else if($deductions2 < 1 && $cashadvancesecondcycle > 0 && $hoursworked2 > 0) { 
+      } else if($deductions2 < 1 && ($cashloansecondcycle > 0 || $cashadvancesecondcycle > 0) && $hoursworked2 > 0) { 
         $payroll_settings_paycheck_deducted_2 = ($perhour*$hoursworked2+$perhour*$xotcount2)-$cashadvancesecondcycle;
         $payroll_settings_paycheck_base_2 = $perhour*$hoursworked2+$perhour*$xotcount2;
-      } else if($deductions2 < 1 && $cashadvancesecondcycle < 1 && $hoursworked2 > 0) { 
+      } else if($deductions2 < 1 && $cashloansecondcycle < 1 && $cashadvancesecondcycle < 1 && $hoursworked2 > 0) { 
         $payroll_settings_paycheck_deducted_2 = $perhour*$hoursworked2+$perhour*$xotcount2;
         $payroll_settings_paycheck_base_2 = $perhour*$hoursworked2+$perhour*$xotcount2;
       } else {
@@ -471,7 +635,7 @@ if($count1 > 0) {
     <td>'.$fname.' '.$mnameinitial.'. '.$lname.'</td>           
     <td>'.$gendertext.'</td>
     <td>'.$statstext.'</td>
-    <td><a href="javascript:void(0)" onclick="openEmployeeMore(\''.$empid.'\',\''.$fname.' '.$mnameinitial.'. '.$lname.'\',\''.$gendertext.'\',\''.$birthday.'\',\''.$contact.'\',\''.$address.'\',\''.$datehired.'\',\''.$datestart.'\',\''.$dateend.'\',\''.$statstext.'\')">More</a> | <a href="javascript:void(0)"  onclick="openEmployeePayrollSettingsDialog(\''.$empid.'\',\''.$recid.'\',\''.$fname.' '.$mnameinitial.'. '.$lname.'\',\''.$perhour.'\',\''.$tax.'\',\''.$pagibig.'\',\''.$sss.'\',\''.$philhealth.'\',\''.$hoursworked.'\',\''.$payroll_settings_paycheck_deducted_1.'\',\''.$payroll_settings_paycheck_deducted_2.'\')">Payroll Settings</a> | <a href="javascript:void(0)" onclick="openEmployeeEditDialog('.$recid.',\''.$empid.'\',\''.$fname.'\',\''.$mname.'\',\''.$lname.'\',\''.$gender.'\',\''.$birthday.'\',\''.$address.'\',\''.$contact.'\',\''.$datehired.'\',\''.$datestart.'\',\''.$dateend.'\',\''.$stats.'\',\''.$tinid.'\',\''.$pagibigid.'\',\''.$philhealthid.'\',\''.$sssid.'\')">Edit</a> | <a href="javascript:void(0)" onclick="openEmployeeDeleteDialog('.$recid.')">Delete</a></td>
+    <td><a href="javascript:void(0)" onclick="openEmployeeMore(\''.$empid.'\',\''.$fname.' '.$mnameinitial.'. '.$lname.'\',\''.$gendertext.'\',\''.$birthday.'\',\''.$contact.'\',\''.$address.'\',\''.$datehired.'\',\''.$datestart.'\',\''.$dateend.'\',\''.$statstext.'\')">More</a> | <a href="javascript:void(0)"  onclick="openEmployeePayrollSettingsDialog(\''.$empid.'\',\''.$recid.'\',\''.$fname.' '.$mnameinitial.'. '.$lname.'\',\''.$perhour.'\',\''.$tax.'\',\''.$pagibig.'\',\''.$sss.'\',\''.$philhealth.'\',\''.$hoursworked.'\',\''.$bimonthsalary1.'\',\''.$bimonthsalary2.'\')">Payroll Settings</a> | Cash Loan/Advance | <a href="javascript:void(0)" onclick="openEmployeeEditDialog('.$recid.',\''.$empid.'\',\''.$fname.'\',\''.$mname.'\',\''.$lname.'\',\''.$gender.'\',\''.$birthday.'\',\''.$address.'\',\''.$contact.'\',\''.$datehired.'\',\''.$datestart.'\',\''.$dateend.'\',\''.$stats.'\',\''.$tinid.'\',\''.$pagibigid.'\',\''.$philhealthid.'\',\''.$sssid.'\')">Edit</a> | <a href="javascript:void(0)" onclick="openEmployeeDeleteDialog('.$recid.')">Delete</a></td></tr>
     ';   
 
   }
@@ -497,7 +661,7 @@ if($count1 > 0) {
     ';
     while($row = mysqli_fetch_array($result)) {  
      $count++; 
-     $recid = $row["id"];
+    $recid = $row["id"];
     $empid = $row["employee_id"];
     $fname = $row["employee_fname"];
     $mname = $row["employee_mname"];
@@ -515,17 +679,6 @@ if($count1 > 0) {
     $pagibigid = "";
     $philhealthid = "";
     $sssid = "";
-
-    $sqlempid = "SELECT * FROM hurtajadmin_employee_identification WHERE employee_id = '$empid' LIMIT 1";
-    $queryempid = mysqli_query($db_conn, $sqlempid);
-    while($rowempid = mysqli_fetch_array($queryempid)) {
-      $tinid = $rowempid["employee_identification_tin"];
-      $pagibigid = $rowempid["employee_identification_pagibig"];
-      $philhealthid = $rowempid["employee_identification_philhealth"];
-      $sssid = $rowempid["employee_identification_sss"];
-    }
-
-    $mnameinitial = substr($mname, 0, 1);
 
     if($birthday == "0000-00-00 00:00:00" || $birthday == "1970-01-01 00:00:00" || $birthday == "1970-01-01 01:00:00") {
       $birthday = "";
@@ -552,15 +705,12 @@ if($count1 > 0) {
     }
 
     $gendertext = "";
-
     if($gender == "1") {
       $gendertext = "Male";
     } else if($gender == "2") {
       $gendertext = "Female";
     }
-
     $statstext = "";
-
     if($stats == "1") {
       $statstext = "Active";
     } else if($stats == "2") {
@@ -570,14 +720,22 @@ if($count1 > 0) {
     } else if($stats == "4") {
       $statstext = "AWOL";
     }
-
+    $mnameinitial = substr($mname, 0, 1);
     $perhour = 0;
     $tax = "";
     $pagibig = "";
     $sss = "";
     $philhealth = "";
-    $insurancecont10 = "";
-    $insurance = "";
+    $sundayhoursworked1 = 0;
+    $sundayhoursworked2 = 0;
+    $firstcycleholidayhoursworked1 = 0;
+    $firstcycleholidayhoursworked2 = 0;
+    $firstcycleholidaybonushours1 = 0;
+    $firstcycleholidaybonushours2 = 0;
+    $secondcycleholidayhoursworked1 = 0;
+    $secondcycleholidayhoursworked2 = 0;
+    $secondcycleholidaybonushours1 = 0;
+    $secondcycleholidaybonushours2 = 0;
     $taxcont1 = 0;
     $ssscont1 = 0;
     $philhealthcont1 = 0;
@@ -592,18 +750,31 @@ if($count1 > 0) {
     $utcount1 = 0;
     $otcount2 = 0;
     $xotcount1 = 0;
+    $xotcountbase1 = 0;
     $xotcount2 = 0;
+    $xotcountbase2 = 0;
     $utcount2 = 0;
     $dailycount1 = 0;
     $dailycount2 = 0;
+    $latecount1 = 0;
+    $latecount2 = 0;
     $disabled = "";
+    $currentprevyear = "";
     $previousmonth = date("m", strtotime("-1 months"));
-    $currentmonth = date("m");
-    $currentyear = date("Y");
+    $month = date("m");
+    $year = date("Y");
+    if($month == "1") {
+      $currentprevyear = $year-1;
+    } else {
+      $currentprevyear = $year;
+    }
+    $cashloanfirstcycle = 0;
+    $cashloansecondcycle = 0;
     $cashadvancefirstcycle = 0;
     $cashadvancesecondcycle = 0;
     $holidayfirstcycle = 0;
     $holidaysecondcycle = 0;
+
     // $firstcycledate1 = $previousmonth."/26/".$currentyear;
     // $firstcycledate2 = $currentmonth."/11/".$currentyear;
     $firstcycledate1 = "12/26/2017"; //this is cycle 25 to 10
@@ -621,6 +792,15 @@ if($count1 > 0) {
     $count01 = mysqli_num_rows($query01);
     while($row01 = mysqli_fetch_array($query01)) {
       $datein = $row01["attendance_date_in_out"];
+
+      $dateindate = date("Y-m-d", strtotime($datein));
+
+      $latecount1 = $latecount1 + round((strtotime($datein) - strtotime($dateindate." 08:00:00"))/3600, 1);
+
+      if($latecount1 < 0.01) {
+        $latecount1 = 0;
+      }
+
       $sqlout = "SELECT id, attendance_date_in_out FROM hurtajadmin_attendance WHERE employee_id = '$empid' AND DATE(attendance_date_in_out) = DATE('$datein') AND attendance_value = '1' AND attendance_status = '1'";
       $queryout = mysqli_query($db_conn, $sqlout);
       $countout = mysqli_num_rows($queryout);
@@ -630,61 +810,96 @@ if($count1 > 0) {
           $dateout = $rowout["attendance_date_in_out"];
         }
         $hourdiff = round((strtotime($dateout) - strtotime($datein))/3600, 1);
+
     if($hourdiff > 8){ // this is for overtime 
       $otcount1 = $hourdiff - 8;
       $dailycount1 = $hourdiff - $otcount1;
-    }else if($hourdiff < 8){ // this is for undertime
+    } else if($hourdiff < 8){ // this is for undertime
       $utcount1 = $hourdiff;
       $dailycount1 = $hourdiff;
-    }else{
+    } else {
       $dailycount1 = $hourdiff;
     }
-    $xotcount1 = $xotcount1 + $otcount1;
+
     $hoursworked1 = $hoursworked1+$dailycount1;
-    if($hourdiff > 0){
-      $sqlhol1 = "SELECT id FROM hurtajadmin_holidays WHERE DATE(holidays_date) = DATE('$datein') AND holidays_type = '1' AND holidays_status = '1'";
-      $queryhol1 = mysqli_query($db_conn, $sqlhol1);
-      $counthol1 = mysqli_num_rows($queryhol1);
-      if($counthol1 > 0) {
-        $sqlholrate = "SELECT * FROM hurtajadmin_holiday_rate WHERE id = '1'";
-        $queryholrate = mysqli_query($db_conn, $sqlholrate);
-        $holratepercentage = 0;
-        while($rowholrate = mysqli_fetch_array($queryholrate)) {
-          $holratepercentage = $rowholrate["holiday_rate_percent"];  
-        }
-        $holidaybonus = ($holratepercentage / 100) * $hourdiff;
-        $hoursworked1 = $hoursworked1+$holidaybonus;
+    $sqlhol1 = "SELECT id FROM hurtajadmin_holidays WHERE DATE(holidays_date) = DATE('$datein') AND holidays_type = '1' AND holidays_status = '1'";
+    $queryhol1 = mysqli_query($db_conn, $sqlhol1);
+    $counthol1 = mysqli_num_rows($queryhol1);
+    if($counthol1 > 0) {
+      $sqlholrate = "SELECT * FROM hurtajadmin_holiday_rate WHERE id = '1'";
+      $queryholrate = mysqli_query($db_conn, $sqlholrate);
+      $holratepercentage = 0;
+      while($rowholrate = mysqli_fetch_array($queryholrate)) {
+        $holratepercentage = $rowholrate["holiday_rate_percent"];  
       }
-      $sqlhol2 = "SELECT id FROM hurtajadmin_holidays WHERE DATE(holidays_date) = DATE('$datein') AND holidays_type = '2' AND holidays_status = '1'";
-      $queryhol2 = mysqli_query($db_conn, $sqlhol2);
-      $counthol2 = mysqli_num_rows($queryhol2);
-      if($counthol2 > 0) {
-        $sqlholrate = "SELECT * FROM hurtajadmin_holiday_rate WHERE id = '2'";
-        $queryholrate = mysqli_query($db_conn, $sqlholrate);
-        $holratepercentage = 0;
-        while($rowholrate = mysqli_fetch_array($queryholrate)) {
-          $holratepercentage = $rowholrate["holiday_rate_percent"];  
-        }
-        $holidaybonus = ($holratepercentage / 100) * $hourdiff;
-        $hoursworked1 = $hoursworked1+$holidaybonus;
+
+      $xotcountbase1 = $xotcount1 + $otcount1;
+
+      $xotcount1 = $xotcount1 + $otcount1 + ($otcount1 * 0.30);
+
+      $firstcycleholidaybonus1 = ($holratepercentage / 100) * $hourdiff;
+      $firstcycleholidayhoursworked1 = $firstcycleholidayhoursworked1+$hourdiff;
+      if($firstcycleholidayhoursworked1 > 8) {
+        $firstcycleholidayhoursworked1 = 8;
       }
+      $firstcycleholidaybonushours1 = $firstcycleholidayhoursworked1+$firstcycleholidaybonus1;
+    // $hoursworked1 = $hoursworked1+$firstcycleholidaybonus1;
+    } 
+    $sqlhol2 = "SELECT id FROM hurtajadmin_holidays WHERE DATE(holidays_date) = DATE('$datein') AND holidays_type = '2' AND holidays_status = '1'";
+    $queryhol2 = mysqli_query($db_conn, $sqlhol2);
+    $counthol2 = mysqli_num_rows($queryhol2);
+    if($counthol2 > 0) {
+      $sqlholrate = "SELECT * FROM hurtajadmin_holiday_rate WHERE id = '2'";
+      $queryholrate = mysqli_query($db_conn, $sqlholrate);
+      $holratepercentage = 0;
+      while($rowholrate = mysqli_fetch_array($queryholrate)) {
+        $holratepercentage = $rowholrate["holiday_rate_percent"];  
+      }
+
+      $xotcountbase1 = $xotcount1 + $otcount1;
+
+      $xotcount1 = $xotcount1 + $otcount1 + ($otcount1 * 0.30);
+
+      $firstcycleholidaybonus2 = ($holratepercentage / 100) * $hourdiff;
+      $firstcycleholidayhoursworked2 = $firstcycleholidayhoursworked2+$hourdiff;
+      if($firstcycleholidayhoursworked2 > 8) {
+        $firstcycleholidayhoursworked2 = 8;
+      }
+      $firstcycleholidaybonushours2 = $firstcycleholidayhoursworked2+$firstcycleholidaybonus2;
+    // $hoursworked1 = $hoursworked1+$firstcycleholidaybonus2;
     }
-  } 
-}
-$sql02 = "SELECT DISTINCT DATE(attendance_date_in_out), attendance_date_in_out, attendance_value FROM hurtajadmin_attendance WHERE employee_id = '$empid' AND attendance_date_in_out >= '$secondcycledate1' AND attendance_date_in_out < '$secondcycledate2' AND attendance_value = '0' AND attendance_status = '1'";
-$query02 = mysqli_query($db_conn, $sql02);
-$count02 = mysqli_num_rows($query02);
-while($row02 = mysqli_fetch_array($query02)) {
-  $datein = $row02["attendance_date_in_out"];
-  $sqlout = "SELECT id, attendance_date_in_out FROM hurtajadmin_attendance WHERE employee_id = '$empid' AND DATE(attendance_date_in_out) = DATE('$datein') AND attendance_value = '1' AND attendance_status = '1'";
-  $queryout = mysqli_query($db_conn, $sqlout);
-  $countout = mysqli_num_rows($queryout);
-  if($countout > 0) {
-    while($rowout = mysqli_fetch_array($queryout)) {
-      $attendanceidout = $rowout["id"];  
-      $dateout = $rowout["attendance_date_in_out"];
+
+    if($counthol1 < 1 && $counthol2 < 1) {
+      $xotcountbase1 = $xotcount1 + $otcount1;
+      $xotcount1 = $xotcount1 + $otcount1;
     }
-    $hourdiff = round((strtotime($dateout) - strtotime($datein))/3600, 1);
+
+    } 
+    }
+    $sql02 = "SELECT DISTINCT DATE(attendance_date_in_out), attendance_date_in_out, attendance_value FROM hurtajadmin_attendance WHERE employee_id = '$empid' AND attendance_date_in_out >= '$secondcycledate1' AND attendance_date_in_out < '$secondcycledate2' AND attendance_value = '0' AND attendance_status = '1'";
+    $query02 = mysqli_query($db_conn, $sql02);
+    $count02 = mysqli_num_rows($query02);
+    while($row02 = mysqli_fetch_array($query02)) {
+      $datein = $row02["attendance_date_in_out"];
+
+      $dateindate = date("Y-m-d", strtotime($datein));
+
+      $latecount2 = $latecount2 + round((strtotime($datein) - strtotime($dateindate." 08:00:00"))/3600, 1);
+
+      if($latecount2 < 0.01) {
+        $latecount2 = 0;
+      }
+
+      $sqlout = "SELECT id, attendance_date_in_out FROM hurtajadmin_attendance WHERE employee_id = '$empid' AND DATE(attendance_date_in_out) = DATE('$datein') AND attendance_value = '1' AND attendance_status = '1'";
+      $queryout = mysqli_query($db_conn, $sqlout);
+      $countout = mysqli_num_rows($queryout);
+      if($countout > 0) {
+        while($rowout = mysqli_fetch_array($queryout)) {
+          $attendanceidout = $rowout["id"];  
+          $dateout = $rowout["attendance_date_in_out"];
+        }
+        $hourdiff = round((strtotime($dateout) - strtotime($datein))/3600, 1);
+
     if($hourdiff > 8){ // this is for overtime 
       $otcount2 = $hourdiff - 8;
       $dailycount2 = $hourdiff - $otcount2;
@@ -694,7 +909,7 @@ while($row02 = mysqli_fetch_array($query02)) {
     }else{
       $dailycount2 = $hourdiff;
     }
-    $xotcount2 = $xotcount2 + $otcount2;
+
     $hoursworked2 = $hoursworked2+$dailycount2;
     $sqlhol1 = "SELECT id FROM hurtajadmin_holidays WHERE DATE(holidays_date) = DATE('$datein') AND holidays_type = '1' AND holidays_status = '1'";
     $queryhol1 = mysqli_query($db_conn, $sqlhol1);
@@ -706,9 +921,21 @@ while($row02 = mysqli_fetch_array($query02)) {
       while($rowholrate = mysqli_fetch_array($queryholrate)) {
         $holratepercentage = $rowholrate["holiday_rate_percent"];  
       }
-      $holidaybonus = ($holratepercentage / 100) * $hourdiff;
-      $hoursworked2 = $hoursworked2+$holidaybonus;
+
+      $xotcountbase2 = $xotcount2 + $otcount2;
+
+      $xotcount2 = $xotcount2 + $otcount2 + ($otcount2 * 0.30);
+
+      $secondcycleholidaybonus1 = ($holratepercentage / 100) * $dailycount2;
+      $secondcycleholidayhoursworked1 = $secondcycleholidayhoursworked1+$hourdiff;
+      if($secondcycleholidayhoursworked1 > 8) {
+        $secondcycleholidayhoursworked1 = 8;
+      }
+      $secondcycleholidaybonushours1 = $secondcycleholidaybonushours1+$secondcycleholidaybonus1;
+    // $hoursworked2 = $hoursworked2+$secondcycleholidaybonus1;
+
     }
+
     $sqlhol2 = "SELECT id FROM hurtajadmin_holidays WHERE DATE(holidays_date) = DATE('$datein') AND holidays_type = '2' AND holidays_status = '1'";
     $queryhol2 = mysqli_query($db_conn, $sqlhol2);
     $counthol2 = mysqli_num_rows($queryhol2);
@@ -719,44 +946,131 @@ while($row02 = mysqli_fetch_array($query02)) {
       while($rowholrate = mysqli_fetch_array($queryholrate)) {
         $holratepercentage = $rowholrate["holiday_rate_percent"];  
       }
-      $holidaybonus = ($holratepercentage / 100) * $hourdiff;
-      $hoursworked2 = $hoursworked2+$holidaybonus;
+
+      $xotcountbase2 = $xotcount2 + $otcount2;
+
+      $xotcount2 = $xotcount2 + $otcount2 + ($otcount2 * 0.30);
+
+      $secondcycleholidaybonus2 = ($holratepercentage / 100) * $dailycount2;
+      $secondcycleholidayhoursworked2 = $secondcycleholidayhoursworked2+$hourdiff;
+      if($secondcycleholidayhoursworked2 > 8) {
+        $secondcycleholidayhoursworked2 = 8;
+      }
+      $secondcycleholidaybonushours2 = $secondcycleholidaybonushours2+$secondcycleholidaybonus2;
+    // $hoursworked2 = $hoursworked2+$secondcycleholidaybonus2;
     }
-  } 
-}
-$sql1 = "SELECT * FROM hurtajadmin_employee_settings WHERE employee_id = '$empid'";
-$query1 = mysqli_query($db_conn, $sql1);
-$count1 = mysqli_num_rows($query1);
-if($count1 > 0) {
-  while($row1 = mysqli_fetch_array($query1)) {  
-    $perhour = $row1["employee_settings_perhour"];
-    $tax = $row1["employee_settings_tax"];
-    $pagibig = $row1["employee_settings_pagibig"];
-    $sss = $row1["employee_settings_sss"];
-    $philhealth = $row1["employee_settings_philhealth"];
-  }
-}
-    // 160 hours worked from attendance
-    // $bimonthsalary = $perhour*$hoursworked;
-    $otpay1 = $perhour * $xotcount1; // this is base on per hour not ot per hour
-    $otpay2 = $perhour * $xotcount2; // this is base on per hour not ot per hour
-    $bimonthsalary1 = $perhour*$hoursworked1+$otpay1;
-    $bimonthsalary2 = $perhour*$hoursworked2+$otpay2;
-    if($insurancecont10 == '1') {
-      $sql10 = "SELECT * FROM hurtajadmin_insurance ";
-      $query10 = mysqli_query($db_conn, $sql10);
-      $count10 = mysqli_num_rows($query10);
-      if($count10 > 0) {
-        while($row10 = mysqli_fetch_array($query10)) {  
-          $insurance = $row10["insurance_fee"];
-          if($insurance == "") {
-            $insurance = 0;
+
+    if($counthol1 < 1 && $counthol2 < 1) {
+      $xotcountbase2 = $xotcount2 + $otcount2;
+      $xotcount2 = $xotcount2 + $otcount2;
+    }
+
+
+
+    } 
+    }
+    $sql1 = "SELECT * FROM hurtajadmin_employee_settings WHERE employee_id = '$empid'";
+    $query1 = mysqli_query($db_conn, $sql1);
+    $count1 = mysqli_num_rows($query1);
+    if($count1 > 0) {
+      while($row1 = mysqli_fetch_array($query1)) {  
+        $perhour = $row1["employee_settings_perhour"];
+        $tax = $row1["employee_settings_tax"];
+        $pagibig = $row1["employee_settings_pagibig"];
+        $sss = $row1["employee_settings_sss"];
+        $philhealth = $row1["employee_settings_philhealth"];
+      }
+    }
+
+    $sundayStartDate1 = date('Y-m-d', strtotime($firstcycledate1));
+    $sundayEndDate1 = date('Y-m-d', strtotime($firstcycledate2));
+
+    $sundayStartDate2 = date('Y-m-d', strtotime($secondcycledate1));
+    $sundayEndDate2 = date('Y-m-d', strtotime($secondcycledate2));
+
+
+    $sundays1 = array();
+
+    while ($sundayStartDate1 <= $sundayEndDate1) {
+      if (date('w', strtotime($sundayStartDate1)) == 0) {
+        $sundays1[] = date('Y-m-d', strtotime($sundayStartDate1));
+      }
+
+      $sundayStartDate1 = date('Y-m-d H:i:s', strtotime($sundayStartDate1 . ' +1 day'));
+    }
+
+    if(count($sundays1) > 0) {
+      for($i = 0; $i < count($sundays1); $i++) {
+        $sundaydate1 = $sundays1[$i];
+        $sqlsd1 = "SELECT DISTINCT DATE(attendance_date_in_out), attendance_date_in_out, attendance_value FROM hurtajadmin_attendance WHERE employee_id = '$empid' AND date(attendance_date_in_out) = '$sundaydate1' AND attendance_value = '0' AND attendance_status = '1' LIMIT 1";
+        $querysd1 = mysqli_query($db_conn, $sqlsd1);
+        $countsd1 = mysqli_num_rows($querysd1);
+        while($rowsd1 = mysqli_fetch_array($querysd1)) {
+          $dateinsd1 = $rowsd1["attendance_date_in_out"];
+          $sqloutsd1 = "SELECT id, attendance_date_in_out FROM hurtajadmin_attendance WHERE employee_id = '$empid' AND DATE(attendance_date_in_out) = DATE('$dateinsd1') AND attendance_value = '1' AND attendance_status = '1' LIMIT 1";
+          $queryoutsd1 = mysqli_query($db_conn, $sqloutsd1);
+          $countoutsd1 = mysqli_num_rows($queryoutsd1);
+          if($countoutsd1 > 0) {
+            while($rowoutsd1 = mysqli_fetch_array($queryoutsd1)) {
+              $attendanceidoutsd1 = $rowoutsd1["id"];  
+              $dateoutsd = $rowoutsd1["attendance_date_in_out"];
+            }
+
+            $hourdiff1 = round((strtotime($dateoutsd1) - strtotime($dateinsd1))/3600, 1);
+            if($hourdiff1 > 8) {
+              $hourdiff1 = 8;
+            }
+            $sundayhoursworked1 = $sundayhoursworked1 + $hourdiff1;
           }
+
         }
       }
-    }else if($insurancecont10 == '2') {
-      $insurance = 0;
     }
+
+    $sundays2 = array();
+
+    while ($sundayStartDate2 <= $sundayEndDate2) {
+      if (date('w', strtotime($sundayStartDate2)) == 0) {
+        $sundays2[] = date('Y-m-d', strtotime($sundayStartDate2));
+      }
+
+      $sundayStartDate2 = date('Y-m-d H:i:s', strtotime($sundayStartDate2 . ' +1 day'));
+    }
+
+    if(count($sundays2) > 0) {
+      for($i = 0; $i < count($sundays2); $i++) {
+        $sundaydate2 = $sundays2[$i];
+        $sqlsd2 = "SELECT DISTINCT DATE(attendance_date_in_out), attendance_date_in_out, attendance_value FROM hurtajadmin_attendance WHERE employee_id = '$empid' AND date(attendance_date_in_out) = '$sundaydate2' AND attendance_value = '0' AND attendance_status = '1' LIMIT 1";
+        $querysd2 = mysqli_query($db_conn, $sqlsd2);
+        $countsd2 = mysqli_num_rows($querysd2);
+        while($rowsd2 = mysqli_fetch_array($querysd2)) {
+          $dateinsd2 = $rowsd2["attendance_date_in_out"];
+          $sqloutsd2 = "SELECT id, attendance_date_in_out FROM hurtajadmin_attendance WHERE employee_id = '$empid' AND DATE(attendance_date_in_out) = DATE('$dateinsd2') AND attendance_value = '1' AND attendance_status = '1' LIMIT 1";
+          $queryoutsd2 = mysqli_query($db_conn, $sqloutsd2);
+          $countoutsd2 = mysqli_num_rows($queryoutsd2);
+          if($countoutsd2 > 0) {
+            while($rowoutsd2 = mysqli_fetch_array($queryoutsd2)) {
+              $attendanceidoutsd2 = $rowoutsd2["id"];  
+              $dateoutsd2 = $rowoutsd2["attendance_date_in_out"];
+            }
+
+            $hourdiff2 = round((strtotime($dateoutsd2) - strtotime($dateinsd2))/3600, 1);
+            if($hourdiff2 > 8) {
+              $hourdiff2 = 8;
+            }
+            $sundayhoursworked2 = $sundayhoursworked2 + $hourdiff2;
+          }
+
+        }
+      }
+    }
+
+    $otpay1 = $perhour * $xotcount1; // this is base on per hour not ot per hour
+    $otpay2 = $perhour * $xotcount2; // this is base on per hour not ot per hour
+    $bimonthsalary1 = (($hoursworked1-$sundayhoursworked1-$firstcycleholidayhoursworked1-$firstcycleholidayhoursworked2)*$perhour)+($xotcount1*$perhour)+($sundayhoursworked1*$perhour)+(($firstcycleholidayhoursworked1+$firstcycleholidaybonushours1)*$perhour)+(($firstcycleholidayhoursworked2+$firstcycleholidaybonushours2)*$perhour);
+
+    $bimonthsalary2 = (($hoursworked2-$sundayhoursworked2-$secondcycleholidayhoursworked1-$secondcycleholidayhoursworked2)*$perhour)+($xotcount2*$perhour)+($sundayhoursworked2*$perhour)+(($secondcycleholidayhoursworked1+$secondcycleholidaybonushours1)*$perhour)+(($secondcycleholidayhoursworked2+$secondcycleholidaybonushours2)*$perhour);
+
     if($tax == '1') {
       $sql2 = "SELECT * FROM hurtajadmin_tax_contribution WHERE $bimonthsalary1 >= tax_contribution_range_from AND $bimonthsalary1 <= tax_contribution_range_to";
       $query2 = mysqli_query($db_conn, $sql2);
@@ -853,20 +1167,31 @@ if($count1 > 0) {
         }
       }
     }
-    $sql6 = "SELECT * FROM hurtajadmin_cash_loan_advance WHERE cash_loan_advance_date >= '$firstcycledate1' AND cash_loan_advance_date < '$firstcycledate2' AND employee_id = '$empid' AND cash_loan_advance_type = '2'";
+    $sql6 = "SELECT * FROM hurtajadmin_cash_loan_advance WHERE cash_loan_advance_date >= '$firstcycledate1' AND cash_loan_advance_date < '$firstcycledate2' AND employee_id = '$empid'";
     $query6 = mysqli_query($db_conn, $sql6);
     $count6 = mysqli_num_rows($query6);
     if($count6 > 0) {
       while($row6 = mysqli_fetch_array($query6)) {  
-        $cashadvancefirstcycle = $cashadvancefirstcycle+$row6["cash_loan_advance_amount"];
+        $cltype = $row6["cash_loan_advance_type"];
+        if($cltype == "1") {
+          $cashloanfirstcycle = $cashloanfirstcycle+$row6["cash_loan_advance_amount"];
+        } else if($cltype == "2") {
+          $cashadvancefirstcycle = $cashadvancefirstcycle+$row6["cash_loan_advance_amount"];
+        }
+
       }
     }
-    $sql7 = "SELECT * FROM hurtajadmin_cash_loan_advance WHERE cash_loan_advance_date >= '$secondcycledate1' AND cash_loan_advance_date < '$secondcycledate2' AND employee_id = '$empid' AND cash_loan_advance_type = '2'";
+    $sql7 = "SELECT * FROM hurtajadmin_cash_loan_advance WHERE cash_loan_advance_date >= '$secondcycledate1' AND cash_loan_advance_date < '$secondcycledate2' AND employee_id = '$empid'";
     $query7 = mysqli_query($db_conn, $sql7);
     $count7 = mysqli_num_rows($query7);
     if($count7 > 0) {
       while($row7 = mysqli_fetch_array($query7)) {  
-        $cashadvancesecondcycle = $cashadvancesecondcycle+$row7["cash_loan_advance_amount"];
+        $cltype = $row7["cash_loan_advance_type"];
+        if($cltype == "1") {
+          $cashloansecondcycle = $cashloansecondcycle+$row7["cash_loan_advance_amount"];
+        } else if($cltype == "2") {
+          $cashadvancesecondcycle = $cashadvancesecondcycle+$row7["cash_loan_advance_amount"];
+        }
       }
     }
     $sql8 = "SELECT SUM(id) AS regularholidaytotal FROM hurtajadmin_holidays WHERE holidays_date >= '$firstcycledate1' AND holidays_date < '$firstcycledate2' AND holidays_type = '1' AND holidays_status = '1'";
@@ -885,24 +1210,26 @@ if($count1 > 0) {
         $holidaysecondcycle = $row9["regularholidaytotal"];
       }
     }
-    $hoursworked = $hoursworked1+$hoursworked2;
-    $deductions1 = (float)$taxcont1+(float)$pagibigcont1+(float)$ssscont1+(float)$philhealthcont1+(float)$insurance;
-    $deductions2 = (float)$taxcont2+(float)$pagibigcont2+(float)$ssscont2+(float)$philhealthcont2+(float)$insurance;
+
+    $hoursworked = $hoursworked1+$hoursworked2+$xotcountbase1+$xotcountbase2; 
+    $deductions1 = (float)$taxcont1+(float)$pagibigcont1+(float)$ssscont1+(float)$philhealthcont1;
+    $deductions2 = (float)$taxcont2+(float)$pagibigcont2+(float)$ssscont2+(float)$philhealthcont2;
     $payroll_settings_paycheck_deducted_1 = 0;
     $payroll_settings_paycheck_base_1 = 0;
     $payroll_settings_paycheck_deducted_2 = 0;
     $payroll_settings_paycheck_base_2= 0;
+
     if($perhour > 0) {
-      if($deductions1 > 0 && $cashadvancefirstcycle > 0 && $hoursworked1 > 0) { 
-        $payroll_settings_paycheck_deducted_1 = ($perhour*$hoursworked1+$perhour*$xotcount1)-$deductions1-$cashadvancefirstcycle;
+      if($deductions1 > 0 && ($cashloanfirstcycle > 0 || $cashadvancefirstcycle > 0) && $hoursworked1 > 0) { 
+        $payroll_settings_paycheck_deducted_1 = ($perhour*$hoursworked1+$perhour*$xotcount1)-$deductions1-$cashloanfirstcycle-$cashadvancefirstcycle;
         $payroll_settings_paycheck_base_1 = $perhour*$hoursworked1+$perhour*$xotcount1;
-      } else if($deductions1 > 0 && $cashadvancefirstcycle < 1 && $hoursworked1 > 0) {
+      } else if($deductions1 > 0 && $cashloanfirstcycle < 1 && $cashadvancefirstcycle < 1 && $hoursworked1 > 0) {
         $payroll_settings_paycheck_deducted_1 = ($perhour*$hoursworked1+$perhour*$xotcount1)-$deductions1;
         $payroll_settings_paycheck_base_1 = $perhour*$hoursworked1+$perhour*$xotcount1;
-      } else if($deductions1 < 1 && $cashadvancefirstcycle > 0  && $hoursworked1 > 0) { 
-        $payroll_settings_paycheck_deducted_1 = ($perhour*$hoursworked1+$perhour*$xotcount1)-$cashadvancefirstcycle;
+      } else if($deductions1 < 1 && ($cashloanfirstcycle > 0 || $cashadvancefirstcycle > 0)  && $hoursworked1 > 0) { 
+        $payroll_settings_paycheck_deducted_1 = ($perhour*$hoursworked1+$perhour*$xotcount1)-$cashloanfirstcycle-$cashadvancefirstcycle;
         $payroll_settings_paycheck_base_1 = $perhour*$hoursworked1+$perhour*$xotcount1;
-      } else if($deductions1 < 1 && $cashadvancefirstcycle < 1  && $hoursworked1 > 0) { 
+      } else if($deductions1 < 1 && $cashloanfirstcycle < 1 && $cashadvancefirstcycle < 1  && $hoursworked1 > 0) { 
         $payroll_settings_paycheck_deducted_1 = $perhour*$hoursworked1+$perhour*$xotcount1;
         $payroll_settings_paycheck_base_1 = $perhour*$hoursworked1+$perhour*$xotcount1;
       } else {
@@ -911,17 +1238,18 @@ if($count1 > 0) {
     } else {
       $payroll_settings_paycheck_deducted_1 = "0";
     }
+
     if($perhour > 0) {
-      if($deductions2 > 0 && $cashadvancesecondcycle > 0 && $hoursworked2 > 0) { 
-        $payroll_settings_paycheck_deducted_2 = ($perhour*$hoursworked2+$perhour*$xotcount2)-$deductions2-$cashadvancesecondcycle;
+      if($deductions2 > 0 && ($cashloansecondcycle > 0 || $cashadvancesecondcycle > 0) && $hoursworked2 > 0) { 
+        $payroll_settings_paycheck_deducted_2 = ($perhour*$hoursworked2+$perhour*$xotcount2)-$deductions2-$cashloansecondcycle-$cashadvancesecondcycle;
         $payroll_settings_paycheck_base_2 = $perhour*$hoursworked2+$perhour*$xotcount2;
-      } else if($deductions2 > 0 && $cashadvancesecondcycle < 1 && $hoursworked2 > 0) { 
+      } else if($deductions2 > 0 && $cashloansecondcycle < 1 && $cashadvancesecondcycle < 1 && $hoursworked2 > 0) { 
         $payroll_settings_paycheck_deducted_2 = ($perhour*$hoursworked2+$perhour*$xotcount2)-$deductions2;
         $payroll_settings_paycheck_base_2 = $perhour*$hoursworked2+$perhour*$xotcount2;
-      } else if($deductions2 < 1 && $cashadvancesecondcycle > 0 && $hoursworked2 > 0) { 
+      } else if($deductions2 < 1 && ($cashloansecondcycle > 0 || $cashadvancesecondcycle > 0) && $hoursworked2 > 0) { 
         $payroll_settings_paycheck_deducted_2 = ($perhour*$hoursworked2+$perhour*$xotcount2)-$cashadvancesecondcycle;
         $payroll_settings_paycheck_base_2 = $perhour*$hoursworked2+$perhour*$xotcount2;
-      } else if($deductions2 < 1 && $cashadvancesecondcycle < 1 && $hoursworked2 > 0) { 
+      } else if($deductions2 < 1 && $cashloansecondcycle < 1 && $cashadvancesecondcycle < 1 && $hoursworked2 > 0) { 
         $payroll_settings_paycheck_deducted_2 = $perhour*$hoursworked2+$perhour*$xotcount2;
         $payroll_settings_paycheck_base_2 = $perhour*$hoursworked2+$perhour*$xotcount2;
       } else {
@@ -937,7 +1265,7 @@ if($count1 > 0) {
     <td>'.$fname.' '.$mnameinitial.'. '.$lname.'</td>           
     <td>'.$gendertext.'</td>
     <td>'.$statstext.'</td>
-    <td><a href="javascript:void(0)" onclick="openEmployeeMore(\''.$empid.'\',\''.$fname.' '.$mnameinitial.'. '.$lname.'\',\''.$gendertext.'\',\''.$birthday.'\',\''.$contact.'\',\''.$address.'\',\''.$datehired.'\',\''.$datestart.'\',\''.$dateend.'\',\''.$statstext.'\')">More</a> | <a href="javascript:void(0)"  onclick="openEmployeePayrollSettingsDialog(\''.$empid.'\',\''.$recid.'\',\''.$fname.' '.$mnameinitial.'. '.$lname.'\',\''.$perhour.'\',\''.$tax.'\',\''.$pagibig.'\',\''.$sss.'\',\''.$philhealth.'\',\''.$hoursworked.'\',\''.$payroll_settings_paycheck_deducted_1.'\',\''.$payroll_settings_paycheck_deducted_2.'\')">Payroll Settings</a> | <a href="javascript:void(0)" onclick="openEmployeeEditDialog('.$recid.',\''.$empid.'\',\''.$fname.'\',\''.$mname.'\',\''.$lname.'\',\''.$gender.'\',\''.$birthday.'\',\''.$address.'\',\''.$contact.'\',\''.$datehired.'\',\''.$datestart.'\',\''.$dateend.'\',\''.$stats.'\',\''.$tinid.'\',\''.$pagibigid.'\',\''.$philhealthid.'\',\''.$sssid.'\')">Edit</a> | <a href="javascript:void(0)" onclick="openEmployeeDeleteDialog('.$recid.')">Delete</a></td>
+    <td><a href="javascript:void(0)" onclick="openEmployeeMore(\''.$empid.'\',\''.$fname.' '.$mnameinitial.'. '.$lname.'\',\''.$gendertext.'\',\''.$birthday.'\',\''.$contact.'\',\''.$address.'\',\''.$datehired.'\',\''.$datestart.'\',\''.$dateend.'\',\''.$statstext.'\')">More</a> | <a href="javascript:void(0)"  onclick="openEmployeePayrollSettingsDialog(\''.$empid.'\',\''.$recid.'\',\''.$fname.' '.$mnameinitial.'. '.$lname.'\',\''.$perhour.'\',\''.$tax.'\',\''.$pagibig.'\',\''.$sss.'\',\''.$philhealth.'\',\''.$hoursworked.'\',\''.$bimonthsalary1.'\',\''.$bimonthsalary2.'\')">Payroll Settings</a> | Cash Loan/Advance | <a href="javascript:void(0)" onclick="openEmployeeEditDialog('.$recid.',\''.$empid.'\',\''.$fname.'\',\''.$mname.'\',\''.$lname.'\',\''.$gender.'\',\''.$birthday.'\',\''.$address.'\',\''.$contact.'\',\''.$datehired.'\',\''.$datestart.'\',\''.$dateend.'\',\''.$stats.'\',\''.$tinid.'\',\''.$pagibigid.'\',\''.$philhealthid.'\',\''.$sssid.'\')">Edit</a> | <a href="javascript:void(0)" onclick="openEmployeeDeleteDialog('.$recid.')">Delete</a></td></tr>
     ';   
 
   }

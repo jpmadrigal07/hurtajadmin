@@ -5,8 +5,8 @@ if (!isset($_SESSION["userid"])) {
   exit();
 }
 
-$type = $_GET["type"];
-$to = $_GET["to"]; 
+$type = "1";
+$to = "1"; 
 
 $typetext = ""; 
 
@@ -14,7 +14,7 @@ if($type == "1") {
 
     $typetext = "Regular"; 
 
-    $empid = $_GET["empid"];
+    $empid = "0";
     $month = $_GET["month"];
     $cycle = $_GET["cycle"];
     $year = $_GET["year"];
@@ -137,12 +137,64 @@ if($type == "1") {
         font-size: 15px;
         text-align: justify;
     }
-    @page { size: auto;  margin: 0mm; }
-    #page-break {page-break-after: always;}
+    @page { size: auto;  margin: 15px 0mm; }
+
+    table{
+        border: 1px solid black;
+        table-layout: fixed;
+        width: 200px;
+        margin: 0px;
+    }
+
+    th {
+        border: 1px solid black;
+        text-align: center;
+    }
+
+    body {
+        padding: 0;
+    }
     </style>
 
   </head>
   <body>
+
+    <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th style="width: 50px;">NO.</th>
+                    <th style="width: 250px;">EMPLOYEE</th>
+                    <th style="width: 250px;">PAY PERIOD</th>
+                    <th style="width: 80px;">DAYS OF WORK</th>
+                    <th style="width: 80px;">DAYS PRESENT</th>
+                    <th style="width: 80px;">OVER TIME</th>
+                    <th style="width: 80px;">SSS</th>
+                    <th style="width: 80px;">SSS LOAN</th>
+                    <th style="width: 80px;">PAG-IBIG</th>
+                    <th style="width: 80px;">PAG-IBIG LOAN</th>
+                    <th style="width: 80px;">PHIL HEALTH</th>
+                    <th style="width: 80px;">TAX</th>
+                    <th style="width: 80px;">LESS LATES</th>
+                    <th style="width: 80px;">CASH LOAN</th>
+                    <th style="width: 90px;">CASH ADVANCE</th>
+                    <th style="width: 80px;">SUNDAY</th>
+                    <th style="width: 100px;">RATE PER HOUR</th>
+                    <th style="width: 250px;">PAYROLL PERIOD</th>
+                    <th style="width: 100px;">RATE PER DAY</th>
+                    <th style="width: 80px;">HOLIDAY</th>
+                    <th style="width: 80px; font-size: 12px;">S N WORKING</th>
+                    <th style="width: 80px;">DAILY</th>
+                    <th style="width: 90px;">OVERTIME PAY</th>
+                    <th style="width: 80px;">SUNDAY</th>
+                    <th style="width: 80px;">HOLIDAY</th>
+                    <th style="width: 80px; font-size: 12px;">S N WORKING</th>
+                    <th style="width: 80px;">GROSS</th>
+                    <th style="width: 90px; font-size: 12px;">TOTAL DEDUCIONS</th>
+                    <th style="width: 80px;">NET</th>
+                </tr>
+            </thead>
+
+            <tbody>
 
 
   <?php
@@ -155,6 +207,20 @@ if($type == "1") {
                                                 }
                                                 $query = mysqli_query($db_conn, $sql);
                                                 $count = 0;
+                                                $sssgrandtotal = 0;
+                                                $pagibiggrandtotal = 0;
+                                                $philhealthgrandtotal = 0;
+                                                $taxgrandtotal = 0;
+                                                $cashloangrandtotal = 0;
+                                                $cashadvancegrandtotal = 0;
+                                                $dailygrandtotal = 0;
+                                                $overtimegrandtotal = 0;
+                                                $sundaygrandtotal = 0;
+                                                $holidaygrandtotal = 0;
+                                                $snholidaygrandtotal = 0;
+                                                $grossgrandtotal = 0;
+                                                $deductionsgrandtotal = 0;
+                                                $netgrandtotal = 0;
                                                 while($row = mysqli_fetch_array($query)) {  
                                                     $count++; 
                                                     $recid = $row["id"];
@@ -802,600 +868,98 @@ if($type == "1") {
                                                     $out1 = strlen($fullname) > 15 ? substr($fullname,0,15)."..." : $fullname;
                                                     $out2 = strlen($fullname) > 24 ? substr($fullname,0,24)."..." : $fullname;
 
-                                                    if($count == 1) {
+                                                    $sssgrandtotal = $sssgrandtotal + $ssscontfinal;
+                                                    $pagibiggrandtotal = $pagibiggrandtotal + $pagibigcontfinal;
+                                                    $philhealthgrandtotal = $philhealthgrandtotal + $philhealthcontfinal;
+                                                    $taxgrandtotal = $taxgrandtotal + $taxcontfinal;
+                                                    $cashloangrandtotal = $cashloangrandtotal + $cashloanfinal;
+                                                    $cashadvancegrandtotal = $cashadvancegrandtotal + $cashadvancefinal;
+                                                    $dailygrandtotal = $dailygrandtotal + (($hoursworked-$sundayhoursworked-$regularholidayfinal-$specialholidayfinal)*$perhour);
+                                                    $overtimegrandtotal = $overtimegrandtotal + ($othoursworked*$perhour);
+                                                    $sundaygrandtotal = $sundaygrandtotal + ($sundayhoursworked*$perhour);
+                                                    $holidaygrandtotal = $holidaygrandtotal + (($regularholidayfinal+$regularholidaybonushoursfinal)*$perhour);
+                                                    $snholidaygrandtotal = $snholidaygrandtotal + (($specialholidayfinal+$specialholidaybonushoursfinal)*$perhour);
+                                                    $grossgrandtotal = $grossgrandtotal + ((($hoursworked-$sundayhoursworked-$regularholidayfinal-$specialholidayfinal)*$perhour)+($othoursworked*$perhour)+($sundayhoursworked*$perhour)+(($regularholidayfinal+$regularholidaybonushoursfinal)*$perhour)+(($specialholidayfinal+$specialholidaybonushoursfinal)*$perhour));
+                                                    $deductionsgrandtotal = $deductionsgrandtotal + ($deductionfinal+$cashloanfinal+$cashadvancefinal+($latecountfinal*$perhour));
+                                                    $netgrandtotal = $netgrandtotal + ((($hoursworked-$sundayhoursworked-$regularholidayfinal-$specialholidayfinal)*$perhour)+($othoursworked*$perhour)+($sundayhoursworked*$perhour)+(($regularholidayfinal+$regularholidaybonushoursfinal)*$perhour)+(($specialholidayfinal+$specialholidaybonushoursfinal)*$perhour)-($deductionfinal+$cashloanfinal+$cashadvancefinal+($latecountfinal*$perhour)));
 
                                                     echo '
-                                                        <div class="container-fluid">
-
-                                                         <div class="row">
-                                                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border-bottom: 1px solid #ddd;">
-                                                                <div style="padding-bottom: 5px; padding-top: 5px;">
-                                                               <img src="image/logoonly.png" width="50" height="50" style="float: left; margin-right: 5px;" /><h5>HURT AJ FABRICATION<br>AND ENTERPRISES CO.</h5>
-                                                                </div>
-                                                               <table style="width: 100%; font-size: 13px; margin-bottom: 16px;">
-                                                                    <tr>
-                                                                        <td>Employee</td>
-                                                                        <td>:</td>
-                                                                        <td style="text-align: right;"><B>'.strtoupper($out1).'</B></td>
-                                                                    </tr>
-                                                                    
-                                                                    <tr>
-                                                                        <td>Pay Period</td>
-                                                                        <td>:</td>
-                                                                        <td style="text-align: right;">'.strtoupper($monthtext).'. '.$period.', '.$year.'</td>
-                                                                    </tr>
-                                                                    <tr><td><br></td></tr>
-                                                                    <tr>
-                                                                        <td>Total Earnings</td>
-                                                                        <td>:</td>
-                                                                        <td style="text-align: right;">'.number_format((($hoursworked-$sundayhoursworked-$regularholidayfinal-$specialholidayfinal)*$perhour)+($othoursworked*$perhour)+($sundayhoursworked*$perhour)+(($regularholidayfinal+$regularholidaybonushoursfinal)*$perhour)+(($specialholidayfinal+$specialholidaybonushoursfinal)*$perhour), 2, '.', ',').'</td>
-                                                                    </tr>
-
-                                                                    <tr>
-                                                                        <td>Total Deductions</td>
-                                                                        <td>:</td>
-                                                                        <td style="text-align: right;">'.number_format($deductionfinal+$cashloanfinal+$cashadvancefinal+($latecountfinal*$perhour), 2, '.', ',').'</td>
-                                                                    </tr>
-                                                                    <tr><td><br></td></tr>
-                                                                    <tr><td><br><br></td></tr>
-                                                                    <tr>
-                                                                        <td><b>NET PAY</b></td>
-                                                                        <td>:</td>
-                                                                        <td style="text-align: right;"><b>'.number_format((($hoursworked-$sundayhoursworked-$regularholidayfinal-$specialholidayfinal)*$perhour)+($othoursworked*$perhour)+($sundayhoursworked*$perhour)+(($regularholidayfinal+$regularholidaybonushoursfinal)*$perhour)+(($specialholidayfinal+$specialholidaybonushoursfinal)*$perhour)-($deductionfinal+$cashloanfinal+$cashadvancefinal+($latecountfinal*$perhour)), 2, '.', ',').'</b></td>
-                                                                    </tr>
-                                                                    <tr><td><br></td></tr>
-                                                                    <tr><td><br></td></tr>
-                                                                    <tr>
-                                                                        <td>Accepted by</td>
-                                                                        <td>:</td>
-                                                                        <td style="border-bottom: 1px solid #ddd;"></td>
-                                                                    </tr>
-                                                                    <tr><td><br></td></tr>
-                                                                    <tr>
-                                                                        <td>Date Recieved</td>
-                                                                        <td>:</td>
-                                                                        <td style="border-bottom: 1px solid #ddd;"></td>
-                                                                    </tr>
-                                                               </table>
-                                                            
-                                                            </div>    
-                                                            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="border-left: 1px solid #ddd;height: 330px;border-bottom: 1px solid #ddd;">
-                                                            <table style="width: 100%">
-                                                                <tr>
-                                                                    <td><div style="padding-bottom: 5px; padding-top: 5px;">
-                                                               <img src="image/logoonly.png" width="50" height="50" style="float: left; margin-right: 5px;" /><h5>HURT AJ FABRICATION<br>AND ENTERPRISES CO.</h5>
-                                                                </div></td>
-                                                                    <td></td>
-                                                                    <td></td>
-                                                                    <td></td>
-                                                                    <td></td>
-                                                                    <td><h5 style="text-align: right;">PAY SLIP</h5></td>
-                                                                </tr>
-                                                                </table>
-                                                            <table style="width: 100%">
-                                                                <tr>
-                                                                        <td>&nbsp;Employee</td>
-                                                                        <td>:</td>
-                                                                        <td>&nbsp;<b>'.strtoupper($out2).'</b></td>
-                                                                        <td>Days of Work</td>
-                                                                        <td>:</td>
-                                                                        <td>&nbsp;<b>'.number_format($daysofwork, 2, '.', ',').'</b></td>
-                                                                </tr>
-                                                                <tr>
-                                                                        <td>&nbsp;Pay Period</td>
-                                                                        <td>:</td>
-                                                                        <td>&nbsp;'.strtoupper($prevmonthtext).'. '.$daytext1.''.$prevyear.' - '.strtoupper($monthtext).'. '.$daytext2.', '.$year.'</td>
-                                                                        <td>Days Present</td>
-                                                                        <td>:</td>
-                                                                        <td>&nbsp;<b>'.number_format($hoursworked/8, 2, '.', ',').'</b></td>
-                                                                </tr>
-                                                                </table>
-                                                                <table style="width: 100%;font-size: 13px;">
-                                                                    <tr style="border-bottom: 1px solid #ddd;border-top: 1px solid #ddd;">
-                                                                        <td>&nbsp;EARNINGS</td>
-                                                                        <TD style="text-align: right;">HOURS</TD>
-                                                                        <TD style="text-align: right;">AMOUNT</TD>
-                                                                        <TD style="border-left: 1px solid #ddd;height: 1px;">&nbsp;DEDUCTIONS</TD>
-                                                                        <TD style="text-align: right;">HOURS</TD>
-                                                                        <TD style="text-align: right;">AMOUNT</TD>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>&nbsp;Basic/Reg</td>
-                                                                        <td style="text-align: right;">'.number_format($hoursworked-$sundayhoursworked-$regularholidayfinal-$specialholidayfinal, 2, '.', ',').'</td>
-                                                                        <td style="text-align: right;">'.number_format(($hoursworked-$sundayhoursworked-$regularholidayfinal-$specialholidayfinal)*$perhour, 2, '.', ',').'</td>
-                                                                        <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;SSS</td>
-                                                                        <td></td>
-                                                                        <td style="text-align: right;">'.number_format($ssscontfinal, 2, '.', ',').'</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>&nbsp;Basic/Reg OT</td>
-                                                                        <td style="text-align: right;">'.number_format($otbasedhoursworked, 2, '.', ',').'</td>
-                                                                        <td style="text-align: right;">'.number_format($othoursworked*$perhour, 2, '.', ',').'</td>
-                                                                        <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;SSS Loan</td>
-                                                                        <td></td>
-                                                                        <td style="text-align: right;">0.00</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>&nbsp;Sunday</td>
-                                                                        <td style="text-align: right;">'.number_format($sundayhoursworked, 2, '.', ',').'</td>
-                                                                        <td style="text-align: right;">'.number_format($sundayhoursworked*$perhour, 2, '.', ',').'</td>
-                                                                        <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;PAG-IBIG</td>
-                                                                        <td></td>
-                                                                        <td style="text-align: right;">'.number_format($pagibigcontfinal, 2, '.', ',').'</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>&nbsp;Holiday</td>
-                                                                        <td style="text-align: right;">'.number_format($regularholidayfinal, 2, '.', ',').'</td>
-                                                                        <td style="text-align: right;">'.number_format(($regularholidayfinal+$regularholidaybonushoursfinal)*$perhour, 2, '.', ',').'</td>
-                                                                        <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;PAG-IBIG Loan</td>
-                                                                        <td></td>
-                                                                        <td style="text-align: right;">0.00</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>&nbsp;S-Non-Working Day</td>
-                                                                        <td style="text-align: right;">'.number_format($specialholidayfinal, 2, '.', ',').'</td>
-                                                                        <td style="text-align: right;">'.number_format(($specialholidayfinal+$specialholidaybonushoursfinal)*$perhour, 2, '.', ',').'</td>
-                                                                        <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;PhilHelth</td>
-                                                                        <td></td>
-                                                                        <td style="text-align: right;">'.number_format($philhealthcontfinal, 2, '.', ',').'</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>&nbsp;Night Differential</td>
-                                                                        <td style="text-align: right;">0.00</td>
-                                                                        <td style="text-align: right;">0.00</td>
-                                                                        <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;Withholding Tax</td>
-                                                                        <td></td>
-                                                                        <td style="text-align: right;">'.number_format($taxcontfinal, 2, '.', ',').'</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;Less Lates</td>
-                                                                        <td style="text-align: right;">'.number_format($latecountfinal, 2, '.', ',').'</td>
-                                                                        <td style="text-align: right;">'.number_format($latecountfinal*$perhour, 2, '.', ',').'</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;Cash Loan(Office)</td>
-                                                                        <td></td>
-                                                                        <td style="text-align: right;">'.number_format($cashloanfinal, 2, '.', ',').'</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;Cash Advance</td>
-                                                                        <td></td>
-                                                                        <td style="text-align: right;">'.number_format($cashadvancefinal, 2, '.', ',').'</td>
-                                                                    </tr>
-                                                                    <tr style="border-bottom: 1px solid #ddd;border-top: 1px solid #ddd;">
-                                                                        <td>&nbsp;<b>TOTAL EARNINGS</b></td>
-                                                                        <td></td>
-                                                                        <td style="text-align: right;">'.number_format((($hoursworked-$sundayhoursworked-$regularholidayfinal-$specialholidayfinal)*$perhour)+($othoursworked*$perhour)+($sundayhoursworked*$perhour)+(($regularholidayfinal+$regularholidaybonushoursfinal)*$perhour)+(($specialholidayfinal+$specialholidaybonushoursfinal)*$perhour), 2, '.', ',').'</td>
-                                                                        <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;<b>TOTAL DEDUCTIONS</b></td>
-                                                                        <td></td>
-                                                                        <td style="text-align: right;">'.number_format($deductionfinal+$cashloanfinal+$cashadvancefinal+($latecountfinal*$perhour), 2, '.', ',').'</td>
-                                                                    </tr>
-                                                                    <tr style="border-bottom: 1px solid #000;border-top: 1px solid #ddd;padding: 3px;">
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td>&nbsp;<B>NET PAY</B></td>
-                                                                        <td>:</td>
-                                                                        <td style="text-align: right;"><B>'.number_format((($hoursworked-$sundayhoursworked-$regularholidayfinal-$specialholidayfinal)*$perhour)+($othoursworked*$perhour)+($sundayhoursworked*$perhour)+(($regularholidayfinal+$regularholidaybonushoursfinal)*$perhour)+(($specialholidayfinal+$specialholidaybonushoursfinal)*$perhour)-($deductionfinal+$cashloanfinal+$cashadvancefinal+($latecountfinal*$perhour)), 2, '.', ',').'</B></td>
-                                                                    </tr>
-                                                                </table>
-                                                            
-                                                            </div>
-                                                        </div>
-
-                                                     </div>
+                                                    <tr>
+                                                        <td style="text-align: center;">'.$count.'</td>
+                                                        <td style="text-align: left;">'.strtoupper($lname).' '.strtoupper($fname).' '.strtoupper($mnameinitial).'.</td>
+                                                        <td style="text-align: left;">'.strtoupper($prevmonthtext).'. '.$daytext1.''.$prevyear.' - '.strtoupper($monthtext).'. '.$daytext2.', '.$year.'</td>
+                                                        <td style="text-align: center;">'.number_format($daysofwork, 2, '.', ',').'</td>
+                                                        <td style="text-align: right;">'.number_format($hoursworked/8, 2, '.', ',').'</td>
+                                                        <td style="text-align: right;">'.number_format($otbasedhoursworked, 2, '.', ',').'</td>
+                                                        <td style="text-align: right;">'.number_format($ssscontfinal, 2, '.', ',').'</td>
+                                                        <td style="text-align: right;"></td>
+                                                        <td style="text-align: right;">'.number_format($pagibigcontfinal, 2, '.', ',').'</td>
+                                                        <td style="text-align: right;"></td>
+                                                        <td style="text-align: right;">'.number_format($philhealthcontfinal, 2, '.', ',').'</td>
+                                                        <td style="text-align: right;">'.number_format($taxcontfinal, 2, '.', ',').'</td>
+                                                        <td style="text-align: right;">'.number_format($latecountfinal, 2, '.', ',').'</td>
+                                                        <td style="text-align: right;">'.number_format($cashloanfinal, 2, '.', ',').'</td>
+                                                        <td style="text-align: right;">'.number_format($cashadvancefinal, 2, '.', ',').'</td>
+                                                        <td style="text-align: right;">'.number_format($sundayhoursworked, 2, '.', ',').'</td>
+                                                        <td style="text-align: right;">'.number_format($perhour, 2, '.', ',').'</td>
+                                                        <td style="text-align: left;">'.strtoupper($monthtext).'. '.$period.', '.$year.'</td>
+                                                        <td style="text-align: right;">'.number_format($perhour*8, 2, '.', ',').'</td>
+                                                        <td style="text-align: right;"></td>
+                                                        <td style="text-align: right;"></td>
+                                                        <td style="text-align: right;">'.number_format(($hoursworked-$sundayhoursworked-$regularholidayfinal-$specialholidayfinal)*$perhour, 2, '.', ',').'</td>
+                                                        <td style="text-align: right;">'.number_format($othoursworked*$perhour, 2, '.', ',').'</td>
+                                                        <td style="text-align: right;">'.number_format($sundayhoursworked*$perhour, 2, '.', ',').'</td>
+                                                        <td style="text-align: right;">'.number_format(($regularholidayfinal+$regularholidaybonushoursfinal)*$perhour, 2, '.', ',').'</td>
+                                                        <td style="text-align: right;">'.number_format(($specialholidayfinal+$specialholidaybonushoursfinal)*$perhour, 2, '.', ',').'</td>
+                                                        <td style="text-align: right;">'.number_format((($hoursworked-$sundayhoursworked-$regularholidayfinal-$specialholidayfinal)*$perhour)+($othoursworked*$perhour)+($sundayhoursworked*$perhour)+(($regularholidayfinal+$regularholidaybonushoursfinal)*$perhour)+(($specialholidayfinal+$specialholidaybonushoursfinal)*$perhour), 2, '.', ',').'</td>
+                                                        <td style="text-align: right;">'.number_format($deductionfinal+$cashloanfinal+$cashadvancefinal+($latecountfinal*$perhour), 2, '.', ',').'</td>
+                                                        <td style="text-align: right;">'.number_format((($hoursworked-$sundayhoursworked-$regularholidayfinal-$specialholidayfinal)*$perhour)+($othoursworked*$perhour)+($sundayhoursworked*$perhour)+(($regularholidayfinal+$regularholidaybonushoursfinal)*$perhour)+(($specialholidayfinal+$specialholidaybonushoursfinal)*$perhour)-($deductionfinal+$cashloanfinal+$cashadvancefinal+($latecountfinal*$perhour)), 2, '.', ',').'</td>
+                                                    </tr>
                                                     ';
-                                                } else if($count == 2) {
-                                                     echo '
-                                                        <div class="container-fluid">
-
-                                                         <div class="row">
-                                                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border-bottom: 1px solid #ddd;">
-                                                                <div style="padding-bottom: 5px; padding-top: 5px;">
-                                                               <img src="image/logoonly.png" width="50" height="50" style="float: left; margin-right: 5px;" /><h5>HURT AJ FABRICATION<br>AND ENTERPRISES CO.</h5>
-                                                                </div>
-                                                               <table style="width: 100%; font-size: 13px; margin-bottom: 16px;">
-                                                                    <tr>
-                                                                        <td>Employee</td>
-                                                                        <td>:</td>
-                                                                        <td style="text-align: right;"><B>'.strtoupper($out1).'</B></td>
-                                                                    </tr>
-                                                                    
-                                                                    <tr>
-                                                                        <td>Pay Period</td>
-                                                                        <td>:</td>
-                                                                        <td style="text-align: right;">'.strtoupper($monthtext).'. '.$period.', '.$year.'</td>
-                                                                    </tr>
-                                                                    <tr><td><br></td></tr>
-                                                                    <tr>
-                                                                        <td>Total Earnings</td>
-                                                                        <td>:</td>
-                                                                        <td style="text-align: right;">'.number_format((($hoursworked-$sundayhoursworked-$regularholidayfinal-$specialholidayfinal)*$perhour)+($othoursworked*$perhour)+($sundayhoursworked*$perhour)+(($regularholidayfinal+$regularholidaybonushoursfinal)*$perhour)+(($specialholidayfinal+$specialholidaybonushoursfinal)*$perhour), 2, '.', ',').'</td>
-                                                                    </tr>
-
-                                                                    <tr>
-                                                                        <td>Total Deductions</td>
-                                                                        <td>:</td>
-                                                                        <td style="text-align: right;">'.number_format($deductionfinal+$cashloanfinal+$cashadvancefinal+($latecountfinal*$perhour), 2, '.', ',').'</td>
-                                                                    </tr>
-                                                                    <tr><td><br></td></tr>
-                                                                    <tr><td><br><br></td></tr>
-                                                                    <tr>
-                                                                        <td><b>NET PAY</b></td>
-                                                                        <td>:</td>
-                                                                        <td style="text-align: right;"><b>'.number_format((($hoursworked-$sundayhoursworked-$regularholidayfinal-$specialholidayfinal)*$perhour)+($othoursworked*$perhour)+($sundayhoursworked*$perhour)+(($regularholidayfinal+$regularholidaybonushoursfinal)*$perhour)+(($specialholidayfinal+$specialholidaybonushoursfinal)*$perhour)-($deductionfinal+$cashloanfinal+$cashadvancefinal+($latecountfinal*$perhour)), 2, '.', ',').'</b></td>
-                                                                    </tr>
-                                                                    <tr><td><br></td></tr>
-                                                                    <tr><td><br></td></tr>
-                                                                    <tr>
-                                                                        <td>Accepted by</td>
-                                                                        <td>:</td>
-                                                                        <td style="border-bottom: 1px solid #ddd;"></td>
-                                                                    </tr>
-                                                                    <tr><td><br></td></tr>
-                                                                    <tr>
-                                                                        <td>Date Recieved</td>
-                                                                        <td>:</td>
-                                                                        <td style="border-bottom: 1px solid #ddd;"></td>
-                                                                    </tr>
-                                                               </table>
-                                                            
-                                                            </div>    
-                                                            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="border-left: 1px solid #ddd;height: 330px;border-bottom: 1px solid #ddd;">
-                                                            <table style="width: 100%">
-                                                                <tr>
-                                                                    <td><div style="padding-bottom: 5px; padding-top: 5px;">
-                                                               <img src="image/logoonly.png" width="50" height="50" style="float: left; margin-right: 5px;" /><h5>HURT AJ FABRICATION<br>AND ENTERPRISES CO.</h5>
-                                                                </div></td>
-                                                                    <td></td>
-                                                                    <td></td>
-                                                                    <td></td>
-                                                                    <td></td>
-                                                                    <td><h5 style="text-align: right;">PAY SLIP</h5></td>
-                                                                </tr>
-                                                                </table>
-                                                            <table style="width: 100%">
-                                                                <tr>
-                                                                        <td>&nbsp;Employee</td>
-                                                                        <td>:</td>
-                                                                        <td>&nbsp;<b>'.strtoupper($out2).'</b></td>
-                                                                        <td>Days of Work</td>
-                                                                        <td>:</td>
-                                                                        <td>&nbsp;<b>'.number_format($daysofwork, 2, '.', ',').'</b></td>
-                                                                </tr>
-                                                                <tr>
-                                                                        <td>&nbsp;Pay Period</td>
-                                                                        <td>:</td>
-                                                                        <td>&nbsp;'.strtoupper($prevmonthtext).'. '.$daytext1.''.$prevyear.' - '.strtoupper($monthtext).'. '.$daytext2.', '.$year.'</td>
-                                                                        <td>Days Present</td>
-                                                                        <td>:</td>
-                                                                        <td>&nbsp;<b>'.number_format($hoursworked/8, 2, '.', ',').'</b></td>
-                                                                </tr>
-                                                                </table>
-                                                                <table style="width: 100%;font-size: 13px;">
-                                                                    <tr style="border-bottom: 1px solid #ddd;border-top: 1px solid #ddd;">
-                                                                        <td>&nbsp;EARNINGS</td>
-                                                                        <TD style="text-align: right;">HOURS</TD>
-                                                                        <TD style="text-align: right;">AMOUNT</TD>
-                                                                        <TD style="border-left: 1px solid #ddd;height: 1px;">&nbsp;DEDUCTIONS</TD>
-                                                                        <TD style="text-align: right;">HOURS</TD>
-                                                                        <TD style="text-align: right;">AMOUNT</TD>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>&nbsp;Basic/Reg</td>
-                                                                        <td style="text-align: right;">'.number_format($hoursworked-$sundayhoursworked-$regularholidayfinal-$specialholidayfinal, 2, '.', ',').'</td>
-                                                                        <td style="text-align: right;">'.number_format(($hoursworked-$sundayhoursworked-$regularholidayfinal-$specialholidayfinal)*$perhour, 2, '.', ',').'</td>
-                                                                        <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;SSS</td>
-                                                                        <td></td>
-                                                                        <td style="text-align: right;">'.number_format($ssscontfinal, 2, '.', ',').'</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>&nbsp;Basic/Reg OT</td>
-                                                                        <td style="text-align: right;">'.number_format($otbasedhoursworked, 2, '.', ',').'</td>
-                                                                        <td style="text-align: right;">'.number_format($othoursworked*$perhour, 2, '.', ',').'</td>
-                                                                        <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;SSS Loan</td>
-                                                                        <td></td>
-                                                                        <td style="text-align: right;">0.00</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>&nbsp;Sunday</td>
-                                                                        <td style="text-align: right;">'.number_format($sundayhoursworked, 2, '.', ',').'</td>
-                                                                        <td style="text-align: right;">'.number_format($sundayhoursworked*$perhour, 2, '.', ',').'</td>
-                                                                        <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;PAG-IBIG</td>
-                                                                        <td></td>
-                                                                        <td style="text-align: right;">'.number_format($pagibigcontfinal, 2, '.', ',').'</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>&nbsp;Holiday</td>
-                                                                        <td style="text-align: right;">'.number_format($regularholidayfinal, 2, '.', ',').'</td>
-                                                                        <td style="text-align: right;">'.number_format(($regularholidayfinal+$regularholidaybonushoursfinal)*$perhour, 2, '.', ',').'</td>
-                                                                        <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;PAG-IBIG Loan</td>
-                                                                        <td></td>
-                                                                        <td style="text-align: right;">0.00</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>&nbsp;S-Non-Working Day</td>
-                                                                        <td style="text-align: right;">'.number_format($specialholidayfinal, 2, '.', ',').'</td>
-                                                                        <td style="text-align: right;">'.number_format(($specialholidayfinal+$specialholidaybonushoursfinal)*$perhour, 2, '.', ',').'</td>
-                                                                        <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;PhilHelth</td>
-                                                                        <td></td>
-                                                                        <td style="text-align: right;">'.number_format($philhealthcontfinal, 2, '.', ',').'</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>&nbsp;Night Differential</td>
-                                                                        <td style="text-align: right;">0.00</td>
-                                                                        <td style="text-align: right;">0.00</td>
-                                                                        <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;Withholding Tax</td>
-                                                                        <td></td>
-                                                                        <td style="text-align: right;">'.number_format($taxcontfinal, 2, '.', ',').'</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;Less Lates</td>
-                                                                        <td style="text-align: right;">'.number_format($latecountfinal, 2, '.', ',').'</td>
-                                                                        <td style="text-align: right;">'.number_format($latecountfinal*$perhour, 2, '.', ',').'</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;Cash Loan(Office)</td>
-                                                                        <td></td>
-                                                                        <td style="text-align: right;">'.number_format($cashloanfinal, 2, '.', ',').'</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;Cash Advance</td>
-                                                                        <td></td>
-                                                                        <td style="text-align: right;">'.number_format($cashadvancefinal, 2, '.', ',').'</td>
-                                                                    </tr>
-                                                                    <tr style="border-bottom: 1px solid #ddd;border-top: 1px solid #ddd;">
-                                                                        <td>&nbsp;<b>TOTAL EARNINGS</b></td>
-                                                                        <td></td>
-                                                                        <td style="text-align: right;">'.number_format((($hoursworked-$sundayhoursworked-$regularholidayfinal-$specialholidayfinal)*$perhour)+($othoursworked*$perhour)+($sundayhoursworked*$perhour)+(($regularholidayfinal+$regularholidaybonushoursfinal)*$perhour)+(($specialholidayfinal+$specialholidaybonushoursfinal)*$perhour), 2, '.', ',').'</td>
-                                                                        <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;<b>TOTAL DEDUCTIONS</b></td>
-                                                                        <td></td>
-                                                                        <td style="text-align: right;">'.number_format($deductionfinal+$cashloanfinal+$cashadvancefinal+($latecountfinal*$perhour), 2, '.', ',').'</td>
-                                                                    </tr>
-                                                                    <tr style="border-bottom: 1px solid #000;border-top: 1px solid #ddd;padding: 3px;">
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td>&nbsp;<B>NET PAY</B></td>
-                                                                        <td>:</td>
-                                                                        <td style="text-align: right;"><B>'.number_format((($hoursworked-$sundayhoursworked-$regularholidayfinal-$specialholidayfinal)*$perhour)+($othoursworked*$perhour)+($sundayhoursworked*$perhour)+(($regularholidayfinal+$regularholidaybonushoursfinal)*$perhour)+(($specialholidayfinal+$specialholidaybonushoursfinal)*$perhour)-($deductionfinal+$cashloanfinal+$cashadvancefinal+($latecountfinal*$perhour)), 2, '.', ',').'</B></td>
-                                                                    </tr>
-                                                                </table>
-                                                            
-                                                            </div>
-                                                        </div>
-
-                                                     </div>
-                                                    ';
-
-                                                } else if($count == 3) {
-                                                    echo '
-                                                        <div class="container-fluid" id="page-break">
-
-                                                         <div class="row">
-                                                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border-bottom: 1px solid #ddd;">
-                                                                <div style="padding-bottom: 5px; padding-top: 5px;">
-                                                               <img src="image/logoonly.png" width="50" height="50" style="float: left; margin-right: 5px;" /><h5>HURT AJ FABRICATION<br>AND ENTERPRISES CO.</h5>
-                                                                </div>
-                                                               <table style="width: 100%; font-size: 13px; margin-bottom: 16px;">
-                                                                    <tr>
-                                                                        <td>Employee</td>
-                                                                        <td>:</td>
-                                                                        <td style="text-align: right;"><B>'.strtoupper($out1).'</B></td>
-                                                                    </tr>
-                                                                    
-                                                                    <tr>
-                                                                        <td>Pay Period</td>
-                                                                        <td>:</td>
-                                                                        <td style="text-align: right;">'.strtoupper($monthtext).'. '.$period.', '.$year.'</td>
-                                                                    </tr>
-                                                                    <tr><td><br></td></tr>
-                                                                    <tr>
-                                                                        <td>Total Earnings</td>
-                                                                        <td>:</td>
-                                                                        <td style="text-align: right;">'.number_format((($hoursworked-$sundayhoursworked-$regularholidayfinal-$specialholidayfinal)*$perhour)+($othoursworked*$perhour)+($sundayhoursworked*$perhour)+(($regularholidayfinal+$regularholidaybonushoursfinal)*$perhour)+(($specialholidayfinal+$specialholidaybonushoursfinal)*$perhour), 2, '.', ',').'</td>
-                                                                    </tr>
-
-                                                                    <tr>
-                                                                        <td>Total Deductions</td>
-                                                                        <td>:</td>
-                                                                        <td style="text-align: right;">'.number_format($deductionfinal+$cashloanfinal+$cashadvancefinal+($latecountfinal*$perhour), 2, '.', ',').'</td>
-                                                                    </tr>
-                                                                    <tr><td><br></td></tr>
-                                                                    <tr><td><br><br></td></tr>
-                                                                    <tr>
-                                                                        <td><b>NET PAY</b></td>
-                                                                        <td>:</td>
-                                                                        <td style="text-align: right;"><b>'.number_format((($hoursworked-$sundayhoursworked-$regularholidayfinal-$specialholidayfinal)*$perhour)+($othoursworked*$perhour)+($sundayhoursworked*$perhour)+(($regularholidayfinal+$regularholidaybonushoursfinal)*$perhour)+(($specialholidayfinal+$specialholidaybonushoursfinal)*$perhour)-($deductionfinal+$cashloanfinal+$cashadvancefinal+($latecountfinal*$perhour)), 2, '.', ',').'</b></td>
-                                                                    </tr>
-                                                                    <tr><td><br></td></tr>
-                                                                    <tr><td><br></td></tr>
-                                                                    <tr>
-                                                                        <td>Accepted by</td>
-                                                                        <td>:</td>
-                                                                        <td style="border-bottom: 1px solid #ddd;"></td>
-                                                                    </tr>
-                                                                    <tr><td><br></td></tr>
-                                                                    <tr>
-                                                                        <td>Date Recieved</td>
-                                                                        <td>:</td>
-                                                                        <td style="border-bottom: 1px solid #ddd;"></td>
-                                                                    </tr>
-                                                               </table>
-                                                            
-                                                            </div>    
-                                                            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="border-left: 1px solid #ddd;height: 330px;border-bottom: 1px solid #ddd;">
-                                                            <table style="width: 100%">
-                                                                <tr>
-                                                                    <td><div style="padding-bottom: 5px; padding-top: 5px;">
-                                                               <img src="image/logoonly.png" width="50" height="50" style="float: left; margin-right: 5px;" /><h5>HURT AJ FABRICATION<br>AND ENTERPRISES CO.</h5>
-                                                                </div></td>
-                                                                    <td></td>
-                                                                    <td></td>
-                                                                    <td></td>
-                                                                    <td></td>
-                                                                    <td><h5 style="text-align: right;">PAY SLIP</h5></td>
-                                                                </tr>
-                                                                </table>
-                                                            <table style="width: 100%">
-                                                                <tr>
-                                                                        <td>&nbsp;Employee</td>
-                                                                        <td>:</td>
-                                                                        <td>&nbsp;<b>'.strtoupper($out2).'</b></td>
-                                                                        <td>Days of Work</td>
-                                                                        <td>:</td>
-                                                                        <td>&nbsp;<b>'.number_format($daysofwork, 2, '.', ',').'</b></td>
-                                                                </tr>
-                                                                <tr>
-                                                                        <td>&nbsp;Pay Period</td>
-                                                                        <td>:</td>
-                                                                        <td>&nbsp;'.strtoupper($prevmonthtext).'. '.$daytext1.''.$prevyear.' - '.strtoupper($monthtext).'. '.$daytext2.', '.$year.'</td>
-                                                                        <td>Days Present</td>
-                                                                        <td>:</td>
-                                                                        <td>&nbsp;<b>'.number_format($hoursworked/8, 2, '.', ',').'</b></td>
-                                                                </tr>
-                                                                </table>
-                                                                <table style="width: 100%;font-size: 13px;">
-                                                                    <tr style="border-bottom: 1px solid #ddd;border-top: 1px solid #ddd;">
-                                                                        <td>&nbsp;EARNINGS</td>
-                                                                        <TD style="text-align: right;">HOURS</TD>
-                                                                        <TD style="text-align: right;">AMOUNT</TD>
-                                                                        <TD style="border-left: 1px solid #ddd;height: 1px;">&nbsp;DEDUCTIONS</TD>
-                                                                        <TD style="text-align: right;">HOURS</TD>
-                                                                        <TD style="text-align: right;">AMOUNT</TD>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>&nbsp;Basic/Reg</td>
-                                                                        <td style="text-align: right;">'.number_format($hoursworked-$sundayhoursworked-$regularholidayfinal-$specialholidayfinal, 2, '.', ',').'</td>
-                                                                        <td style="text-align: right;">'.number_format(($hoursworked-$sundayhoursworked-$regularholidayfinal-$specialholidayfinal)*$perhour, 2, '.', ',').'</td>
-                                                                        <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;SSS</td>
-                                                                        <td></td>
-                                                                        <td style="text-align: right;">'.number_format($ssscontfinal, 2, '.', ',').'</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>&nbsp;Basic/Reg OT</td>
-                                                                        <td style="text-align: right;">'.number_format($otbasedhoursworked, 2, '.', ',').'</td>
-                                                                        <td style="text-align: right;">'.number_format($othoursworked*$perhour, 2, '.', ',').'</td>
-                                                                        <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;SSS Loan</td>
-                                                                        <td></td>
-                                                                        <td style="text-align: right;">0.00</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>&nbsp;Sunday</td>
-                                                                        <td style="text-align: right;">'.number_format($sundayhoursworked, 2, '.', ',').'</td>
-                                                                        <td style="text-align: right;">'.number_format($sundayhoursworked*$perhour, 2, '.', ',').'</td>
-                                                                        <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;PAG-IBIG</td>
-                                                                        <td></td>
-                                                                        <td style="text-align: right;">'.number_format($pagibigcontfinal, 2, '.', ',').'</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>&nbsp;Holiday</td>
-                                                                        <td style="text-align: right;">'.number_format($regularholidayfinal, 2, '.', ',').'</td>
-                                                                        <td style="text-align: right;">'.number_format(($regularholidayfinal+$regularholidaybonushoursfinal)*$perhour, 2, '.', ',').'</td>
-                                                                        <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;PAG-IBIG Loan</td>
-                                                                        <td></td>
-                                                                        <td style="text-align: right;">0.00</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>&nbsp;S-Non-Working Day</td>
-                                                                        <td style="text-align: right;">'.number_format($specialholidayfinal, 2, '.', ',').'</td>
-                                                                        <td style="text-align: right;">'.number_format(($specialholidayfinal+$specialholidaybonushoursfinal)*$perhour, 2, '.', ',').'</td>
-                                                                        <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;PhilHelth</td>
-                                                                        <td></td>
-                                                                        <td style="text-align: right;">'.number_format($philhealthcontfinal, 2, '.', ',').'</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>&nbsp;Night Differential</td>
-                                                                        <td style="text-align: right;">0.00</td>
-                                                                        <td style="text-align: right;">0.00</td>
-                                                                        <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;Withholding Tax</td>
-                                                                        <td></td>
-                                                                        <td style="text-align: right;">'.number_format($taxcontfinal, 2, '.', ',').'</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;Less Lates</td>
-                                                                        <td style="text-align: right;">'.number_format($latecountfinal, 2, '.', ',').'</td>
-                                                                        <td style="text-align: right;">'.number_format($latecountfinal*$perhour, 2, '.', ',').'</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;Cash Loan(Office)</td>
-                                                                        <td></td>
-                                                                        <td style="text-align: right;">'.number_format($cashloanfinal, 2, '.', ',').'</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;Cash Advance</td>
-                                                                        <td></td>
-                                                                        <td style="text-align: right;">'.number_format($cashadvancefinal, 2, '.', ',').'</td>
-                                                                    </tr>
-                                                                    <tr style="border-bottom: 1px solid #ddd;border-top: 1px solid #ddd;">
-                                                                        <td>&nbsp;<b>TOTAL EARNINGS</b></td>
-                                                                        <td></td>
-                                                                        <td style="text-align: right;">'.number_format((($hoursworked-$sundayhoursworked-$regularholidayfinal-$specialholidayfinal)*$perhour)+($othoursworked*$perhour)+($sundayhoursworked*$perhour)+(($regularholidayfinal+$regularholidaybonushoursfinal)*$perhour)+(($specialholidayfinal+$specialholidaybonushoursfinal)*$perhour), 2, '.', ',').'</td>
-                                                                        <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;<b>TOTAL DEDUCTIONS</b></td>
-                                                                        <td></td>
-                                                                        <td style="text-align: right;">'.number_format($deductionfinal+$cashloanfinal+$cashadvancefinal+($latecountfinal*$perhour), 2, '.', ',').'</td>
-                                                                    </tr>
-                                                                    <tr style="border-bottom: 1px solid #000;border-top: 1px solid #ddd;padding: 3px;">
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td>&nbsp;<B>NET PAY</B></td>
-                                                                        <td>:</td>
-                                                                        <td style="text-align: right;"><B>'.number_format((($hoursworked-$sundayhoursworked-$regularholidayfinal-$specialholidayfinal)*$perhour)+($othoursworked*$perhour)+($sundayhoursworked*$perhour)+(($regularholidayfinal+$regularholidaybonushoursfinal)*$perhour)+(($specialholidayfinal+$specialholidaybonushoursfinal)*$perhour)-($deductionfinal+$cashloanfinal+$cashadvancefinal+($latecountfinal*$perhour)), 2, '.', ',').'</B></td>
-                                                                    </tr>
-                                                                </table>
-                                                            
-                                                            </div>
-                                                        </div>
-
-                                                     </div>
-                                                    ';
-
-                                                    $count = 0;
-
-                                                }
                                                 }
                                             }
   ?>
 
-  <?php
+               
+            </tbody>
+        </table>
 
-  
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td style="width: 50px;"></td>
+                    <td style="width: 250px;"></td>
+                    <td style="width: 250px;"></td>
+                    <td style="width: 80px;"></td>
+                    <td style="width: 80px;"></td>
+                    <td style="width: 80px;"></td>
+                    <td style="width: 80px; text-align: right;"><?php echo number_format($sssgrandtotal, 2, '.', ','); ?></td>
+                    <td style="width: 80px;"></td>
+                    <td style="width: 80px; text-align: right;"><?php echo number_format($pagibiggrandtotal, 2, '.', ','); ?></td>
+                    <td style="width: 80px;"></td>
+                    <td style="width: 80px; text-align: right;"><?php echo number_format($philhealthgrandtotal, 2, '.', ','); ?></td>
+                    <td style="width: 80px; text-align: right;"><?php echo number_format($taxgrandtotal, 2, '.', ','); ?></td>
+                    <td style="width: 80px;"></td>
+                    <td style="width: 80px; text-align: right;"><?php echo number_format($cashloangrandtotal, 2, '.', ','); ?></td>
+                    <td style="width: 90px; text-align: right;"><?php echo number_format($cashadvancegrandtotal, 2, '.', ','); ?></td>
+                    <td style="width: 80px;"></td>
+                    <td style="width: 100px;"></td>
+                    <td style="width: 250px;"></td>
+                    <td style="width: 100px;"></td>
+                    <td style="width: 80px;"></td>
+                    <td style="width: 80px;"></td>
+                    <td style="width: 80px; text-align: right;"><?php echo number_format($dailygrandtotal, 2, '.', ','); ?></td>
+                    <td style="width: 90px; text-align: right;"><?php echo number_format($overtimegrandtotal, 2, '.', ','); ?></td>
+                    <td style="width: 80px; text-align: right;"><?php echo number_format($sundaygrandtotal, 2, '.', ','); ?></td>
+                    <td style="width: 80px; text-align: right;"><?php echo number_format($holidaygrandtotal, 2, '.', ','); ?></td>
+                    <td style="width: 80px; text-align: right;"><?php echo number_format($snholidaygrandtotal, 2, '.', ','); ?></td>
+                    <td style="width: 80px; text-align: right;"><?php echo number_format($grossgrandtotal, 2, '.', ','); ?></td>
+                    <td style="width: 90px; text-align: right;"><?php echo number_format($deductionsgrandtotal, 2, '.', ','); ?></td>
+                    <td style="width: 80px; text-align: right;"><?php echo number_format($netgrandtotal, 2, '.', ','); ?></td>
+                </tr>
+            </tbody>
+        </table>
 
-  echo '
-
-     
-
-     ';
-
-     ?>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

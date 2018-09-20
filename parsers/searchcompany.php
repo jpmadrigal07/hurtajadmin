@@ -12,7 +12,7 @@ $result = mysqli_query($db_conn, $sql);
 
 if($_POST["search"] == "") {
   $output .= '
-  <table class="table table-striped">
+  <table class="table table-bordered">
   <thead>
   <tr>
   <th>#</th>
@@ -54,7 +54,7 @@ if($_POST["search"] == "") {
 } else {
   if(mysqli_num_rows($result) > 0) {  
     $output .= '
-    <table class="table table-striped">
+    <table class="table table-bordered">
     <thead>
     <tr>
     <th>#</th>
