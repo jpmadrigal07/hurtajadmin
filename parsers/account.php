@@ -623,6 +623,27 @@ if(isset($_POST["deleteemployeeid"])) {
 
 }
 
+if(isset($_POST["deletepayslipid"])) {
+
+  include_once("../include/db_conn.php");
+  include_once("../include/loginstatus.php");
+
+  $rid = $_POST['deletepayslipid'];
+  $type = $_POST['deletepaysliptype'];
+
+  if($type == "1") {
+    $sql = "UPDATE hurtajadmin_regular_payslip SET regular_payslip_status='2' WHERE regular_payslip_payslip_id='$rid'";
+    $query = mysqli_query($db_conn, $sql);
+  } else if($type == "2") {
+    $sql = "UPDATE hurtajadmin_tertint_payslip SET tertint_payslip_status='2' WHERE tertint_payslip_payslip_id='$rid'";
+    $query = mysqli_query($db_conn, $sql);
+  }
+  echo "successupdate";
+
+  exit();
+
+}
+
 if(isset($_POST["editssscontributionid"])) {
 
   include_once("../include/db_conn.php");

@@ -115,8 +115,8 @@ if(
   $pheading = "Cash Loan/Advance"; 
 } else if (isset($_GET["payroll"]) && isset($_GET["action"]) && trim($_GET["payroll"]) == "focus" && trim($_GET["action"]) == "attendance"){
   $pheading = "Import Attendance"; 
-} else if (isset($_GET["payroll"]) && isset($_GET["action"]) && trim($_GET["payroll"]) == "focus" && trim($_GET["action"]) == "payslip"){
-  $pheading = "Generate Payslip"; 
+} else if (isset($_GET["payroll"]) && isset($_GET["action"]) && trim($_GET["payroll"]) == "focus" && (trim($_GET["action"]) == "payslip" || trim($_GET["action"]) == "regularpayslip" || trim($_GET["action"]) == "tertintpayslip")){
+  $pheading = "Payslip"; 
 } else if (isset($_GET["payroll"]) && isset($_GET["action"]) && trim($_GET["payroll"]) == "focus" && trim($_GET["action"]) == "summary"){
   $pheading = "Summary"; 
 } else if (isset($_GET["payroll"]) && isset($_GET["action"]) && trim($_GET["payroll"]) == "focus" && trim($_GET["action"]) == "sss"){
@@ -281,7 +281,7 @@ if(
                                     <a href="account.php?id=<?php echo $id; ?>&payroll=focus&action=attendance">Import Attendance</a>
                                 </li>
                                 <li>
-                                    <a href="account.php?id=<?php echo $id; ?>&payroll=focus&action=payslip">Generate Payslip</a>
+                                    <a href="account.php?id=<?php echo $id; ?>&payroll=focus&action=payslip">Payslip</a>
                                 </li>
                                 <li>
                                     <a href="account.php?id=<?php echo $id; ?>&payroll=focus&action=summary">Summary</a>
@@ -1762,7 +1762,10 @@ if(
                     <div id="my-request" class="panel panel-default">
                             <div class="panel-heading"><a type="button" class="btn btn-danger" href="account.php?id=<?php echo $id; ?>&payroll=focus&action=attendance">Import Attendance</a></div>
                             <div class="panel-body">
-                                <div class="col-md-6 col-md-offset-3">
+                            <div class="row">
+                                <div class="col-md-6">
+                                <h3>Generate Payslip</h3>
+                                <hr>
                                     <form id="loginForm" onsubmit="return false;">
                                         <span id="paySlipPageStatus"></span>
                                         <div class="form-group">
@@ -1830,13 +1833,80 @@ if(
                                             <option value="2030">2030</option>
                                           </select>
                                         </div>
-                                        <button type="button" class="btn btn-primary" id="paySlipPageBtn" style="width: 100%" onclick="generatePaySlipPage();">Generate</button>
+                                        <button type="button" class="btn btn-primary" id="paySlipPageBtn" style="width: 100%" onclick="openGenPaySlipDialog()">Generate</button>
                                     </form>
+                                </div>
+                                <div class="col-md-6">
+                                <h3>Search Payslip</h3>
+                                <hr>
+                                <div class="form-group">
+                                          <select class="form-control" id="select-type-payslip">
+                                            <option value="">Payment Type</option>
+                                            <option value="1">Regular</option>
+                                            <option value="2">13th month</option>
+                                          </select>
+                                        </div>
+                                <div class="form-group">
+											<select class="form-control" id="select-filter-payslip">
+												<option value="">Select Filter</option>
+												<option value="payslipid">Filter by Payslip ID</option>
+												<option value="payslipcycle">Filter by Payslip Cycle</option>
+											</select>
+										</div>
+                                <div class="form-group" id="text-search-payslip" hidden="true">  
+			                        <input type="text" value="" id="payslip-search-id" placeholder="Search Payslip ID" class="form-control" autofocus />  
+			                    </div>
+                                <div class="form-group" id="month-search-payslip" hidden="true">
+									<select class="form-control" id="payslip-search-month">
+										<option value="">Month</option>
+                      					<option value="1">January</option>
+                      					<option value="2">February</option>
+                      					<option value="3">March</option>
+                      					<option value="4">April</option>
+                      					<option value="5">May</option>
+                      					<option value="6">June</option>
+                      					<option value="7">July</option>
+                      					<option value="8">August</option>
+                      					<option value="9">September</option>
+                      					<option value="10">October</option>
+                      					<option value="11">November</option>
+                      					<option value="12">December</option>
+									</select>
+								</div>
+                                <div class="form-group" id="cycle-search-payslip" hidden="true">
+									<select class="form-control" id="payslip-search-cycle">
+										<option value="">Cycle</option>
+                                        <option value="1">(Past Month) 26 - 10 </option>
+                                        <option value="2">11 - 25</option>
+									</select>
+								</div>
+                                <div class="form-group" id="year-search-payslip" hidden="true">
+									<select class="form-control" id="payslip-search-year">
+										<option value="">Year</option>
+                                        <option value="2018">2018</option>
+                                        <option value="2019">2019</option>
+                                        <option value="2020">2020</option>
+                                        <option value="2021">2021</option>
+                                        <option value="2022">2022</option>
+                                        <option value="2023">2023</option>
+                                        <option value="2024">2024</option>
+                                        <option value="2025">2025</option>
+                                        <option value="2026">2026</option>
+                                        <option value="2027">2027</option>
+                                        <option value="2028">2028</option>
+                                        <option value="2029">2029</option>
+                                        <option value="2030">2030</option>
+									</select>
+								</div>
+                                <div id="payslip-search-result">
+                                
+                                </div>
+								</div>
                                 </div>
                             </div>
                         </div>
                     <br>
-            <?php } else if (isset($_GET["payroll"]) && isset($_GET["action"]) && isset($_GET["type"]) && isset($_GET["to"]) && isset($_GET["empid"]) && isset($_GET["month"]) && isset($_GET["cycle"]) && isset($_GET["year"]) && trim($_GET["payroll"]) == "focus" && trim($_GET["action"]) == "payslip") { ?>
+            <?php } else if (isset($_GET["payroll"]) && isset($_GET["action"]) && !isset($_GET["payslipid"]) && isset($_GET["type"]) && isset($_GET["to"]) && isset($_GET["empid"]) && isset($_GET["month"]) && isset($_GET["cycle"]) && isset($_GET["year"]) && trim($_GET["payroll"]) == "focus" && trim($_GET["action"]) == "payslip") { ?>
                     <div class="row">
                         <div class="col-lg-12">
                             <h1 class="page-header"><?php echo $pheading; ?></h1>
@@ -1939,49 +2009,11 @@ if(
                                $prevmonth = "0".$prevmonth;
                             }
 
-                            if($to == "1") {
-
-                                if($cycle == "1") {
-
-                                    $headerinfo = '<div class="col-md-6"><span style="font-size: 22px;"><b>Date Cycle:</b> '.$prevmonthtext.' '.$daytext1.''.$prevyear.' - '.$monthtext.' '.$daytext2.', '.$year.'</span></div><div class="col-md-6"><span style="font-size: 22px;"><b>Type:</b> Regular</span></div>';
-
-                                    $printbtn = '<a type="button" class="btn btn-danger" href="payslip.php?type='.$type.'&to='.$to.'&empid=0&month='.$month.'&cycle='.$cycle.'&year='.$year.'" target="_blank">Print</a>';
-
-                                } else if($cycle == "2") {
-
-                                    $headerinfo = '<div class="col-md-6"><span style="font-size: 22px;"><b>Date Cycle:</b> '.$monthtext.' '.$daytext1.' - '.$monthtext.' '.$daytext2.', '.$year.'</span></div><div class="col-md-6"><span style="font-size: 22px;"><b>Type:</b> Regular</span></div>';
-
-                                    $printbtn = '<a type="button" class="btn btn-danger" href="payslip.php?type='.$type.'&to='.$to.'&empid=0&month='.$month.'&cycle='.$cycle.'&year='.$year.'" target="_blank">Print</a>';
-
-                                }
-
-
-                            } else if($to == "2") {
-
-                                $headerinfo = '<div class="col-md-6"><span style="font-size: 22px;"><b>Date Cycle:</b> '.$prevmonthtext.' '.$daytext1.''.$prevyear.' - '.$monthtext.' '.$daytext2.', '.$year.'</span></div><div class="col-md-3"><span style="font-size: 22px;"><b>Employee ID:</b> '.$empid.'</span></div><div class="col-md-3"><span style="font-size: 22px;"><b>Type:</b> Regular</span></div>';
-
-                                $printbtn = '<a type="button" class="btn btn-danger" href="payslip.php?type='.$type.'&to='.$to.'&empid='.$empid.'&month='.$month.'&cycle='.$cycle.'&year='.$year.'" target="_blank">Print</a>';
-
-                            }
-
+                           
                         } else if($type == "2") {
                             $empid = $_GET["empid"];
                             $year = $_GET["year"];
 
-                            if($to == "1") {
-
-                                $headerinfo = '<div class="col-md-6"><span style="font-size: 22px;"><b>Year:</b> '.$year.'</span></div><div class="col-md-6"><span style="font-size: 22px;"><b>Type:</b> 13th Month</span></div>';
-
-                                $printbtn = '<a type="button" class="btn btn-danger" href="payslip.php?type='.$type.'&to='.$to.'&empid=0&month=0&cycle=0&year='.$year.'" target="_blank">Print</a>';
-
-                            } else if($to == "2") {
-
-                                $headerinfo = '<div class="col-md-4"><span style="font-size: 22px;"><b>Year:</b> '.$year.'</span></div>
-                                        <div class="col-md-4"><span style="font-size: 22px;"><b>Employee ID:</b> '.$empid.'</span></div><div class="col-md-4"><span style="font-size: 22px;"><b>Type:</b> 13th Month</span></div>';
-
-                                $printbtn = '<a type="button" class="btn btn-danger" href="payslip.php?type='.$type.'&to='.$to.'&empid='.$empid.'&month=0&cycle=0&year='.$year.'" target="_blank">Print</a>';
-
-                            }
                         }
 
                         
@@ -1990,34 +2022,12 @@ if(
                     <div class="row">
                     <div class="col-lg-12">
                         <div id="my-request" class="panel panel-default">
-                            <div class="panel-heading"><a type="button" class="btn btn-default" href="account.php?id=<?php echo $log_id; ?>&payroll=focus&action=payslip">Back</a> <?php echo $printbtn; ?></div>
+                            <div class="panel-heading"><a type="button" class="btn btn-default" href="account.php?id=<?php echo $log_id; ?>&payroll=focus&action=payslip">Back</a></div>
                             <div class="panel-body">
                                 <div class="row">
                                     <?php echo $headerinfo; ?>
                                 </div>
                                 
-                                <hr>
-                                    <table class="table table-bordered">
-                                            <thead>
-                                            <?php if($type == "1") { ?>
-                                              <tr>
-                                                <th>Employee ID</th>
-                                                <th>Name</th>
-                                                <th>Basic Pay</th>
-                                                <th>Overtime Pay</th>
-                                                <th>Deductions</th>
-                                              </tr>
-                                            <?php } else if($type == "2") { ?>
-                                                <tr>
-                                                <th>Employee ID</th>
-                                                <th>Name</th>
-                                                <th>Basic Pay</th>
-                                                <th>Overtime Pay</th>
-                                                <th>13th Month Pay</th>
-                                              </tr>
-                                            <?php } ?>
-                                        </thead>
-                                        <tbody>
                                             <?php
 
                                             if($type == "1") {
@@ -2027,7 +2037,10 @@ if(
                                                     $sql = "SELECT * FROM hurtajadmin_employee WHERE employee_id = '$empid' ORDER BY id DESC";
                                                 }
                                                 $query = mysqli_query($db_conn, $sql);
+                                                $querycount = mysqli_num_rows($query);
                                                 $count = 0;
+                                                $payslipcountregular = 0;
+                                                $insertpayslipcount = 0;
                                                 while($row = mysqli_fetch_array($query)) {  
                                                     $count++; 
                                                     $recid = $row["id"];
@@ -2646,15 +2659,65 @@ if(
                                                         }
                                                     }
 
-                                                    echo '
-                                                        <tr>
-                                                            <td>'.$empid.'</td>
-                                                            <td>'.$fname.' '.$mnameinitial.'. '.$lname.'</td>
-                                                            <td>₱'.number_format((($hoursworked-$sundayhoursworked-$regularholidayfinal-$specialholidayfinal)*$perhour)+($sundayhoursworked*$perhour)+(($regularholidayfinal+$regularholidaybonushoursfinal)*$perhour)+(($specialholidayfinal+$specialholidaybonushoursfinal)*$perhour), 2, '.', ',').'</td>
-                                                            <td>₱'.number_format($othoursworked*$perhour, 2, '.', ',').'</td>
-                                                            <td><a href="javascript:void(0)" onclick="showModalViewDeduction(\''.$taxcontfinal.'\',\''.$pagibigcontfinal.'\',\''.$ssscontfinal.'\',\''.$philhealthcontfinal.'\');">View</a></td>
-                                                        </tr>
-                                                    ';
+                                                    $regularpay = (($hoursworked-$sundayhoursworked-$regularholidayfinal-$specialholidayfinal)*$perhour)+($sundayhoursworked*$perhour)+(($regularholidayfinal+$regularholidaybonushoursfinal)*$perhour)+(($specialholidayfinal+$specialholidaybonushoursfinal)*$perhour);
+
+                                                    $overtimepay = $othoursworked*$perhour;
+
+                                                    $overallpay = $regularpay+$overtimepay;
+
+                                                    $payslipid = "PYSLP".$month.$cycle.$year;
+
+                                                    $dayspresent = $hoursworked/8;
+                                                    $latecountfinalamount = $latecountfinal*$perhour;
+                                                    $specialholidayfinalamount = ($specialholidayfinal+$specialholidaybonushoursfinal)*$perhour;
+                                                    $regularholidayfinalamount = ($regularholidayfinal+$regularholidaybonushoursfinal)*$perhour;
+                                                    $sundayhoursworkedamount = $sundayhoursworked*$perhour;
+                                                    $othoursworkedamount = $othoursworked*$perhour;
+                                                    $latecountfinalamount = $latecountfinal*$perhour;
+
+                                                    $basicreg = $hoursworked-$sundayhoursworked-$regularholidayfinal-$specialholidayfinal;
+                                                    $basicregamount = ($hoursworked-$sundayhoursworked-$regularholidayfinal-$specialholidayfinal)*$perhour;
+
+                                                    if($to == "1") {
+
+                                                            $payslipcountregular++;
+
+                                                            $sql_check_emp = "SELECT id FROM hurtajadmin_regular_payslip WHERE regular_payslip_payslip_id = '$payslipid' AND employee_id = '$empid' AND regular_payslip_status = '1' LIMIT 1";
+                                                            $query_check_emp = mysqli_query($db_conn, $sql_check_emp);
+                                                            $count_check_emp = mysqli_num_rows($query_check_emp);
+
+                                                            if($count_check_emp == 0) {
+                                                                $sql_reg_pay = "INSERT INTO hurtajadmin_regular_payslip (regular_payslip_payslip_id, regular_payslip_date_cycle_month, regular_payslip_date_cycle_cycle, regular_payslip_date_cycle_year, employee_id, regular_payslip_basic_pay, regular_payslip_overtime_pay, regular_payslip_tax_cont, regular_payslip_pagibig_cont, regular_payslip_sss_cont, regular_payslip_philhealth_cont, 	regular_payslip_days_of_work, regular_payslip_days_present,regular_payslip_cash_advance, regular_payslip_cash_loan,regular_payslip_less_lates_hours, regular_payslip_less_lates,regular_payslip_s_non_working_holiday_hours,regular_payslip_s_non_working_holiday,	regular_payslip_holiday_hours,	regular_payslip_holiday,regular_payslip_sunday_hours,regular_payslip_sunday,regular_payslip_basic_reg_ot_hours,regular_payslip_basic_reg_ot,	regular_payslip_basic_reg_hours,regular_payslip_basic_reg, regular_payslip_date_created, regular_payslip_status) VALUES ('$payslipid','$month','$cycle','$year','$empid','$regularpay','$overtimepay','$taxcontfinal','$pagibigcontfinal','$ssscontfinal','$philhealthcontfinal','$daysofwork','$dayspresent','$cashadvancefinal','$cashloanfinal','$latecountfinal','$latecountfinalamount','$specialholidayfinal','$specialholidayfinalamount','$regularholidayfinal','$regularholidayfinalamount','$sundayhoursworked','$sundayhoursworkedamount','$otbasedhoursworked','$othoursworkedamount','$basicreg','$basicregamount',NOW(),'1')";
+                                                                $query_reg_pay = mysqli_query($db_conn, $sql_reg_pay);
+
+                                                                $insertpayslipcount++;
+                                                            }
+
+                                                            if($payslipcountregular == $querycount) {
+                                                                if($insertpayslipcount > 0) {
+                                                                    echo '<h3>Generating...</h3>';
+                                                                    echo("<script>location.href = 'account.php?id=$log_id&payroll=focus&action=regularpayslip&payslipid=$payslipid';</script>");
+                                                                } else {
+                                                                    echo '<h3>Sorry, this cycle is already exist.</h3>';
+                                                                }
+                                                            }
+                                                        
+                                                    } else if($to == "2") {
+                                                        $sql_check_payslip = "SELECT id FROM hurtajadmin_regular_payslip WHERE regular_payslip_payslip_id = '$payslipid' AND employee_id = '$empid' AND regular_payslip_status = '1' LIMIT 1";
+                                                        $query_check_payslip = mysqli_query($db_conn, $sql_check_payslip);
+                                                        $count_check_payslip = mysqli_num_rows($query_check_payslip);
+
+                                                        if($count_check_payslip == 0) {
+                                                            echo '<h3>Generating...</h3>';
+            
+                                                            $sql_reg_pay = "INSERT INTO hurtajadmin_regular_payslip (regular_payslip_payslip_id, regular_payslip_date_cycle_month, regular_payslip_date_cycle_cycle, regular_payslip_date_cycle_year, employee_id, regular_payslip_basic_pay, regular_payslip_overtime_pay, regular_payslip_tax_cont, regular_payslip_pagibig_cont, regular_payslip_sss_cont, regular_payslip_philhealth_cont, 	regular_payslip_days_of_work, regular_payslip_days_present,regular_payslip_cash_advance, regular_payslip_cash_loan,regular_payslip_less_lates_hours, regular_payslip_less_lates,regular_payslip_s_non_working_holiday_hours,regular_payslip_s_non_working_holiday,	regular_payslip_holiday_hours,	regular_payslip_holiday,regular_payslip_sunday_hours,regular_payslip_sunday,regular_payslip_basic_reg_ot_hours,regular_payslip_basic_reg_ot,	regular_payslip_basic_reg_hours,regular_payslip_basic_reg, regular_payslip_date_created, regular_payslip_status) VALUES ('$payslipid','$month','$cycle','$year','$empid','$regularpay','$overtimepay','$taxcontfinal','$pagibigcontfinal','$ssscontfinal','$philhealthcontfinal','$daysofwork','$dayspresent','$cashadvancefinal','$cashloanfinal','$latecountfinal','$latecountfinalamount','$specialholidayfinal','$specialholidayfinalamount','$regularholidayfinal','$regularholidayfinalamount','$sundayhoursworked','$sundayhoursworkedamount','$otbasedhoursworked','$othoursworkedamount','$basicreg','$basicregamount',NOW(),'1')";
+                                                            $query_reg_pay = mysqli_query($db_conn, $sql_reg_pay);
+
+                                                            echo("<script>location.href = 'account.php?id=$log_id&payroll=focus&action=regularpayslip&payslipid=$payslipid';</script>");
+                                                        } else {
+                                                            echo '<h3>Sorry, this employee has a payslip record for this cycle.</h3>';
+                                                        }
+                                                    } 
                                                 }
                                             } else if($type == "2") {
                                                 if($to == "1") {
@@ -2663,7 +2726,10 @@ if(
                                                     $sql = "SELECT * FROM hurtajadmin_employee WHERE employee_id = '$empid' ORDER BY id DESC";
                                                 }
                                                         $query = mysqli_query($db_conn, $sql);
+                                                        $querycount = mysqli_num_rows($query);
                                                         $count = 0;
+                                                        $payslipcounttertint = 0;
+                                                        $insertpayslipcount = 0;
                                                         while($row = mysqli_fetch_array($query)) {  
                                                             $count++; 
                                                             $recid = $row["id"];
@@ -2795,6 +2861,8 @@ if(
                                                         } 
                                                     }
 
+                                                    
+
 
                                                     $sql1 = "SELECT * FROM hurtajadmin_employee_settings WHERE employee_id = '$empid'";
                                                     $query1 = mysqli_query($db_conn, $sql1);
@@ -2804,26 +2872,338 @@ if(
                                                             $perhour = $row1["employee_settings_perhour"];
                                                         }
                                                     }
+
+                                                    $datediff = strtotime("12/31/".$year) - strtotime("1/1/".$year);
+                                                    $daysofwork = $datediff / (60 * 60 * 24) - 24;
+                                                    $dayspresent = $hoursworked/8;
+
+                                                    $payslipid = "PYSLPTM".$year;
                                             
-                                                    // 160 hours worked from attendance
-                                                    // $bimonthsalary = $perhour*$hoursworked;
-                                                    $otpay = $perhour * $xotcount; // this is base on per hour not ot per hour
-                                                    $tertint = $perhour*$hoursworked+$otpay;
-                                                 
-                                                    echo '
-                                                    <tr>
-                                                    <td>'.$empid.'</td>
-                                                    <td>'.$fname.' '.$mnameinitial.'. '.$lname.'</td>
-                                                    <td>₱'.number_format($tertint-$otpay, 2, '.', ',').'</td>
-                                                    <td>₱'.number_format($otpay, 2, '.', ',').'</td>
-                                                    <td>₱'.number_format($tertint/12, 2, '.', ',').'</td>
-                                                    </tr>
-                                                    ';
+                                                    $otpay = $perhour*$xotcount; // this is base on per hour not ot per hour
+                                                    $tertint = $perhour*$hoursworked;
+                                                
+
+                                                    if($to == "1") {
+
+                                                        $payslipcounttertint++;
+
+                                                        $sql_check_emp = "SELECT id FROM hurtajadmin_tertint_payslip WHERE tertint_payslip_payslip_id = '$payslipid' AND employee_id = '$empid' AND tertint_payslip_status = '1' LIMIT 1";
+                                                        $query_check_emp = mysqli_query($db_conn, $sql_check_emp);
+                                                        $count_check_emp = mysqli_num_rows($query_check_emp);
+
+                                                        if($count_check_emp == 0) {
+                                                            $sql_tertint_pay = "INSERT INTO hurtajadmin_tertint_payslip (	tertint_payslip_payslip_id, tertint_payslip_date_cycle_year, employee_id, 	tertint_payslip_ot_pay,	tertint_payslip_ot_pay_hours, tertint_payslip_tertint_pay, tertint_payslip_tertint_pay_hours,	tertint_payslip_days_of_work, tertint_payslip_days_present, tertint_payslip_date_created, tertint_payslip_status) VALUES ('$payslipid','$year','$empid','$otpay','$xotcount','$tertint','$hoursworked','$daysofwork','$dayspresent',NOW(),'1')";
+                                                            $query_tertint_pay = mysqli_query($db_conn, $sql_tertint_pay);
+
+                                                            $insertpayslipcount++;
+                                                        }
+
+                                                        if($payslipcounttertint == $querycount) {
+                                                            if($insertpayslipcount > 0) {
+                                                                echo '<h3>Generating...</h3>';
+                                                                echo("<script>location.href = 'account.php?id=$log_id&payroll=focus&action=tertintpayslip&payslipid=$payslipid';</script>");
+                                                            } else {
+                                                                echo '<h3>Sorry, this cycle is already exist.</h3>';
+                                                            }
+                                                        }
+                                                    
+                                                } else if($to == "2") {
+                                                    $sql_check_payslip = "SELECT id FROM hurtajadmin_regular_payslip WHERE regular_payslip_payslip_id = '$payslipid' AND employee_id = '$empid' AND regular_payslip_status = '1' LIMIT 1";
+                                                    $query_check_payslip = mysqli_query($db_conn, $sql_check_payslip);
+                                                    $count_check_payslip = mysqli_num_rows($query_check_payslip);
+
+                                                    if($count_check_payslip == 0) {
+                                                        echo '<h3>Generating...</h3>';
+        
+                                                        $sql_tertint_pay = "INSERT INTO hurtajadmin_tertint_payslip (	tertint_payslip_payslip_id, tertint_payslip_date_cycle_year, employee_id, 	tertint_payslip_ot_pay,	tertint_payslip_ot_pay_hours, tertint_payslip_tertint_pay, tertint_payslip_tertint_pay_hours,	tertint_payslip_days_of_work, tertint_payslip_days_present, tertint_payslip_date_created, tertint_payslip_status) VALUES ('$payslipid','$year','$empid','$otpay','$xotcount','$tertint','$hoursworked','$daysofwork','$dayspresent',NOW(),'1')";
+                                                        $query_tertint_pay = mysqli_query($db_conn, $sql_tertint_pay);
+
+                                                        echo("<script>location.href = 'account.php?id=$log_id&payroll=focus&action=tertintpayslip&payslipid=$payslipid';</script>");
+                                                    } else {
+                                                        echo '<h3>Sorry, this employee has a payslip record for this cycle.</h3>';
+                                                    }
+                                                } 
                                                 }
                                             }
                                                 ?>
                                         </tbody>
                                     </table>
+                            </div>
+                        </div>
+                    </div><!-- /.col-->
+                </div><!-- /.row -->
+                <br>
+                <?php } else if (isset($_GET["payroll"]) && isset($_GET["action"]) && isset($_GET["payslipid"]) && !isset($_GET["type"]) && !isset($_GET["to"]) && !isset($_GET["empid"]) && !isset($_GET["month"]) && !isset($_GET["cycle"]) && !isset($_GET["year"]) && trim($_GET["payroll"]) == "focus" && trim($_GET["action"]) == "regularpayslip") { ?>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1 class="page-header"><?php echo $pheading; ?></h1>
+                        </div>
+                        <!-- /.col-lg-12 -->
+                    </div>
+                    <?php
+
+                        $payslipid = $_GET["payslipid"];
+
+                        $sql_h = "SELECT * FROM hurtajadmin_regular_payslip WHERE regular_payslip_payslip_id = '$payslipid' LIMIT 1";
+                        $query_h = mysqli_query($db_conn, $sql_h);
+                        while($row_h = mysqli_fetch_array($query_h)) {  
+                            $month = $row_h["regular_payslip_date_cycle_month"];
+                            $cycle = $row_h["regular_payslip_date_cycle_cycle"];
+                            $year = $row_h["regular_payslip_date_cycle_year"];
+                        }
+
+                        $monthtext = "";
+                        $prevmonthtext = "";
+                        $cycletext = "";
+
+                        $prevmonth = "";
+
+                        if($month == 1) {
+                            $prevmonth = 12;
+                        } else {
+                            $prevmonth = $month-1;
+                        }
+                                                        
+                        if($month == "1") {
+                            $monthtext = "Jan";
+                        } else if($month == "2") {
+                            $monthtext = "Feb";
+                        } else if($month == "3") {
+                            $monthtext = "Mar";
+                        } else if($month == "4") {
+                            $monthtext = "Apr";
+                        } else if($month == "5") {
+                            $monthtext = "May";
+                        } else if($month == "6") {
+                            $monthtext = "Jun";
+                        } else if($month == "7") {
+                            $monthtext = "Jul";
+                        } else if($month == "8") {
+                            $monthtext = "Aug";
+                        } else if($month == "9") {
+                            $monthtext = "Sep";
+                        } else if($month == "10") {
+                            $monthtext = "Oct";
+                        } else if($month == "11") {
+                            $monthtext = "Nov";
+                        } else if($month == "12") {
+                            $monthtext = "Dec";
+                        }
+
+                        if($prevmonth == "1") {
+                            $prevmonthtext = "Jan";
+                        } else if($prevmonth == "2") {
+                            $prevmonthtext = "Feb";
+                        } else if($prevmonth == "3") {
+                            $prevmonthtext = "Mar";
+                        } else if($prevmonth == "4") {
+                            $prevmonthtext = "Apr";
+                        } else if($prevmonth == "5") {
+                            $prevmonthtext = "May";
+                        } else if($prevmonth == "6") {
+                            $prevmonthtext = "Jun";
+                        } else if($prevmonth == "7") {
+                            $prevmonthtext = "Jul";
+                        } else if($prevmonth == "8") {
+                            $prevmonthtext = "Aug";
+                        } else if($prevmonth == "9") {
+                            $prevmonthtext = "Sep";
+                        } else if($prevmonth == "10") {
+                            $prevmonthtext = "Oct";
+                        } else if($prevmonth == "11") {
+                            $prevmonthtext = "Nov";
+                        } else if($prevmonth == "12") {
+                            $prevmonthtext = "Dec";
+                        }
+
+                        if($cycle == "1") {
+                            if($month == 1) { 
+                                $prevyear = $year-1;
+                                $cycletext = $prevmonthtext.". 26, ".$prevyear." - ".$monthtext.". 10, ".$year;
+                            } else {
+                                $cycletext = $prevmonthtext.". 26 - ".$monthtext.". 10, ".$year;
+                            }
+                        } else if($cycle == "2") {
+                            $cycletext = $monthtext.". 11 - 25, ".$year;
+                        }
+
+                        $headerinfo = '<div class="col-md-6"><span style="font-size: 22px;"><b>Date Cycle:</b> '.$cycletext.'</span></div><div class="col-md-6"><span style="font-size: 22px;"><b>Type:</b> Regular</span></div>';
+
+                        $printbtn = '<a type="button" class="btn btn-primary" href="payslip.php?payslipid='.$payslipid.'&type=1" target="_blank">Print All</a>';
+                        
+                    ?>
+
+                    <div class="row">
+                    <div class="col-lg-12">
+                        <div id="my-request" class="panel panel-default">
+                            <div class="panel-heading"><a type="button" class="btn btn-default" href="account.php?id=<?php echo $log_id; ?>&payroll=focus&action=payslip">Back</a> <?php echo $printbtn; ?></div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <?php echo $headerinfo; ?>
+                                </div>
+                                
+                                <hr>
+                                <input type="hidden" id="search-employee-regular-payslip-payslipid" value="<?php echo $payslipid; ?>" />
+                                <div class="input-group">
+                                            <input type="text" class="form-control" name="date" placeholder="Search Employee ID" id="search-employee-regular-payslip" autocomplete="off" />
+                                            <span class="input-group-addon add-on"><span class="glyphicon glyphicon-search"></span></span>
+                                        </div>
+                                        <br/>
+                                        <div id="employee-regular-payslip-search-result">
+                                    <table class="table table-bordered">
+                                            <thead>
+                                              <tr>
+                                                <th>Employee ID</th>
+                                                <th>Name</th>
+                                                <th>Basic Pay</th>
+                                                <th>Overtime Pay</th>
+                                                <th>Deductions</th>
+                                                <th>Action</th>
+                                              </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+
+                                                $sql = "SELECT * FROM hurtajadmin_regular_payslip WHERE regular_payslip_payslip_id = '$payslipid'";
+
+                                                $query = mysqli_query($db_conn, $sql);
+                                                $count = 0;
+                                                while($row = mysqli_fetch_array($query)) {  
+                                                    $count++; 
+                                                    $recid = $row["id"];
+                                                    $month = $row["regular_payslip_date_cycle_month"];
+                                                    $cycle = $row["regular_payslip_date_cycle_cycle"];
+                                                    $year = $row["regular_payslip_date_cycle_year"];
+                                                    $employee_id = $row["employee_id"];
+                                                    $basicpay = $row["regular_payslip_basic_pay"];
+                                                    $overtimepay = $row["regular_payslip_overtime_pay"];
+                                                    $taxcont = $row["regular_payslip_tax_cont"];
+                                                    $pagibigcont = $row["regular_payslip_pagibig_cont"];
+                                                    $ssscont = $row["regular_payslip_sss_cont"];
+                                                    $philhealthcont = $row["regular_payslip_philhealth_cont"];
+                                                    $datecreated = $row["regular_payslip_date_created"];
+                                                    $status = $row["regular_payslip_status"];
+
+                                                    $sql_emp = "SELECT * FROM hurtajadmin_employee WHERE employee_id = '$employee_id' LIMIT 1";
+                                                    $query_emp = mysqli_query($db_conn, $sql_emp);
+
+                                                    while($row_emp = mysqli_fetch_array($query_emp)) {
+                                                        $lmnameinitial = substr($row_emp["employee_mname"], 0, 1);
+                                                        $empfullname = $row_emp["employee_fname"].' '.$lmnameinitial.'. '.$row_emp["employee_lname"];
+                                                    }
+
+                                                    echo '
+                                                        <tr>
+                                                            <td>'.$employee_id.'</td>
+                                                            <td>'.$empfullname.'</td>
+                                                            <td>₱'.number_format($basicpay, 2, '.', ',').'</td>
+                                                            <td>₱'.number_format($overtimepay, 2, '.', ',').'</td>
+                                                            <td><a href="javascript:void(0)" onclick="showModalViewDeduction(\''.$taxcont.'\',\''.$pagibigcont.'\',\''.$ssscont.'\',\''.$philhealthcont.'\');">View</a></td>
+                                                            <td><a href="payslip.php?payslipid='.$payslipid.'&type=1&empid='.$employee_id.'" target="_blank">Print This</a></td>
+                                                        </tr>
+                                                    ';
+                                                }
+                                                ?>
+                                        </tbody>
+                                    </table>
+                                    </div>
+                            </div>
+                        </div>
+                    </div><!-- /.col-->
+                </div><!-- /.row -->
+                <br>
+                <?php } else if (isset($_GET["payroll"]) && isset($_GET["action"]) && isset($_GET["payslipid"]) && !isset($_GET["type"]) && !isset($_GET["to"]) && !isset($_GET["empid"]) && !isset($_GET["month"]) && !isset($_GET["cycle"]) && !isset($_GET["year"]) && trim($_GET["payroll"]) == "focus" && trim($_GET["action"]) == "tertintpayslip") { ?>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1 class="page-header"><?php echo $pheading; ?></h1>
+                        </div>
+                        <!-- /.col-lg-12 -->
+                    </div>
+                    <?php
+
+                        $payslipid = $_GET["payslipid"];
+
+                        $sql_h = "SELECT * FROM hurtajadmin_tertint_payslip WHERE tertint_payslip_payslip_id = '$payslipid' LIMIT 1";
+                        $query_h = mysqli_query($db_conn, $sql_h);
+                        while($row_h = mysqli_fetch_array($query_h)) {  
+                            $year = $row_h["tertint_payslip_date_cycle_year"];
+                        }
+
+        
+                        $headerinfo = '<div class="col-md-6"><span style="font-size: 22px;"><b>Year:</b> '.$year.'</span></div><div class="col-md-6"><span style="font-size: 22px;"><b>Type:</b> 13th Month</span></div>';
+
+                        $printbtn = '<a type="button" class="btn btn-primary" href="payslip.php?payslipid='.$payslipid.'&type=2" target="_blank">Print All</a>';
+                        
+                    ?>
+
+                    <div class="row">
+                    <div class="col-lg-12">
+                        <div id="my-request" class="panel panel-default">
+                            <div class="panel-heading"><a type="button" class="btn btn-default" href="account.php?id=<?php echo $log_id; ?>&payroll=focus&action=payslip">Back</a> <?php echo $printbtn; ?></div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <?php echo $headerinfo; ?>
+                                </div>
+                                
+                                <hr>
+                                <input type="hidden" id="search-employee-tertint-payslip-payslipid" value="<?php echo $payslipid; ?>" />
+                                <div class="input-group">
+                                            <input type="text" class="form-control" name="date" placeholder="Search Employee ID" id="search-employee-tertint-payslip" autocomplete="off" />
+                                            <span class="input-group-addon add-on"><span class="glyphicon glyphicon-search"></span></span>
+                                        </div>
+                                        <br/>
+                                        <div id="employee-tertint-payslip-search-result">
+                                    <table class="table table-bordered">
+                                            <thead>
+                                              <tr>
+                                                <th>Employee ID</th>
+                                                <th>Name</th>
+                                                <th>Basic Pay (January - December)</th>
+                                                <th>Overtime Pay (January - December)</th>
+                                                <th>13th Month Pay</th>
+                                                <th>Action</th>
+                                              </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+
+                                                $sql = "SELECT * FROM hurtajadmin_tertint_payslip WHERE tertint_payslip_payslip_id = '$payslipid'";
+
+                                                $query = mysqli_query($db_conn, $sql);
+                                                $count = 0;
+                                                while($row = mysqli_fetch_array($query)) {  
+                                                    $count++; 
+                                                    $recid = $row["id"];
+                                                    $year = $row["tertint_payslip_date_cycle_year"];
+                                                    $employee_id = $row["employee_id"];
+                                                    $otpay = $row["tertint_payslip_ot_pay"];
+                                                    $basicpay = $row["tertint_payslip_tertint_pay"];
+                                                    $datecreated = $row["tertint_payslip_date_created"];
+                                                    $status = $row["tertint_payslip_status"];
+
+                                                    $sql_emp = "SELECT * FROM hurtajadmin_employee WHERE employee_id = '$employee_id' LIMIT 1";
+                                                    $query_emp = mysqli_query($db_conn, $sql_emp);
+
+                                                    while($row_emp = mysqli_fetch_array($query_emp)) {
+                                                        $lmnameinitial = substr($row_emp["employee_mname"], 0, 1);
+                                                        $empfullname = $row_emp["employee_fname"].' '.$lmnameinitial.'. '.$row_emp["employee_lname"];
+                                                    }
+
+                                                    echo '
+                                                        <tr>
+                                                            <td>'.$employee_id.'</td>
+                                                            <td>'.$empfullname.'</td>
+                                                            <td>₱'.number_format($basicpay, 2, '.', ',').'</td>
+                                                            <td>₱'.number_format($otpay, 2, '.', ',').'</td>
+                                                            <td>₱'.number_format(($otpay+$basicpay)/12, 2, '.', ',').'</td>
+                                                            <td><a href="payslip.php?payslipid='.$payslipid.'&type=2&empid='.$employee_id.'" target="_blank">Print This</a></td>
+                                                        </tr>
+                                                    ';
+                                                }
+                                                ?>
+                                        </tbody>
+                                    </table>
+                                    </div>
                             </div>
                         </div>
                     </div><!-- /.col-->
@@ -2839,8 +3219,9 @@ if(
                     <div id="my-request" class="panel panel-default">
                             <div class="panel-heading"><a type="button" class="btn btn-danger" href="account.php?id=<?php echo $id; ?>&payroll=focus&action=attendance">Import Attendance</a> <a type="button" class="btn btn-danger" href="account.php?id=<?php echo $id; ?>&payroll=focus&action=payslip">Generate Payslip</a></div>
                             <div class="panel-body">
+                            <div class="row">
                                 <div class="col-md-6">
-                                    <h2>Payroll</h2>
+                                    <h3>Payroll</h3>
                                     <hr>
                                     <form id="loginForm" onsubmit="return false;">
                                         <span id="summaryPayrollStatus"></span>
@@ -2893,7 +3274,7 @@ if(
                                     </form>
                                 </div>
                                 <div class="col-md-6">
-                                    <h2>Contribution</h2>
+                                    <h3>Contribution</h3>
                                     <hr>
                                     <form id="loginForm" onsubmit="return false;">
                                         <span id="summaryContributionStatus"></span>
@@ -2936,6 +3317,7 @@ if(
                                         </div>
                                         <button type="button" class="btn btn-primary" id="summaryContributionBtn" style="width: 100%" onclick="generateContributionPayroll();">Generate Summary</button>
                                     </form>
+                                </div>
                                 </div>
                             </div>
                         </div>
@@ -5191,6 +5573,28 @@ if(
     </div>
 <!--Modal end edit tax -->
 
+<!--Modal open generate payslip-->
+<div class="modal fade bd-example-modal-sm" id="viewGeneratePayslipConfirmation" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Generate Payslip</h5>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+                <div class="col-lg-12">
+                <p style="text-align: justify; text-justify: inter-word;">By clicking proceed button below, the system will generate a payslip record for the information you've given and you are aware that all of the computation of employee's salary will be based on the generated list.</p>
+                </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" onclick="generatePaySlipPage()">Update</button>
+          </div>
+        </div>
+      </div>
+    </div>
+ <!--end open generate payslip-->
 
 <!--Modal delete holiday -->
     <div class="modal fade bd-example-modal-sm" id="deleteHoliday" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -5416,6 +5820,25 @@ if(
           </div>
         </div>
 <!--Modal end delete holiday-->
+<div class="modal fade bd-example-modal-sm" id="deletePayslip" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	      <div class="modal-dialog modal-sm" role="document">
+	        <div class="modal-content">
+	          <div class="modal-header">
+	            <h5 class="modal-title" id="exampleModalLabel">Delete Payslip</h5>
+	          </div>
+	          <div class="modal-body">
+	            <span id="deletePayslipStatus"></span>
+	            <input type="hidden" class="form-control" id="delete-payslip-id">
+                <input type="hidden" class="form-control" id="delete-payslip-type">
+	            <p>Are you sure with this?</p>
+	          </div>
+	          <div class="modal-footer">
+	            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+	            <button type="button" class="btn btn-primary" id="deletePayslipBtn" onclick="deletePayslipRecord()">Yes</button>
+	          </div>
+	        </div>
+	      </div>
+	    </div>
    
     <!-- jQuery -->
     <script src="vendor/jquery/jquery.min.js"></script>
@@ -5702,6 +6125,49 @@ if(
         $('#markPaidCollectibles').modal('show');
         _("mark-paid-collectibles-id").value = rid;
       }
+
+      function openGenPaySlipDialog() {
+        var type = _("payrollType").value;
+		var to = _("payrollTo").value;
+		var empid = _("payrollEmpID").value;
+        var month = _("payrollMonth").value;
+        var cycle = _("payrollCycle").value;
+        var year = _("payrollYear").value;
+        var error = '<div style="color: red; margin-bottom: 10px;">Incomplete Parameters.</div>';
+        var status = _("paySlipPageStatus");
+        var button = _("paySlipPageBtn");
+        if(type == "1") {
+        	if(to == "1") {
+		        if (month == "" || cycle == "" || year == "") {
+		            status.innerHTML = error;
+		        } else {
+                    $("#viewGeneratePayslipConfirmation").modal("show");
+				}
+			} else if(to == "2") {
+		        if (empid == "" || month == "" || cycle == "" || year == "") {
+		            status.innerHTML = error;
+		        } else {
+                    $("#viewGeneratePayslipConfirmation").modal("show");
+				}
+			}
+		} else if(type == "2") {
+			if(to == "1") {
+		        if (year == "") {
+		            status.innerHTML = error;
+		        } else {
+                    $("#viewGeneratePayslipConfirmation").modal("show");
+				}
+			} else if(to == "2") {
+		        if (empid == "" || year == "") {
+		            status.innerHTML = error;
+		        } else {
+                    $("#viewGeneratePayslipConfirmation").modal("show");
+				}
+			}
+		} else {
+			status.innerHTML = error;
+		}
+    }
 
       function markPaidCollectiblesRecord() {
         var rid = _("mark-paid-collectibles-id").value;
@@ -6737,6 +7203,55 @@ if(
             });
        });
 
+       $('#search-employee-regular-payslip').keyup(function(e){  
+            var txtSearch = $(this).val();
+            var txtPayslipID = $("#search-employee-regular-payslip-payslipid").val();
+
+            console.log(txtSearch);
+            $.ajax({ 
+                url:"parsers/searchemployeeregularpayslip.php",  
+                method:"post",  
+                data:{search:txtSearch,payslipid:txtPayslipID},  
+                dataType:"text",  
+                success:function(data) {
+                    $('#employee-regular-payslip-search-result').html(data); 
+                }  
+            });
+       });
+
+       $('#search-employee-tertint-payslip').keyup(function(e){  
+            var txtSearch = $(this).val();
+            var txtPayslipID = $("#search-employee-tertint-payslip-payslipid").val();
+
+            console.log(txtSearch);
+            $.ajax({ 
+                url:"parsers/searchemployeetertintpayslip.php",  
+                method:"post",  
+                data:{search:txtSearch,payslipid:txtPayslipID},  
+                dataType:"text",  
+                success:function(data) {
+                    $('#employee-tertint-payslip-search-result').html(data); 
+                }  
+            });
+       });
+
+       $('#search-employee-payslip').keyup(function(e){  
+            var txtSearch = $(this).val();
+            var txtPayslipID = $("#search-employee-payslip-payslipid").val();
+
+            console.log(txtSearch);
+            $.ajax({ 
+                url:"parsers/searchemployeeregularpayslip.php",  
+                method:"post",  
+                data:{search:txtSearch,payslipid:txtPayslipID},  
+                dataType:"text",  
+                success:function(data) {
+                    $('#employee-payslip-search-result').html(data); 
+                }  
+            });
+       });
+       
+
         $('#search-leave').keyup(function(e){  
             var txtleaveSearch = $(this).val();
             console.log(txtleaveSearch);
@@ -6877,6 +7392,113 @@ if(
                 }
         });
 
+        $("#select-filter-payslip, #select-type-payslip").change(function () { 
+            var filterleaveValue = $("#select-filter-payslip").val();
+            var typeleaveValue = $("#select-type-payslip").val();
+
+            $('#payslip-search-result').html(''); 
+
+            if(typeleaveValue == "1") {
+                $("#payslip-search-id").val('');
+                $("#payslip-search-year").val('');
+                $("#payslip-search-cycle").val('');
+                $("#payslip-search-month").val('');
+                if (filterleaveValue == "") {
+                    $("#text-search-payslip").hide();
+                    $("#year-search-payslip").hide();
+                }else if (filterleaveValue == "payslipid") {
+                    $("#text-search-payslip").show();
+                    $("#month-search-payslip").hide();
+                    $("#cycle-search-payslip").hide();
+                    $("#year-search-payslip").hide();
+                } else if (filterleaveValue == "payslipcycle") {
+                    $("#text-search-payslip").hide();
+                    $("#month-search-payslip").show();
+                    $("#cycle-search-payslip").show();
+                    $("#year-search-payslip").show();
+                } 
+            } else if(typeleaveValue == "2") {
+                $("#payslip-search-year").val('');
+                $("#payslip-search-id").val('');
+                if (filterleaveValue == "") {
+                    $("#text-search-payslip").hide();
+                    $("#year-search-payslip").hide();
+                }else if (filterleaveValue == "payslipid") {
+                    $("#text-search-payslip").show();
+                    $("#month-search-payslip").hide();
+                    $("#cycle-search-payslip").hide();
+                    $("#year-search-payslip").hide();
+                } else if (filterleaveValue == "payslipcycle") {
+                    $("#text-search-payslip").hide();
+                    $("#month-search-payslip").hide();
+                    $("#cycle-search-payslip").hide();
+                    $("#year-search-payslip").show();
+                } 
+            }
+
+        });
+        
+        $('#payslip-search-month, #payslip-search-cycle, #payslip-search-year').change(function(e){ 
+            var month = $("#payslip-search-month").val();
+            var cycle = $("#payslip-search-cycle").val();
+            var year = $("#payslip-search-year").val();
+            var type = $("#select-type-payslip").val();
+
+            if(type == "1") {
+                if(month != "" && cycle != "" && year != "") {
+                    console.log(month);
+                    $.ajax({ 
+                        url:"parsers/searchpayslipregular.php",  
+                        method:"post",  
+                        data:{type:type,filter:"cycle",id:"",month:month,cycle:cycle,year:year},  
+                        dataType:"text",  
+                        success:function(data) {
+                            $('#payslip-search-result').html(data); 
+                        }  
+                    });
+                }
+            } else if(type == "2") {
+                if(year != "") {
+                    $.ajax({ 
+                        url:"parsers/searchpaysliptertint.php",  
+                        method:"post",  
+                        data:{type:type,filter:"cycle",id:"",year:year},  
+                        dataType:"text",  
+                        success:function(data) {
+                            $('#payslip-search-result').html(data); 
+                        }  
+                    });
+                }
+            }
+        });
+        $('#payslip-search-id').keyup(function(e){  
+            var txtSearch = $(this).val();
+            var type = $("#select-type-payslip").val();
+            console.log(txtSearch);
+            if(type == "1") {
+                $.ajax({ 
+                        url:"parsers/searchpayslipregular.php",  
+                        method:"post",  
+                        data:{type:type,filter:"id",id:txtSearch,month:"",cycle:"",year:""},  
+                        dataType:"text",  
+                        success:function(data) {
+                            $('#payslip-search-result').html(data); 
+                        }  
+                    });
+            } else if(type == "2") {
+                $.ajax({ 
+                        url:"parsers/searchpaysliptertint.php",  
+                        method:"post",  
+                        data:{type:type,filter:"id",id:txtSearch,year:""},  
+                        dataType:"text",  
+                        success:function(data) {
+                            $('#payslip-search-result').html(data); 
+                        }  
+                    });
+            }
+        });
+        
+
         function generatePaySlipPage() {
             var type = _("payrollType").value;
             var to = _("payrollTo").value;
@@ -6919,6 +7541,8 @@ if(
                 status.innerHTML = error;
             }
         }
+
+        
 
         function showModalViewDeduction(tax, pagibig, sss, philhealth) {
             $("#viewDeductions").modal("show");
@@ -7304,6 +7928,40 @@ if(
             } else {
               window.open("summarycontribution.php?month="+ month +"&year="+ year, '_blank');
             }
+      }
+
+      function openDeletePayslipDialog(rid, type) {
+        $('#deletePayslip').modal('show');
+        _("delete-payslip-id").value = rid;
+        _("delete-payslip-type").value = type;
+    }
+
+    function deletePayslipRecord() {
+        var rid = _("delete-payslip-id").value;
+        var type = _("delete-payslip-type").value;
+        var load = '<center><i class="fa fa-circle-o-notch fa-spin" style="color: #999; margin-bottom: 10px;"></i><center>';
+        var error = '<div style="color: red; margin-bottom: 10px;">Incomplete Parameters.</div>';
+        var status = _("deletePayslipStatus");
+        var button = _("deletePayslipBtn");
+        status.innerHTML = load;
+        if (rid == "") {
+            status.innerHTML = error;
+        } else {
+            button.disabled = true;
+            status.innerHTML = load;
+            var ajax = ajaxObj("POST", "parsers/account.php");
+            ajax.onreadystatechange = function() {
+              if(ajaxReturn(ajax) == true) {
+                  if (ajax.responseText == "successupdate"){
+                      window.location = "account.php?id=<?php echo $log_id; ?>&payroll=focus&action=payslip";
+                  } else {
+                      button.disabled = false;
+                      status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Unknown error! Error Details: '+ ajax.responseText +'</div>';
+                  }
+              }
+            }
+          ajax.send("deletepayslipid="+rid+"&deletepaysliptype="+type);
+        }
       }
 
       function goBack() {
