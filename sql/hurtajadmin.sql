@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.1
+-- version 4.8.3
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 20, 2018 at 05:53 AM
--- Server version: 10.1.33-MariaDB
--- PHP Version: 7.2.6
+-- Generation Time: Dec 06, 2018 at 09:42 AM
+-- Server version: 10.1.37-MariaDB
+-- PHP Version: 7.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -305,7 +305,7 @@ INSERT INTO `hurtajadmin_company` (`id`, `company_name`, `company_address`, `com
 (2, 'JFS PRECISION TECHNOLOGY CORPORATION', 'Block 2, Lot 9, Daiichi Industrial Park-SEZ, Maguyam, Silang Cavite 4118', '0464105292', '2018-06-26 17:31:50', 1),
 (3, 'OPTODEV, INC.', 'Blk 2, Lot 2, Star Avenue corner Interstar Street, LIIP SEPZ, Mamplasan, BiÃ±an, Laguna 4024', '0495390977', '2018-06-26 19:36:56', 1),
 (4, 'FRONTKEN PHILIPPINES, INC.', 'Lot C3-9 Carmelray Industrial Park II, Calamba City Laguna 4027 Philippines', '0495080049', '2018-06-29 02:40:14', 1),
-(5, 'MIYOSHI TECHNOLOGIES PHILS., INC.', 'Lot B1-5 Road 6, Carmelray Industrial Park II, Brgy Tulo, Calamba City, Laguna 4027', '0495081388 to 90', '2018-06-29 02:50:43', 1),
+(5, 'MIYOSHI TECHNOLOGIES PHILS., INC.', 'Lot B1-5 Road 6, Carmelray Industrial Park II, Brgy Tulo, Calamba City, Laguna 4027', '0495081388 to 90', '2018-06-29 02:50:43', 2),
 (6, 'MANUVENTURES, INC.', 'Block 4 Lot 4, Gatchalian Compound, Brgy Banay-Banay, Cabuyao Laguna 4025', '0495451084', '2018-06-29 03:19:18', 1),
 (7, 'MkFF LASERTEKNIQUE, INC.', '#141 East Main Avenue, Loop, Laguna Technopark SEPZ, BiÃ±an, Laguna 4024', '0495022841', '2018-06-29 03:39:39', 1),
 (8, 'STANLEY BLACK ', '105 Industry Road, Unit 4, Laguna Technopark Inc., Phase 1, Brgy Don Jose, Sta. Rosa, Laguna 4026', '0495433828', '2018-06-29 03:45:05', 1),
@@ -503,6 +503,36 @@ INSERT INTO `hurtajadmin_pagibig_contribution` (`id`, `pagibig_contribution_rang
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `hurtajadmin_payables`
+--
+
+CREATE TABLE `hurtajadmin_payables` (
+  `id` int(11) NOT NULL,
+  `supplier_id` int(11) NOT NULL,
+  `payables_total_amount` varchar(255) NOT NULL,
+  `payables_po_number` varchar(255) NOT NULL,
+  `payables_invoice_number` varchar(255) NOT NULL,
+  `payables_invoice_date` datetime NOT NULL,
+  `payables_maturity_date` datetime NOT NULL,
+  `payables_dr_number` varchar(255) NOT NULL,
+  `payables_delivery_date` datetime NOT NULL,
+  `payables_bank` varchar(255) NOT NULL,
+  `payables_check_number` varchar(255) NOT NULL,
+  `payables_check_date` datetime NOT NULL,
+  `payables_date_added` datetime NOT NULL,
+  `payables_status` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `hurtajadmin_payables`
+--
+
+INSERT INTO `hurtajadmin_payables` (`id`, `supplier_id`, `payables_total_amount`, `payables_po_number`, `payables_invoice_number`, `payables_invoice_date`, `payables_maturity_date`, `payables_dr_number`, `payables_delivery_date`, `payables_bank`, `payables_check_number`, `payables_check_date`, `payables_date_added`, `payables_status`) VALUES
+(1, 2, 'â‚±25,000', '12312', '124134', '2018-10-01 00:00:00', '2018-10-05 00:00:00', '123123', '2018-10-06 00:00:00', 'BDOS', '123123', '2018-10-26 00:00:00', '2018-10-22 17:42:53', 1);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `hurtajadmin_payroll`
 --
 
@@ -596,6 +626,52 @@ INSERT INTO `hurtajadmin_philhealth_contribution` (`id`, `philhealth_contributio
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `hurtajadmin_regular_payslip`
+--
+
+CREATE TABLE `hurtajadmin_regular_payslip` (
+  `id` int(11) NOT NULL,
+  `regular_payslip_payslip_id` varchar(14) NOT NULL,
+  `regular_payslip_date_cycle_month` int(11) NOT NULL,
+  `regular_payslip_date_cycle_cycle` int(11) NOT NULL,
+  `regular_payslip_date_cycle_year` int(11) NOT NULL,
+  `employee_id` varchar(255) NOT NULL,
+  `regular_payslip_basic_pay` varchar(255) NOT NULL,
+  `regular_payslip_overtime_pay` varchar(255) NOT NULL,
+  `regular_payslip_tax_cont` varchar(255) NOT NULL,
+  `regular_payslip_pagibig_cont` varchar(255) NOT NULL,
+  `regular_payslip_sss_cont` varchar(255) NOT NULL,
+  `regular_payslip_philhealth_cont` varchar(255) NOT NULL,
+  `regular_payslip_days_of_work` varchar(255) NOT NULL,
+  `regular_payslip_days_present` varchar(255) NOT NULL,
+  `regular_payslip_cash_advance` varchar(255) NOT NULL,
+  `regular_payslip_cash_loan` varchar(255) NOT NULL,
+  `regular_payslip_less_lates_hours` varchar(255) NOT NULL,
+  `regular_payslip_less_lates` varchar(255) NOT NULL,
+  `regular_payslip_s_non_working_holiday_hours` varchar(255) NOT NULL,
+  `regular_payslip_s_non_working_holiday` varchar(255) NOT NULL,
+  `regular_payslip_holiday_hours` varchar(255) NOT NULL,
+  `regular_payslip_holiday` varchar(255) NOT NULL,
+  `regular_payslip_sunday_hours` varchar(255) NOT NULL,
+  `regular_payslip_sunday` varchar(255) NOT NULL,
+  `regular_payslip_basic_reg_ot_hours` varchar(255) NOT NULL,
+  `regular_payslip_basic_reg_ot` varchar(255) NOT NULL,
+  `regular_payslip_basic_reg_hours` varchar(255) NOT NULL,
+  `regular_payslip_basic_reg` varchar(255) NOT NULL,
+  `regular_payslip_date_created` datetime NOT NULL,
+  `regular_payslip_status` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `hurtajadmin_regular_payslip`
+--
+
+INSERT INTO `hurtajadmin_regular_payslip` (`id`, `regular_payslip_payslip_id`, `regular_payslip_date_cycle_month`, `regular_payslip_date_cycle_cycle`, `regular_payslip_date_cycle_year`, `employee_id`, `regular_payslip_basic_pay`, `regular_payslip_overtime_pay`, `regular_payslip_tax_cont`, `regular_payslip_pagibig_cont`, `regular_payslip_sss_cont`, `regular_payslip_philhealth_cont`, `regular_payslip_days_of_work`, `regular_payslip_days_present`, `regular_payslip_cash_advance`, `regular_payslip_cash_loan`, `regular_payslip_less_lates_hours`, `regular_payslip_less_lates`, `regular_payslip_s_non_working_holiday_hours`, `regular_payslip_s_non_working_holiday`, `regular_payslip_holiday_hours`, `regular_payslip_holiday`, `regular_payslip_sunday_hours`, `regular_payslip_sunday`, `regular_payslip_basic_reg_ot_hours`, `regular_payslip_basic_reg_ot`, `regular_payslip_basic_reg_hours`, `regular_payslip_basic_reg`, `regular_payslip_date_created`, `regular_payslip_status`) VALUES
+(1, 'PYSLP0822018', 8, 2, 2018, '000001', '800', '245', '0', '50', '110', '200', '13', '2', '0', '0', '0.2', '10', '0', '0', '0', '0', '0', '0', '4.9', '245', '16', '800', '2018-12-03 13:17:36', 1);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `hurtajadmin_sss_contribution`
 --
 
@@ -646,6 +722,29 @@ INSERT INTO `hurtajadmin_sss_contribution` (`id`, `sss_contribution_range_from`,
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `hurtajadmin_supplier`
+--
+
+CREATE TABLE `hurtajadmin_supplier` (
+  `id` int(11) NOT NULL,
+  `supplier_name` varchar(255) NOT NULL,
+  `supplier_address` varchar(255) NOT NULL,
+  `supplier_contact` varchar(255) NOT NULL,
+  `supplier_date_added` datetime NOT NULL,
+  `supplier_status` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `hurtajadmin_supplier`
+--
+
+INSERT INTO `hurtajadmin_supplier` (`id`, `supplier_name`, `supplier_address`, `supplier_contact`, `supplier_date_added`, `supplier_status`) VALUES
+(1, 'Kotaku Masai', 'adSADASDA', '09261428395', '2018-10-17 10:22:10', 2),
+(2, 'Monoku', 'Adasdasdasda', '09261428395', '2018-10-17 10:35:26', 2);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `hurtajadmin_tax_contribution`
 --
 
@@ -666,6 +765,34 @@ INSERT INTO `hurtajadmin_tax_contribution` (`id`, `tax_contribution_range_from`,
 (3, '16668', '33333', ''),
 (4, '33334', '83333', ''),
 (5, '83334', '333333', '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `hurtajadmin_tertint_payslip`
+--
+
+CREATE TABLE `hurtajadmin_tertint_payslip` (
+  `id` int(11) NOT NULL,
+  `tertint_payslip_payslip_id` varchar(14) NOT NULL,
+  `tertint_payslip_date_cycle_year` int(11) NOT NULL,
+  `employee_id` varchar(255) NOT NULL,
+  `tertint_payslip_ot_pay` varchar(255) NOT NULL,
+  `tertint_payslip_ot_pay_hours` varchar(255) NOT NULL,
+  `tertint_payslip_tertint_pay` varchar(255) NOT NULL,
+  `tertint_payslip_tertint_pay_hours` varchar(255) NOT NULL,
+  `tertint_payslip_days_of_work` varchar(255) NOT NULL,
+  `tertint_payslip_days_present` varchar(255) NOT NULL,
+  `tertint_payslip_date_created` datetime NOT NULL,
+  `tertint_payslip_status` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `hurtajadmin_tertint_payslip`
+--
+
+INSERT INTO `hurtajadmin_tertint_payslip` (`id`, `tertint_payslip_payslip_id`, `tertint_payslip_date_cycle_year`, `employee_id`, `tertint_payslip_ot_pay`, `tertint_payslip_ot_pay_hours`, `tertint_payslip_tertint_pay`, `tertint_payslip_tertint_pay_hours`, `tertint_payslip_days_of_work`, `tertint_payslip_days_present`, `tertint_payslip_date_created`, `tertint_payslip_status`) VALUES
+(1, 'PYSLPTM2018', 2018, '000001', '1555', '31.1', '1800', '36', '340', '4.5', '2018-12-03 20:12:08', 1);
 
 -- --------------------------------------------------------
 
@@ -691,7 +818,7 @@ CREATE TABLE `hurtajadmin_user` (
 --
 
 INSERT INTO `hurtajadmin_user` (`id`, `user_email`, `user_pass`, `user_fname`, `user_lname`, `user_ip`, `user_date_created`, `user_last_login`, `user_level`, `user_status`) VALUES
-(1, 'admin', 'admin', 'Administrator', 'Administrator', 1, '2018-05-18 00:00:00', '2018-09-20 09:13:47', 1, 1);
+(1, 'admin', 'admin', 'Administrator', 'Administrator', 1, '2018-05-18 00:00:00', '2018-12-06 09:37:03', 1, 1);
 
 --
 -- Indexes for dumped tables
@@ -770,6 +897,12 @@ ALTER TABLE `hurtajadmin_pagibig_contribution`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `hurtajadmin_payables`
+--
+ALTER TABLE `hurtajadmin_payables`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `hurtajadmin_payroll`
 --
 ALTER TABLE `hurtajadmin_payroll`
@@ -782,15 +915,33 @@ ALTER TABLE `hurtajadmin_philhealth_contribution`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `hurtajadmin_regular_payslip`
+--
+ALTER TABLE `hurtajadmin_regular_payslip`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `hurtajadmin_sss_contribution`
 --
 ALTER TABLE `hurtajadmin_sss_contribution`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `hurtajadmin_supplier`
+--
+ALTER TABLE `hurtajadmin_supplier`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `hurtajadmin_tax_contribution`
 --
 ALTER TABLE `hurtajadmin_tax_contribution`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `hurtajadmin_tertint_payslip`
+--
+ALTER TABLE `hurtajadmin_tertint_payslip`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -876,6 +1027,12 @@ ALTER TABLE `hurtajadmin_pagibig_contribution`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT for table `hurtajadmin_payables`
+--
+ALTER TABLE `hurtajadmin_payables`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `hurtajadmin_payroll`
 --
 ALTER TABLE `hurtajadmin_payroll`
@@ -888,16 +1045,34 @@ ALTER TABLE `hurtajadmin_philhealth_contribution`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
+-- AUTO_INCREMENT for table `hurtajadmin_regular_payslip`
+--
+ALTER TABLE `hurtajadmin_regular_payslip`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `hurtajadmin_sss_contribution`
 --
 ALTER TABLE `hurtajadmin_sss_contribution`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
+-- AUTO_INCREMENT for table `hurtajadmin_supplier`
+--
+ALTER TABLE `hurtajadmin_supplier`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `hurtajadmin_tax_contribution`
 --
 ALTER TABLE `hurtajadmin_tax_contribution`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `hurtajadmin_tertint_payslip`
+--
+ALTER TABLE `hurtajadmin_tertint_payslip`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `hurtajadmin_user`

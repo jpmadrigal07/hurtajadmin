@@ -73,6 +73,7 @@ if(
   (
     !isset($_GET["dashboard"]) 
     && !isset($_GET["ageing"])
+    && !isset($_GET["export"])
     && !isset($_GET["employee"])
     && !isset($_GET["payroll"])     
     && !isset($_GET["leave"]) 
@@ -83,6 +84,8 @@ if(
   || (isset($_GET["dashboard"]) && trim($_GET["dashboard"]) != "focus") 
   
   || (isset($_GET["ageing"]) && trim($_GET["ageing"]) != "focus")  
+
+  || (isset($_GET["export"]) && trim($_GET["export"]) != "focus") 
 
   || (isset($_GET["employee"]) && trim($_GET["employee"]) != "focus") 
 
@@ -98,16 +101,26 @@ if(
 } else if (isset($_GET["dashboard"]) && trim($_GET["dashboard"]) == "focus"){
   $pheading = "Dashboard";
 } else if (isset($_GET["ageing"]) && isset($_GET["add"]) && trim($_GET["ageing"]) == "focus" && trim($_GET["add"]) == "company"){
-  $pheading = "Add Ageing > Company"; 
-} else if (isset($_GET["ageing"]) && isset($_GET["add"]) && trim($_GET["ageing"]) == "focus" && trim($_GET["add"]) == "collectibles"){
-  $pheading = "Add Ageing > Collectibles"; 
-} else if (isset($_GET["ageing"]) && isset($_GET["view"]) && trim($_GET["ageing"]) == "focus" && trim($_GET["view"]) == "company"){
-  $pheading = "View Ageing > Company"; 
-} else if (isset($_GET["ageing"]) && isset($_GET["view"]) && trim($_GET["ageing"]) == "focus" && trim($_GET["view"]) == "collectibles"){
-  $pheading = "View Ageing > Collectibles"; 
-} else if (isset($_GET["ageing"]) && isset($_GET["view"]) && trim($_GET["ageing"]) == "focus" && trim($_GET["view"]) == "paidcollectibles"){
-  $pheading = "View Ageing > Paid Collectibles"; 
-} else if (isset($_GET["employee"]) && isset($_GET["add"]) && trim($_GET["employee"]) == "focus" && trim($_GET["add"]) == "employee"){
+    $pheading = "Add Ageing > Company"; 
+  } else if (isset($_GET["ageing"]) && isset($_GET["add"]) && trim($_GET["ageing"]) == "focus" && trim($_GET["add"]) == "supplier"){
+      $pheading = "Add Ageing > Supplier"; 
+  } else if (isset($_GET["ageing"]) && isset($_GET["add"]) && trim($_GET["ageing"]) == "focus" && trim($_GET["add"]) == "collectibles"){
+    $pheading = "Add Ageing > Collectibles"; 
+  } else if (isset($_GET["ageing"]) && isset($_GET["add"]) && trim($_GET["ageing"]) == "focus" && trim($_GET["add"]) == "payables"){
+      $pheading = "Add Ageing > Payables"; 
+  } else if (isset($_GET["ageing"]) && isset($_GET["view"]) && trim($_GET["ageing"]) == "focus" && trim($_GET["view"]) == "company"){
+    $pheading = "View Ageing > Company"; 
+  } else if (isset($_GET["ageing"]) && isset($_GET["view"]) && trim($_GET["ageing"]) == "focus" && trim($_GET["view"]) == "supplier"){
+      $pheading = "View Ageing > Supplier"; 
+  } else if (isset($_GET["ageing"]) && isset($_GET["view"]) && trim($_GET["ageing"]) == "focus" && trim($_GET["view"]) == "collectibles"){
+    $pheading = "View Ageing > Collectibles"; 
+  } else if (isset($_GET["ageing"]) && isset($_GET["view"]) && trim($_GET["ageing"]) == "focus" && trim($_GET["view"]) == "payables"){
+      $pheading = "View Ageing > Payables"; 
+  } else if (isset($_GET["ageing"]) && isset($_GET["view"]) && trim($_GET["ageing"]) == "focus" && trim($_GET["view"]) == "paidcollectibles"){
+    $pheading = "View Ageing > Paid Collectibles"; 
+  } else if (isset($_GET["export"]) && trim($_GET["export"]) == "focus"){
+      $pheading = "Export Excel";
+  } else if (isset($_GET["employee"]) && isset($_GET["add"]) && trim($_GET["employee"]) == "focus" && trim($_GET["add"]) == "employee"){
   $pheading = "Add Employee"; 
 } else if (isset($_GET["employee"]) && isset($_GET["view"]) && trim($_GET["employee"]) == "focus" && trim($_GET["view"]) == "employee"){
   $pheading = "View Employee"; 
@@ -236,10 +249,16 @@ if(
                             <a href="#"><i class="fa fa-plus fa-fw"></i> Add Ageing<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="account.php?id=<?php echo $id; ?>&ageing=focus&add=company">Company</a>
+                                    <a href="account.php?id=<?php echo $log_id; ?>&ageing=focus&add=company">Company</a>
                                 </li>
                                 <li>
-                                    <a href="account.php?id=<?php echo $id; ?>&ageing=focus&add=collectibles">Collectibles</a>
+                                    <a href="account.php?id=<?php echo $log_id; ?>&ageing=focus&add=supplier">Supplier</a>
+                                </li>
+                                <li>
+                                    <a href="account.php?id=<?php echo $log_id; ?>&ageing=focus&add=collectibles">Collectibles</a>
+                                </li>
+                                <li>
+                                    <a href="account.php?id=<?php echo $log_id; ?>&ageing=focus&add=payables">Payables</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->
@@ -248,16 +267,25 @@ if(
                             <a href="#"><i class="fa fa-eye fa-fw"></i> View Ageing<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="account.php?id=<?php echo $id; ?>&ageing=focus&view=company">Company</a>
+                                    <a href="account.php?id=<?php echo $log_id; ?>&ageing=focus&view=company">Company</a>
                                 </li>
                                 <li>
-                                    <a href="account.php?id=<?php echo $id; ?>&ageing=focus&view=collectibles">Collectibles</a>
+                                    <a href="account.php?id=<?php echo $log_id; ?>&ageing=focus&view=supplier">Supplier</a>
                                 </li>
                                 <li>
-                                    <a href="account.php?id=<?php echo $id; ?>&ageing=focus&view=paidcollectibles">Paid Collectibles</a>
+                                    <a href="account.php?id=<?php echo $log_id; ?>&ageing=focus&view=collectibles">Collectibles</a>
+                                </li>
+                                <li>
+                                    <a href="account.php?id=<?php echo $log_id; ?>&ageing=focus&view=paidcollectibles">Paid Collectibles</a>
+                                </li>
+                                <li>
+                                    <a href="account.php?id=<?php echo $log_id; ?>&ageing=focus&view=payables">Payables</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                            <a href="account.php?id=<?php echo $id; ?>&export=focus"><i class="fa fa-download fa-fw"></i> Export Excel</a>
                         </li>
                         <li>
                             <a href="#"><i class="fa fa-user fa-fw"></i> Employee<span class="fa arrow"></span></a>
@@ -425,6 +453,43 @@ if(
                             </div>
                         </div>
                         <br>
+                        <?php } else if (isset($_GET["ageing"]) && isset($_GET["add"]) && trim($_GET["ageing"]) == "focus" && trim($_GET["add"]) == "supplier") { ?>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1 class="page-header"><?php echo $pheading; ?></h1>
+                        </div>
+                        <!-- /.col-lg-12 -->
+                    </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading"><a type="button" class="btn btn-danger" href="account.php?id=<?php echo $id; ?>&ageing=focus&view=supplier">View Supplier Lists</a></div>
+                            <div class="panel-body">
+                                <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="table-responsive">
+                                        <div class="col-md-6 col-md-offset-3">
+                                        <form role="form" onsubmit="return false;">
+                                            <span id="addSupplierStatus"></span>
+                                            <div class="form-group">
+                                                <label class="control-label">Supplier Name</label>
+                                                <input type="text" class="form-control" id="add-supplier-name" placeholder="">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">Full Address</label>
+                                                <input type="text" class="form-control" id="add-supplier-address" placeholder="">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">Contact Number</label>
+                                                <input type="text" class="form-control" id="add-supplier-contact" placeholder="">
+                                            </div>
+                                            <button type="button" class="btn btn-primary" id="addSupplierBtn" style="width: 100%;" onclick="addSupplierRecord()">ADD</button>
+                                        </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
             <?php } else if (isset($_GET["ageing"]) && isset($_GET["add"]) && trim($_GET["ageing"]) == "focus" && trim($_GET["add"]) == "collectibles") { ?>
                 <div class="row">
                         <div class="col-lg-12">
@@ -518,6 +583,99 @@ if(
                             </div>
                         </div>
                         <br>
+                <?php } else if (isset($_GET["ageing"]) && isset($_GET["add"]) && trim($_GET["ageing"]) == "focus" && trim($_GET["add"]) == "payables") { ?>
+                <div class="row">
+                        <div class="col-lg-12">
+                            <h1 class="page-header"><?php echo $pheading; ?></h1>
+                        </div>
+                        <!-- /.col-lg-12 -->
+                    </div>
+                    <div class="panel panel-default">
+                            <div class="panel-heading"><a type="button" class="btn btn-danger" href="account.php?id=<?php echo $id; ?>&ageing=focus&view=payables">View Payables Lists</a></div>
+                            <div class="panel-body">
+                                <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="table-responsive">
+                                        <div class="col-md-6 col-md-offset-3">
+                                        <form role="form" onsubmit="return false;">
+                                            <span id="addPayablesStatus"></span>
+                                            <div class="form-group">
+                                                <label class="control-label">Supplier</label>
+                                                <select class="form-control" id="add-payables-supplier">
+                                                    <option value=""></option>
+                                                    <?php
+                                                        $sql = "SELECT * FROM hurtajadmin_supplier WHERE supplier_status = '1' ORDER BY supplier_name";
+                                                        $query = mysqli_query($db_conn, $sql);
+                                                        while($row = mysqli_fetch_array($query)) {
+                                                            $cid = $row["id"];
+                                                            $suppliername = $row["supplier_name"];
+
+                                                            echo '<option value="'.$cid.'">'.$suppliername.'</option>';
+                                                        }
+                                                    ?>  
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">Total Amount</label>
+                                                <input type="text" class="form-control" id="add-payables-total-amount" placeholder="">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">P.O Number</label>
+                                                <input type="text" class="form-control" id="add-payables-po-number" placeholder="">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">Invoice Number</label>
+                                                <input type="text" class="form-control" id="add-payables-invoice-number" placeholder="">
+                                            </div>
+                                            <div class="form-group">
+                                              <label class="control-label">Invoice Date</label>
+                                              <div class="input-group date" id="datePicker1">
+                                                <input type="text" class="form-control" name="date" id="add-payables-invoice-date" autocomplete="off" />
+                                                <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+                                              </div>
+                                            </div>
+                                            <div class="form-group">
+                                              <label class="control-label">Maturity Date</label>
+                                              <div class="input-group date" id="datePicker2">
+                                                <input type="text" class="form-control" name="date" id="add-payables-maturity-date"  autocomplete="off" />
+                                                <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+                                              </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">DR Number</label>
+                                                <input type="text" class="form-control" id="add-payables-dr-number" placeholder="">
+                                            </div>
+                                            <div class="form-group">
+                                              <label class="control-label">Delivery Date</label>
+                                              <div class="input-group date" id="datePicker3">
+                                                <input type="text" class="form-control" name="date" id="add-payables-delivery-date" autocomplete="off" />
+                                                <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+                                              </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">Bank</label>
+                                                <input type="text" class="form-control" id="add-payables-bank" placeholder="">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">Check Number</label>
+                                                <input type="text" class="form-control" id="add-payables-check-number" placeholder="">
+                                            </div>
+                                            <div class="form-group">
+                                              <label class="control-label">Check Date</label>
+                                              <div class="input-group date" id="datePicker4">
+                                                <input type="text" class="form-control" name="date" id="add-payables-check-date" autocomplete="off" />
+                                                <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+                                              </div>
+                                            </div>
+                                            <button type="button" class="btn btn-primary" id="addPayablesBtn" style="width: 100%;" onclick="addPayablesRecord()">ADD</button>
+                                        </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
             <?php } else if (isset($_GET["ageing"]) && isset($_GET["view"]) && trim($_GET["ageing"]) == "focus" && trim($_GET["view"]) == "company") { ?>
                 <div class="row">
                         <div class="col-lg-12">
@@ -584,6 +742,72 @@ if(
                         </div>
                     </div>
                     <br>
+                    <?php } else if (isset($_GET["ageing"]) && isset($_GET["view"]) && trim($_GET["ageing"]) == "focus" && trim($_GET["view"]) == "supplier") { ?>
+                <div class="row">
+                        <div class="col-lg-12">
+                            <h1 class="page-header"><?php echo $pheading; ?></h1>
+                        </div>
+                        <!-- /.col-lg-12 -->
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><a type="button" class="btn btn-danger" href="account.php?id=<?php echo $id; ?>&ageing=focus&add=supplier">Add Supplier</a></div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="table-responsive">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="date" placeholder="Search Supplier" id="search-supplier"/>
+                                            <span class="input-group-addon add-on"><span class="glyphicon glyphicon-search"></span></span>
+                                        </div>
+                                        <hr>
+                                        <div id="supplier-search-result">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Name</th>
+                                                    <th>Address</th>
+                                                    <th>Contact Number</th>
+                                                    <th>Date Added</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+                                                $sql = "SELECT * FROM hurtajadmin_supplier WHERE supplier_status = '1' ORDER BY id DESC";
+                                                $query = mysqli_query($db_conn, $sql);
+                                                $count = 0;
+                                                while($row = mysqli_fetch_array($query)) {  
+                                                    $count++; 
+                                                    $recid = $row["id"];
+                                                    $name = $row["supplier_name"];
+                                                    $address = $row["supplier_address"];
+                                                    $contact = $row["supplier_contact"];
+                                                    $date = $row["supplier_date_added"];
+                                                    $newDate = date("F d, Y H:i A", strtotime($date));
+
+                                                    echo '
+                                                    <tr>
+                                                    <td>'.$count.'</td>
+                                                    <td>'.$name.'</td>           
+                                                    <td>'.$address.'</td>
+                                                    <td>'.$contact.'</td>
+                                                    <td>'.$newDate.'</td>
+                                                    <td><a href="javascript:void(0)" onclick="openSupplierEditDialog('.$recid.',\''.$name.'\',\''.$address.'\',\''.$contact.'\')">Edit</a> | <a href="javascript:void(0)" onclick="openSupplierDeleteDialog('.$recid.')">Delete</a></td>
+                                                    </tr>
+                                                    ';   
+
+                                                  }
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
             <?php } else if (isset($_GET["ageing"]) && isset($_GET["view"]) && trim($_GET["ageing"]) == "focus" && trim($_GET["view"]) == "collectibles") { ?>
                 <div class="row">
                         <div class="col-lg-12">
@@ -603,7 +827,7 @@ if(
                                         </div>
                                         <hr>
                                         <div id="collectibles-search-result">
-                                        <table class="table table-bordered">
+                                        <table class="table >">
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
@@ -626,11 +850,16 @@ if(
                                                     $recid = $row["id"];
                                                     $companyid = $row["company_id"];
 
-                                                    $sql1 = "SELECT * FROM hurtajadmin_company WHERE id = '$companyid' ORDER BY id DESC";
+                                                    $sql1 = "SELECT * FROM hurtajadmin_company WHERE id = '$companyid' AND company_status = '1' ORDER BY id DESC";
                                                     $query1 = mysqli_query($db_conn, $sql1);
+
+                                                    $querycount1 = mysqli_num_rows($query1);
+
                                                     while($row1 = mysqli_fetch_array($query1)) {
                                                         $companyname = $row1["company_name"];
                                                     }
+
+
 
                                                     $totalamount = $row["collectibles_total_amount"];
                                                     $ponumber = $row["collectibles_po_number"];
@@ -692,18 +921,22 @@ if(
 
                                                     $dateadded = date("F d, Y", strtotime($dateadded));
 
-                                                    echo '
-                                                    <tr>
-                                                    <td>'.$count.'</td>
-                                                    <td>'.$companyname.'</td>           
-                                                    <td>'.$totalamount.'</td>
-                                                    <td>'.$invoicedate.'</td>
-                                                    <td>'.$maturitydate.'</td>
-                                                    <td>'.$leftdays.'</td>
-                                                    <td>'.$exceeddays.'</td>
-                                                    <td><a href="javascript:void(0)" onclick="openCollectiblesInfoDialog(\''.$count.'\',\''.$companyname.'\',\''.$totalamount.'\',\''.$ponumber.'\',\''.$invocenumber.'\',\''.$invoicedate.'\',\''.$maturitydate.'\',\''.$drnumber.'\',\''.$deliverydate.'\',\''.$remarkspaid.'\',\''.$ornumber.'\',\''.$ordate.'\')">More</a> | <a href="javascript:void(0)" onclick="openCollectiblesEditDialog(\''.$recid.'\',\''.$companyid.'\',\''.$totalamount.'\',\''.$ponumber.'\',\''.$invocenumber.'\',\''.$editinvoicedate.'\',\''.$editmaturitydate.'\',\''.$drnumber.'\',\''.$editdeliverydate.'\',\''.$remarkspaid.'\',\''.$ornumber.'\',\''.$editordate.'\')">Edit</a> | <a href="javascript:void(0)" onclick="openCollectiblesMarkPaidDialog('.$recid.')">Paid</a> | <a href="javascript:void(0)" onclick="openCollectiblesDeleteDialog('.$recid.')">Delete</a></td>
-                                                    </tr>
-                                                    ';   
+                                                    if($querycount1 > 0) {
+
+                                                        echo '
+                                                        <tr>
+                                                        <td>'.$count.'</td>
+                                                        <td>'.$companyname.'</td>           
+                                                        <td>'.$totalamount.'</td>
+                                                        <td>'.$invoicedate.'</td>
+                                                        <td>'.$maturitydate.'</td>
+                                                        <td>'.$leftdays.'</td>
+                                                        <td>'.$exceeddays.'</td>
+                                                        <td><a href="javascript:void(0)" onclick="openCollectiblesInfoDialog(\''.$count.'\',\''.$companyname.'\',\''.$totalamount.'\',\''.$ponumber.'\',\''.$invocenumber.'\',\''.$invoicedate.'\',\''.$maturitydate.'\',\''.$drnumber.'\',\''.$deliverydate.'\',\''.$remarkspaid.'\',\''.$ornumber.'\',\''.$ordate.'\')">More</a> | <a href="javascript:void(0)" onclick="openCollectiblesEditDialog(\''.$recid.'\',\''.$companyid.'\',\''.$totalamount.'\',\''.$ponumber.'\',\''.$invocenumber.'\',\''.$editinvoicedate.'\',\''.$editmaturitydate.'\',\''.$drnumber.'\',\''.$editdeliverydate.'\',\''.$remarkspaid.'\',\''.$ornumber.'\',\''.$editordate.'\')">Edit</a> | <a href="javascript:void(0)" onclick="openCollectiblesMarkPaidDialog('.$recid.')">Paid</a> | <a href="javascript:void(0)" onclick="openCollectiblesDeleteDialog('.$recid.')">Delete</a></td>
+                                                        </tr>
+                                                        ';   
+
+                                                    }
 
                                                   }
                                                 ?>
@@ -848,6 +1081,195 @@ if(
                         </div>
                     </div>
                     <br>
+                    <?php } else if (isset($_GET["ageing"]) && isset($_GET["view"]) && trim($_GET["ageing"]) == "focus" && trim($_GET["view"]) == "payables") { ?>
+                <div class="row">
+                        <div class="col-lg-12">
+                            <h1 class="page-header"><?php echo $pheading; ?></h1>
+                        </div>
+                        <!-- /.col-lg-12 -->
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><a type="button" class="btn btn-danger" href="account.php?id=<?php echo $id; ?>&ageing=focus&add=payables">Add Payables</a></div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="table-responsive">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="date" placeholder="Search Supplier, P.O Name or Invoice Number" id="search-payables" autocomplete="off"/>
+                                            <span class="input-group-addon add-on"><span class="glyphicon glyphicon-search"></span></span>
+                                        </div>
+                                        <hr>
+                                        <div id="payables-search-result">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Supplier</th>
+                                                    <th>Total Amount</th>
+                                                    <th>Invoice Date</th>
+                                                    <th>Maturity Date</th>
+                                                    <th>P.O Number</th>
+                                                    <th>Invoice Number</th>
+                                                    <th>Days Left</th>
+                                                    <th>Days Exceed</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+                                                $sql = "SELECT hurtajadmin_payables.id
+                                                , hurtajadmin_payables.payables_total_amount
+                                                , hurtajadmin_payables.payables_po_number
+                                                , hurtajadmin_payables.payables_invoice_number
+                                                , hurtajadmin_payables.payables_invoice_date 
+                                                , hurtajadmin_payables.payables_maturity_date 
+                                                , hurtajadmin_payables.payables_dr_number 
+                                                , hurtajadmin_payables.payables_delivery_date 
+                                                , hurtajadmin_payables.payables_bank
+                                                , hurtajadmin_payables.payables_check_number 
+                                                , hurtajadmin_payables.payables_check_date 
+                                                , hurtajadmin_payables.payables_date_added
+                                                , hurtajadmin_supplier.id AS supplier_id
+                                                , hurtajadmin_supplier.supplier_name  
+                                                FROM hurtajadmin_payables
+                                                LEFT JOIN hurtajadmin_supplier
+                                                ON hurtajadmin_payables.supplier_id=hurtajadmin_supplier.id
+                                                WHERE hurtajadmin_payables.payables_status = '1'
+                                                AND hurtajadmin_supplier.supplier_status = '1' 
+                                                ORDER BY hurtajadmin_supplier.supplier_name";
+
+                                                $query = mysqli_query($db_conn, $sql);
+                                                $count = 0;
+                                                while($row = mysqli_fetch_array($query)) {  
+                                                    $count++; 
+                                                    $recid = $row["id"];
+                                                    $supplierid = $row["supplier_id"];
+                                                    $suppliername = $row["supplier_name"];
+                                                    $totalamount = $row["payables_total_amount"];
+                                                    $ponumber = $row["payables_po_number"];
+                                                    $invocenumber = $row["payables_invoice_number"];
+                                                    $invoicedate = $row["payables_invoice_date"];
+                                                    $maturitydate = $row["payables_maturity_date"];
+                                                    $drnumber = $row["payables_dr_number"];
+                                                    $deliverydate = $row["payables_delivery_date"];
+                                                    $bank = $row["payables_bank"];
+                                                    $checknumber = $row["payables_check_number"];
+                                                    $checkdate = $row["payables_check_date"];
+                                                    $dateadded = $row["payables_date_added"];
+
+                                                    $now = time(); // or your date as well
+                                                    $your_date = strtotime($maturitydate);
+                                                    $datediff = $your_date - $now;
+                                                    $datediff = round($datediff / (60 * 60 * 24));
+
+                                                    $exceeddays = 0;
+                                                    $leftdays = 0;
+
+                                                    if($datediff < 0) {
+                                                        $exceeddays = abs($datediff);
+                                                    } else if($datediff > 0) {
+                                                        $leftdays = $datediff;
+                                                    }
+
+                                                    if($invoicedate != "" && $invoicedate != "1970-01-01 01:00:00" && $invoicedate != "1970-01-01 00:00:00" && $invoicedate != "0000-00-00 00:00:00") {
+                                                        $invoicedate = date("F d, Y", strtotime($invoicedate));
+                                                        $editinvoicedate = date("m/d/Y", strtotime($invoicedate));
+                                                    } else {
+                                                        $invoicedate = "";
+                                                        $editinvoicedate = "";
+                                                    }
+
+                                                    if($maturitydate != "" && $maturitydate != "1970-01-01 01:00:00" && $maturitydate != "1970-01-01 00:00:00" && $maturitydate != "0000-00-00 00:00:00") {
+                                                        $maturitydate = date("F d, Y", strtotime($maturitydate));
+                                                        $editmaturitydate = date("m/d/Y", strtotime($maturitydate));
+                                                    } else {
+                                                        $maturitydate = "";
+                                                        $editmaturitydate = "";
+                                                    }
+
+                                                    if($deliverydate != "" && $deliverydate != "1970-01-01 01:00:00" && $deliverydate != "1970-01-01 00:00:00" && $deliverydate != "0000-00-00 00:00:00") {
+                                                        $deliverydate = date("F d, Y", strtotime($deliverydate));
+                                                        $editdeliverydate = date("m/d/Y", strtotime($deliverydate));
+                                                    } else {
+                                                        $deliverydate = "";
+                                                        $editdeliverydate = "";
+                                                    }
+
+                                                    if($checkdate != "" && $checkdate != "1970-01-01 01:00:00" && $checkdate != "1970-01-01 00:00:00" && $checkdate != "0000-00-00 00:00:00") {
+                                                        $checkdate = date("F d, Y", strtotime($checkdate));
+                                                        $editcheckdate = date("m/d/Y", strtotime($checkdate));
+                                                    } else {
+                                                        $checkdate = "";
+                                                        $editcheckdate = "";
+                                                    }
+
+                                                    $dateadded = date("F d, Y", strtotime($dateadded));
+
+                                                    echo '
+                                                    <tr>
+                                                    <td>'.$count.'</td>
+                                                    <td>'.$suppliername.'</td>           
+                                                    <td>'.$totalamount.'</td>
+                                                    <td>'.$invoicedate.'</td>
+                                                    <td>'.$maturitydate.'</td>
+                                                    <td>'.$ponumber.'</td>
+                                                    <td>'.$invocenumber.'</td>
+                                                    <td>'.$leftdays.'</td>
+                                                    <td>'.$exceeddays.'</td>
+                                                    <td><a href="javascript:void(0)" onclick="openPayablesInfoDialog(\''.$count.'\',\''.$suppliername.'\',\''.$totalamount.'\',\''.$ponumber.'\',\''.$invocenumber.'\',\''.$invoicedate.'\',\''.$maturitydate.'\',\''.$drnumber.'\',\''.$deliverydate.'\',\''.$bank.'\',\''.$checknumber.'\',\''.$checkdate.'\')">More</a> | <a href="javascript:void(0)" onclick="openPayablesEditDialog(\''.$recid.'\',\''.$supplierid.'\',\''.$totalamount.'\',\''.$ponumber.'\',\''.$invocenumber.'\',\''.$editinvoicedate.'\',\''.$editmaturitydate.'\',\''.$drnumber.'\',\''.$editdeliverydate.'\',\''.$bank.'\',\''.$checknumber.'\',\''.$editcheckdate.'\')">Edit</a> | <a href="javascript:void(0)" onclick="openPayablesDeleteDialog('.$recid.')">Delete</a></td>
+                                                    </tr>
+                                                    ';   
+
+                                                  }
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+            <?php } else if (isset($_GET["export"]) && trim($_GET["export"]) == "focus") { ?>
+                <div class="row">
+                        <div class="col-lg-12">
+                            <h1 class="page-header"><?php echo $pheading; ?></h1>
+                        </div>
+                        <!-- /.col-lg-12 -->
+                    </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading"><a type="button" class="btn btn-danger" href="account.php?id=<?php echo $id; ?>&dashboard=focus">Dashboard</a></div>
+                            <div class="panel-body">
+                                <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="table-responsive">
+                                        <div class="col-md-6 col-md-offset-3">
+                                        <form role="form" onsubmit="return false;">
+                                            <span id="exportExcelStatus"></span>
+                                            <div class="form-group">
+                                              <label class="control-label">From</label>
+                                              <div class="input-group date" id="datePicker7">
+                                                <input type="text" class="form-control" name="date" id="export-excel-from" autocomplete="off" />
+                                                <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+                                              </div>
+                                            </div>
+                                            <div class="form-group">
+                                              <label class="control-label">To</label>
+                                              <div class="input-group date" id="datePicker8">
+                                                <input type="text" class="form-control" name="date" id="export-excel-to" autocomplete="off" />
+                                                <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+                                              </div>
+                                            </div>
+                                            <button type="button" class="btn btn-primary" id="exportExcelBtn" style="width: 100%;" onclick="exportExcel()">EXPORT</button>
+                                        </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
             <?php } else if (isset($_GET["employee"]) && isset($_GET["add"]) && trim($_GET["employee"]) == "focus" && trim($_GET["add"]) == "employee") { ?>
                     <div class="row">
                         <div class="col-lg-12">
@@ -2678,6 +3100,11 @@ if(
                                                     $basicreg = $hoursworked-$sundayhoursworked-$regularholidayfinal-$specialholidayfinal;
                                                     $basicregamount = ($hoursworked-$sundayhoursworked-$regularholidayfinal-$specialholidayfinal)*$perhour;
 
+                                                    $taxcontfinal = $taxcontfinal;
+                                                    $pagibigcontfinal = $pagibigcontfinal;
+                                                    $ssscontfinal = $ssscontfinal;
+                                                    $philhealthcontfinal = $philhealthcontfinal;
+
                                                     if($to == "1") {
 
                                                             $payslipcountregular++;
@@ -4379,9 +4806,12 @@ if(
                                                 <option value="dateleave">Filter by Date</option>
                                             </select>
                                         </div>
-                                    <div class="form-group" id="text-search-leave" hidden="true">  
-                                      <input type="text" name="record-search-text" value="" id="search-leave" placeholder="Search Employee ID or Name..." class="form-control" autofocus />  
-                                    </div>
+                                    <div class="form-group" id="text-search-leave" hidden="true">
+                                    <div class="input-group" >
+                                            <input type="text" class="form-control" name="date" placeholder="Search Employee ID or Name..." id="search-leave" autocomplete="off" autofocus />
+                                            <span class="input-group-addon add-on"><span class="glyphicon glyphicon-search"></span></span>
+                                        </div>
+                                        </div>
                                     <div class="form-group" id="select-filter-date-leave" hidden="true">
                                                 <div class="input-group date" id="datePicker22">
                                                 <input type="text" class="form-control" name="date" id="select-date-leave"  autocomplete="off"/>
@@ -4675,7 +5105,7 @@ if(
           <div class="modal-body">
             <span id="deleteCompanyStatus"></span>
             <input type="hidden" class="form-control" id="delete-company-id">
-            <p>Are you sure with this?</p>
+            <p>All collectibles that are connected to this supplier will be also deleted. Are you sure with this?</p>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -5839,6 +6269,237 @@ if(
 	        </div>
 	      </div>
 	    </div>
+
+
+ <!-- Modal -->
+ <div class="modal fade bd-example-modal-sm" id="editSupplier" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Edit Supplier</h5>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" class="form-control" id="edit-supplier-id">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="table-responsive">
+                        <form role="form" onsubmit="return false;">
+                            <span id="editSupplierStatus"></span>
+                            <div class="form-group">
+                                <label class="control-label">Supplier Name</label>
+                                <input type="text" class="form-control" id="edit-supplier-name" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Full Address</label>
+                                <input type="text" class="form-control" id="edit-supplier-address" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Contact Number</label>
+                                <input type="text" class="form-control" id="edit-supplier-contact" placeholder="">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="editSupplierBtn" onclick="editSupplierRecord()">Update</button>
+          </div>
+        </div>
+      </div>
+    </div> 
+
+    <!-- Modal -->
+    <div class="modal fade bd-example-modal-sm" id="deleteSupplier" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Delete Supplier</h5>
+          </div>
+          <div class="modal-body">
+            <span id="deleteSupplierStatus"></span>
+            <input type="hidden" class="form-control" id="delete-supplier-id">
+            <p>All payables that are connected to this supplier will be also deleted. Are you sure with this?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="deleteSupplierBtn" onclick="deleteSupplierRecord()">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>  
+
+     <!-- Modal -->
+     <div class="modal fade bd-example-modal-md" id="editPayables" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Edit Payables</h5>
+          </div>
+          <div class="modal-body">
+            <span id="editPayablesStatus"></span>
+            <input type="hidden" class="form-control" id="edit-payables-id">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="table-responsive">
+                        <form role="form" onsubmit="return false;">
+                            <div class="form-group">
+                                <label class="control-label">Supplier</label>
+                                <select class="form-control" id="edit-payables-supplier">
+                                    <option value=""></option>
+                                    <?php
+                                    $sql = "SELECT * FROM hurtajadmin_supplier WHERE supplier_status = '1' ORDER BY supplier_name";
+                                    $query = mysqli_query($db_conn, $sql);
+                                    while($row = mysqli_fetch_array($query)) {
+                                        $cid = $row["id"];
+                                        $suppliername = $row["supplier_name"];
+
+                                        echo '<option value="'.$cid.'">'.$suppliername.'</option>';
+                                    }
+                                    ?>  
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Total Amount</label>
+                                <input type="text" class="form-control" id="edit-payables-total-amount" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">P.O Number</label>
+                                <input type="text" class="form-control" id="edit-payables-po-number" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Invoice Number</label>
+                                <input type="text" class="form-control" id="edit-payables-invoice-number" placeholder="">
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label">Invoice Date</label>
+                              <div class="input-group date" id="datePicker9">
+                                <input type="text" class="form-control" name="date" id="edit-payables-invoice-date" autocomplete="off" />
+                                <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                          <label class="control-label">Maturity Date</label>
+                          <div class="input-group date" id="datePicker10">
+                            <input type="text" class="form-control" name="date" id="edit-payables-maturity-date" autocomplete="off" />
+                            <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">DR Number</label>
+                        <input type="text" class="form-control" id="edit-payables-dr-number" placeholder="">
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label">Delivery Date</label>
+                      <div class="input-group date" id="datePicker11">
+                        <input type="text" class="form-control" name="date" id="edit-payables-delivery-date" autocomplete="off" />
+                        <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Bank</label>
+                    <input type="text" class="form-control" id="edit-payables-bank" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Check Number</label>
+                    <input type="text" class="form-control" id="edit-payables-check-number" placeholder="">
+                </div>
+                <div class="form-group">
+                  <label class="control-label">Check Date</label>
+                  <div class="input-group date" id="datePicker12">
+                    <input type="text" class="form-control" name="date" id="edit-payables-check-date" autocomplete="off" />
+                    <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+            </div>
+        </form>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="editPayablesBtn" onclick="editPayablesRecord()">Update</button>
+          </div>
+        </div>
+      </div>
+    </div> 
+
+    <!-- Modal -->
+    <div class="modal fade bd-example-modal-sm" id="deletePayables" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Delete Payables</h5>
+          </div>
+          <div class="modal-body">
+            <span id="deletePayablesStatus"></span>
+            <input type="hidden" class="form-control" id="delete-payables-id">
+            <p>Are you sure with this?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="deletePayablesBtn" onclick="deletePayablesRecord()">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade bd-example-modal-lg" id="infoPayables" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">More Information</h5>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Supplier</th>
+                                    <th>Total Amount</th>
+                                    <th>P.O Number</th>
+                                    <th>Invoice Number</th>
+                                    <th>Invoice Date</th>
+                                    <th>Maturity Date</th>
+                                    <th>DR Number</th>
+                                    <th>Delivery Date</th>
+                                    <th>Bank</th>
+                                    <th>Check Number</th>
+                                    <th>Check Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><p id="morepayablesrid"><p></td>
+                                    <td><p id="morepayablescompany"><p></td>           
+                                    <td><p id="morepayablestotalamount"><p></td>
+                                    <td><p id="morepayablesponumber"><p></td>
+                                    <td><p id="morepayablesinvoicenumber"><p></td>
+                                    <td><p id="morepayablesinvoicedate"><p></td>
+                                    <td><p id="morepayablesmaturitydate"><p></td>
+                                    <td><p id="morepayablesdrnumber"><p></td>           
+                                    <td><p id="morepayablesdeliverydate"><p></td>
+                                    <td><p id="morepayablesbank"><p></td>
+                                    <td><p id="morepayableschecknumber"><p></td>
+                                    <td><p id="morepayablescheckdate"><p></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
    
     <!-- jQuery -->
     <script src="vendor/jquery/jquery.min.js"></script>
@@ -7308,6 +7969,33 @@ if(
             });
        });  
 
+       $('#search-payables').keyup(function(e){  
+            var txtSearch = $(this).val();
+            console.log(txtSearch);
+            $.ajax({ 
+                url:"parsers/searchpayables.php",  
+                method:"post",  
+                data:{search:txtSearch},  
+                dataType:"text",  
+                success:function(data) {
+                    $('#payables-search-result').html(data); 
+                }  
+            });
+       }); 
+
+       $('#search-supplier').keyup(function(e){  
+            var txtSearch = $(this).val();
+            $.ajax({ 
+                url:"parsers/searchsupplier.php",  
+                method:"post",  
+                data:{search:txtSearch},  
+                dataType:"text",  
+                success:function(data) {
+                    $('#supplier-search-result').html(data); 
+                }  
+            });
+        }); 
+
       $(function () {
             $("#importPayrollFile, #import-payroll-sheet-number").bind("propertychange change click keyup input paste", function () {      
               if ($("#importPayrollFile").val() != "" && $("#import-payroll-sheet-number").val() != "")
@@ -7963,6 +8651,275 @@ if(
           ajax.send("deletepayslipid="+rid+"&deletepaysliptype="+type);
         }
       }
+
+      function addSupplierRecord() {
+        var name = _("add-supplier-name").value;
+        var address = _("add-supplier-address").value;
+        var contact = _("add-supplier-contact").value;
+        var load = '<center><i class="fa fa-circle-o-notch fa-spin" style="color: #999; margin-bottom: 10px;"></i><center>';
+        var error = '<div style="color: red; margin-bottom: 10px;">Incomplete Parameters.</div>';
+        var status = _("addSupplierStatus");
+        var button = _("addSupplierBtn");
+        status.innerHTML = load;
+        if (name == "" || address == "" || contact == "") {
+            status.innerHTML = error;
+        } else {
+            button.disabled = true;
+            status.innerHTML = load;
+            var ajax = ajaxObj("POST", "parsers/account.php");
+            ajax.onreadystatechange = function() {
+              if(ajaxReturn(ajax) == true) {
+                  if (ajax.responseText == "successinsert"){
+                      window.location = "account.php?id=<?php echo $log_id; ?>&ageing=focus&view=supplier";
+                  } else if (ajax.responseText == "exist"){
+                      button.disabled = false;
+                      status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Supplier information has already exist!</div>';
+                  } else {
+                      button.disabled = false;
+                      status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Unknown error! Error Details: '+ ajax.responseText +'</div>';
+                  }
+              }
+            }
+          ajax.send("addsuppliername="+name+"&addsupplieraddress="+address+"&addsuppliercontact="+contact);
+        }
+      }
+
+      function openSupplierEditDialog(rid, name, address, contact) {
+        $('#editSupplier').modal('show');
+        _("edit-supplier-id").value = rid;
+        _("edit-supplier-name").value = name;
+        _("edit-supplier-address").value = address;
+        _("edit-supplier-contact").value = contact;
+      }
+
+      function editSupplierRecord() {
+        var rid = _("edit-supplier-id").value;
+        var name = _("edit-supplier-name").value;
+        var address = _("edit-supplier-address").value;
+        var contact = _("edit-supplier-contact").value;
+        var load = '<center><i class="fa fa-circle-o-notch fa-spin" style="color: #999; margin-bottom: 10px;"></i><center>';
+        var error = '<div style="color: red; margin-bottom: 10px;">Incomplete Parameters.</div>';
+        var status = _("editSupplierStatus");
+        var button = _("editSupplierBtn");
+        status.innerHTML = load;
+        if (rid == "" || name == "" || address == "" || contact == "") {
+            status.innerHTML = error;
+        } else {
+            button.disabled = true;
+            status.innerHTML = load;
+            var ajax = ajaxObj("POST", "parsers/account.php");
+            ajax.onreadystatechange = function() {
+              if(ajaxReturn(ajax) == true) {
+                  if (ajax.responseText == "successupdate"){
+                      window.location = "account.php?id=<?php echo $log_id; ?>&ageing=focus&view=supplier";
+                  } else {
+                      button.disabled = false;
+                      status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Unknown error! Error Details: '+ ajax.responseText +'</div>';
+                  }
+              }
+            }
+          ajax.send("editsupplierid="+rid+"&editsuppliername="+name+"&editsupplieraddress="+address+"&editsuppliercontact="+contact);
+        }
+      }
+
+      function openSupplierDeleteDialog(rid) {
+        $('#deleteSupplier').modal('show');
+        _("delete-supplier-id").value = rid;
+      }
+
+      function deleteSupplierRecord() {
+        var rid = _("delete-supplier-id").value;
+        var load = '<center><i class="fa fa-circle-o-notch fa-spin" style="color: #999; margin-bottom: 10px;"></i><center>';
+        var error = '<div style="color: red; margin-bottom: 10px;">Incomplete Parameters.</div>';
+        var status = _("deleteSupplierStatus");
+        var button = _("deleteSupplierBtn");
+        status.innerHTML = load;
+        if (rid == "") {
+            status.innerHTML = error;
+        } else {
+            button.disabled = true;
+            status.innerHTML = load;
+            var ajax = ajaxObj("POST", "parsers/account.php");
+            ajax.onreadystatechange = function() {
+              if(ajaxReturn(ajax) == true) {
+                  if (ajax.responseText == "successupdate"){
+                      window.location = "account.php?id=<?php echo $log_id; ?>&ageing=focus&view=supplier";
+                  } else {
+                      button.disabled = false;
+                      status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Unknown error! Error Details: '+ ajax.responseText +'</div>';
+                  }
+              }
+            }
+          ajax.send("deletesupplierid="+rid);
+        }
+      }
+
+      function openPayablesInfoDialog(rid, companyname, totalamount, ponumber, invocenumber, invoicedate, maturitydate, drnumber, deliverydate, bank, checknumber, checkdate) {
+        $('#infoPayables').modal('show');
+        _("morepayablesrid").innerHTML = rid;
+        _("morepayablescompany").innerHTML = companyname;
+        _("morepayablestotalamount").innerHTML = totalamount;
+        _("morepayablesponumber").innerHTML = ponumber;
+        _("morepayablesinvoicenumber").innerHTML = invocenumber;
+        _("morepayablesinvoicedate").innerHTML = invoicedate;
+        _("morepayablesmaturitydate").innerHTML = maturitydate;
+        _("morepayablesdrnumber").innerHTML = drnumber;
+        _("morepayablesdeliverydate").innerHTML = deliverydate;
+        _("morepayablesbank").innerHTML = bank;
+        _("morepayableschecknumber").innerHTML = checknumber;
+        _("morepayablescheckdate").innerHTML = checkdate;
+      }
+
+      function addPayablesRecord() {
+        var supplier = _("add-payables-supplier").value;
+        var totalamount = _("add-payables-total-amount").value;
+        var ponumber = _("add-payables-po-number").value;
+        var invoicenumber = _("add-payables-invoice-number").value;
+        var invoicedate = _("add-payables-invoice-date").value;
+        var maturitydate = _("add-payables-maturity-date").value;
+        var drnumber = _("add-payables-dr-number").value;
+        var deliverydate = _("add-payables-delivery-date").value;
+        var bank = _("add-payables-bank").value;
+        var checknumber = _("add-payables-check-number").value;
+        var checkdate = _("add-payables-check-date").value;
+
+        var load = '<center><i class="fa fa-circle-o-notch fa-spin" style="color: #999; margin-bottom: 10px;"></i><center>';
+        var error = '<div style="color: red; margin-bottom: 10px;">Incomplete Parameters.</div>';
+        var status = _("addPayablesStatus");
+        var button = _("addPayablesBtn");
+        status.innerHTML = load;
+        if (supplier == "" || totalamount == "" || ponumber == "" || invoicenumber == "" || invoicedate == "" || maturitydate == "") {
+            status.innerHTML = error;
+        } else {
+            button.disabled = true;
+            status.innerHTML = load;
+            var ajax = ajaxObj("POST", "parsers/account.php");
+            ajax.onreadystatechange = function() {
+              if(ajaxReturn(ajax) == true) {
+                  if (ajax.responseText == "successinsert"){
+                      window.location = "account.php?id=<?php echo $log_id; ?>&ageing=focus&view=payables";
+                  } else if (ajax.responseText == "exist"){
+                      button.disabled = false;
+                      status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Payables information has already exist!</div>';
+                  } else {
+                      button.disabled = false;
+                      status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Unknown error! Error Details: '+ ajax.responseText +'</div>';
+                  }
+              }
+            }
+          ajax.send("addpayablessupplier="+supplier+"&addpayablestotalamount="+totalamount+"&addpayablesponumber="+ponumber+"&addpayablesinvoicenumber="+invoicenumber+"&addpayablesinvoicedate="+invoicedate+"&addpayablesmaturitydate="+maturitydate+"&addpayablesdrnumber="+drnumber+"&addpayablesdeliverydate="+deliverydate+"&addpayablesbank="+bank+"&addpayableschecknumber="+checknumber+"&addpayablescheckdate="+checkdate);
+        }
+      }
+
+       function openPayablesEditDialog(rid, supplierid, totalamount, ponumber, invocenumber, invoicedate, maturitydate, drnumber, deliverydate, bank, checknumber, checkdate) {
+        $('#editPayables').modal('show');
+        _("edit-payables-id").value = rid;
+        _("edit-payables-supplier").value = supplierid;
+        _("edit-payables-total-amount").value = totalamount;
+        _("edit-payables-po-number").value = ponumber;
+        _("edit-payables-invoice-number").value = invocenumber;
+        _("edit-payables-invoice-date").value = invoicedate;
+        _("edit-payables-maturity-date").value = maturitydate;
+        _("edit-payables-dr-number").value = drnumber;
+        _("edit-payables-delivery-date").value = deliverydate;
+        _("edit-payables-bank").value = bank;
+        _("edit-payables-check-number").value = checknumber;
+        _("edit-payables-check-date").value = checkdate;
+      }
+
+      function editPayablesRecord() {
+        var rid = _("edit-payables-id").value;
+        var supplierid = _("edit-payables-supplier").value;
+        var totalamount = _("edit-payables-total-amount").value;
+        var ponumber = _("edit-payables-po-number").value;
+        var invoicenumber = _("edit-payables-invoice-number").value;
+        var invoicedate = _("edit-payables-invoice-date").value;
+        var maturitydate = _("edit-payables-maturity-date").value;
+        var drnumber = _("edit-payables-dr-number").value;
+        var deliverydate = _("edit-payables-delivery-date").value;
+        var bank = _("edit-payables-bank").value;
+        var checknumber = _("edit-payables-check-number").value;
+        var checkdate = _("edit-payables-check-date").value;
+        var load = '<center><i class="fa fa-circle-o-notch fa-spin" style="color: #999; margin-bottom: 10px;"></i><center>';
+        var error = '<div style="color: red; margin-bottom: 10px;">Incomplete Parameters.</div>';
+        var status = _("editPayablesStatus");
+        var button = _("editPayablesBtn");
+        status.innerHTML = load;
+        if (supplierid == "" || totalamount == "" || ponumber == "" || invoicenumber == "" || invoicedate == "" || maturitydate == "") {
+            status.innerHTML = error;
+        } else {
+            button.disabled = true;
+            status.innerHTML = load;
+            var ajax = ajaxObj("POST", "parsers/account.php");
+            ajax.onreadystatechange = function() {
+              if(ajaxReturn(ajax) == true) {
+                  if (ajax.responseText == "successupdate"){
+                      window.location = "account.php?id=<?php echo $log_id; ?>&ageing=focus&view=payables";
+                  } else {
+                      button.disabled = false;
+                      status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Unknown error! Error Details: '+ ajax.responseText +'</div>';
+                  }
+              }
+            }
+          ajax.send("editpayablesid="+rid+"&editpayablessupplier="+supplierid+"&editpayablestotalamount="+totalamount+"&editpayablesponumber="+ponumber+"&editpayablesinvoicenumber="+invoicenumber+"&editpayablesinvoicedate="+invoicedate+"&editpayablesmaturitydate="+maturitydate+"&editpayablesdrnumber="+drnumber+"&editpayablesdeliverydate="+deliverydate+"&editpayablesbank="+bank+"&editpayableschecknumber="+checknumber+"&editpayablescheckdate="+checkdate);
+        }
+      }
+
+      function openPayablesDeleteDialog(rid) {
+        $('#deletePayables').modal('show');
+        _("delete-payables-id").value = rid;
+      }
+
+      function deletePayablesRecord() {
+        var rid = _("delete-payables-id").value;
+        var load = '<center><i class="fa fa-circle-o-notch fa-spin" style="color: #999; margin-bottom: 10px;"></i><center>';
+        var error = '<div style="color: red; margin-bottom: 10px;">Incomplete Parameters.</div>';
+        var status = _("deletePayablesStatus");
+        var button = _("deletePayablesBtn");
+        status.innerHTML = load;
+        if (rid == "") {
+            status.innerHTML = error;
+        } else {
+            button.disabled = true;
+            status.innerHTML = load;
+            var ajax = ajaxObj("POST", "parsers/account.php");
+            ajax.onreadystatechange = function() {
+              if(ajaxReturn(ajax) == true) {
+                  if (ajax.responseText == "successupdate"){
+                      window.location = "account.php?id=<?php echo $log_id; ?>&ageing=focus&view=payables";
+                  } else {
+                      button.disabled = false;
+                      status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Unknown error! Error Details: '+ ajax.responseText +'</div>';
+                  }
+              }
+            }
+          ajax.send("deletepayablesid="+rid);
+        }
+      }
+
+      function exportExcel() {
+        var from = _("export-excel-from").value;
+        var to = _("export-excel-to").value;
+        var load = '<center><i class="fa fa-circle-o-notch fa-spin" style="color: #999; margin-bottom: 10px;"></i><center>';
+        var error = '<div style="color: red; margin-bottom: 10px;">Incomplete Parameters.</div>';
+        var status = _("exportExcelStatus");
+        var button = _("exportExcelBtn");
+        status.innerHTML = load;
+        if (from == "" || to == "") {
+            status.innerHTML = error;
+        } else {
+            button.disabled = true;
+            status.innerHTML = load;
+
+            setTimeout(function () {
+                window.open('parsers/exportcollectibles.php?id=<?php echo $log_id; ?>&from='+from+'&to='+to, '_blank');
+                button.disabled = false;
+                status.innerHTML = '';
+            }, 2000);
+            
+        }
+      }
+      
 
       function goBack() {
         window.history.back();

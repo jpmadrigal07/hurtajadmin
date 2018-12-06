@@ -1219,5 +1219,157 @@ if(isset($_POST["editleaveremarksrid"])) {
 
 }
 
+if(isset($_POST["addsuppliername"])) {
+
+  include_once("../include/db_conn.php");
+  include_once("../include/loginstatus.php");
+
+  $name = $_POST['addsuppliername'];
+  $address = $_POST['addsupplieraddress'];
+  $contact = $_POST['addsuppliercontact'];
+
+  $sql = "SELECT * FROM hurtajadmin_supplier WHERE supplier_name='$name' AND supplier_address='$address' AND supplier_contact='$contact' AND supplier_status = '1' LIMIT 1";
+  $query = mysqli_query($db_conn, $sql);
+  $check = mysqli_num_rows($query);
+
+  if($check > 0) { 
+
+    echo "exist";
+
+  } else {
+
+    $sql_code = "INSERT INTO hurtajadmin_supplier (supplier_name, supplier_address, supplier_contact, supplier_date_added, supplier_status)
+    VALUES ('$name','$address','$contact',NOW(),'1')";
+    $query = mysqli_query($db_conn, $sql_code);
+    echo "successinsert";
+
+  }
+
+  exit();
+
+}
+
+if(isset($_POST["editsupplierid"])) {
+
+  include_once("../include/db_conn.php");
+  include_once("../include/loginstatus.php");
+
+  $rid = $_POST['editsupplierid'];
+  $name = $_POST['editsuppliername'];
+  $address = $_POST['editsupplieraddress'];
+  $contact = $_POST['editsuppliercontact'];
+
+  $sql = "UPDATE hurtajadmin_supplier SET supplier_name='$name', supplier_address='$address', supplier_contact='$contact' WHERE id='$rid' LIMIT 1";
+  $query = mysqli_query($db_conn, $sql);
+
+  echo "successupdate";
+
+  exit();
+
+}
+
+if(isset($_POST["deletesupplierid"])) {
+
+  include_once("../include/db_conn.php");
+  include_once("../include/loginstatus.php");
+
+  $rid = $_POST['deletesupplierid'];
+
+  $sql = "UPDATE hurtajadmin_supplier SET supplier_status='2' WHERE id='$rid' LIMIT 1";
+  $query = mysqli_query($db_conn, $sql);
+  echo "successupdate";
+
+  exit();
+
+}
+
+if(isset($_POST["addpayablessupplier"])) {
+
+  include_once("../include/db_conn.php");
+  include_once("../include/loginstatus.php");
+
+  $supplier = $_POST['addpayablessupplier'];
+  $totalamount = $_POST['addpayablestotalamount'];
+  $ponumber = $_POST['addpayablesponumber'];
+  $invoicenumber = $_POST['addpayablesinvoicenumber'];
+  $invoicedate = $_POST['addpayablesinvoicedate'];
+  $maturitydate = $_POST['addpayablesmaturitydate'];
+  $drnumber = $_POST['addpayablesdrnumber'];
+  $deliverydate = $_POST['addpayablesdeliverydate'];
+  $bank = $_POST['addpayablesbank'];
+  $checknumber = $_POST['addpayableschecknumber'];
+  $checkdate = $_POST['addpayablescheckdate'];
+
+  $invoicedate = date("Y-m-d H:i:s", strtotime($invoicedate));
+  $maturitydate = date("Y-m-d H:i:s", strtotime($maturitydate));
+  $deliverydate = date("Y-m-d H:i:s", strtotime($deliverydate));
+  $checkdate = date("Y-m-d H:i:s", strtotime($checkdate));
+
+  $sql = "SELECT * FROM hurtajadmin_payables WHERE supplier_id='$supplier' AND payables_total_amount='$totalamount' AND payables_invoice_number='$invoicenumber' AND payables_invoice_date='$invoicedate' AND payables_status = '1' LIMIT 1";
+  $query = mysqli_query($db_conn, $sql);
+  $check = mysqli_num_rows($query);
+
+  if($check > 0) { 
+
+    echo "exist";
+
+  } else {
+
+    $sql_code = "INSERT INTO hurtajadmin_payables (supplier_id, payables_total_amount, payables_po_number, payables_invoice_number, payables_invoice_date, payables_maturity_date, payables_dr_number,  payables_delivery_date, payables_bank, payables_check_number, payables_check_date, payables_date_added, payables_status)
+    VALUES ('$supplier','$totalamount','$ponumber', '$invoicenumber','$invoicedate','$maturitydate', '$drnumber','$deliverydate','$bank', '$checknumber','$checkdate', NOW(),'1')";
+    $query = mysqli_query($db_conn, $sql_code);
+    echo "successinsert";
+
+  }
+
+  exit();
+
+}
+
+if(isset($_POST["editpayablesid"])) {
+
+  include_once("../include/db_conn.php");
+  include_once("../include/loginstatus.php");
+
+  $rid = $_POST['editpayablesid'];
+  $supplier = $_POST['editpayablessupplier'];
+  $totalamount = $_POST['editpayablestotalamount'];
+  $ponumber = $_POST['editpayablesponumber'];
+  $invoicenumber = $_POST['editpayablesinvoicenumber'];
+  $invoicedate = $_POST['editpayablesinvoicedate'];
+  $maturitydate = $_POST['editpayablesmaturitydate'];
+  $drnumber = $_POST['editpayablesdrnumber'];
+  $deliverydate = $_POST['editpayablesdeliverydate'];
+  $bank = $_POST['editpayablesbank'];
+  $checknumber = $_POST['editpayableschecknumber'];
+  $checkdate = $_POST['editpayablescheckdate'];
+
+  $invoicedate = date("Y-m-d H:i:s", strtotime($invoicedate));
+  $maturitydate = date("Y-m-d H:i:s", strtotime($maturitydate));
+  $deliverydate = date("Y-m-d H:i:s", strtotime($deliverydate));
+  $checkdate = date("Y-m-d H:i:s", strtotime($checkdate));
+
+  $sql = "UPDATE hurtajadmin_payables SET supplier_id='$supplier', payables_total_amount='$totalamount', payables_po_number='$ponumber', payables_invoice_number='$invoicenumber', payables_invoice_date='$invoicedate', payables_maturity_date='$maturitydate', payables_dr_number='$drnumber', payables_delivery_date='$deliverydate', payables_bank='$bank', payables_check_number='$checknumber', payables_check_date='$checkdate' WHERE id='$rid' LIMIT 1";
+  $query = mysqli_query($db_conn, $sql);
+  echo "successupdate";
+
+  exit();
+
+}
+
+if(isset($_POST["deletepayablesid"])) {
+
+  include_once("../include/db_conn.php");
+  include_once("../include/loginstatus.php");
+
+  $rid = $_POST['deletepayablesid'];
+
+  $sql = "UPDATE hurtajadmin_payables SET payables_status='3' WHERE id='$rid' LIMIT 1";
+  $query = mysqli_query($db_conn, $sql);
+  echo "successupdate";
+
+  exit();
+
+}
 
 ?>
