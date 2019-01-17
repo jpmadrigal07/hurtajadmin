@@ -5,9 +5,20 @@ $output = '';
 $count = 0; 
 
 $text = $_POST["search"];
+$collectiblesIdList = $_POST["collectiblesIdList"];
+if($collectiblesIdList == "") {
+  $collectiblesIdListArray = array();
+} else {
+  $collectiblesIdListArray = explode(',', $collectiblesIdList);
+}
+$collectiblesIdListArrayCount = count($collectiblesIdListArray);
+$headCheckbox = '<input type="checkbox" name="cb1" id="collectibles-all-checkbox" onclick="checkUncheckAll()"/>';
 
-$sql = "SELECT * FROM hurtajadmin_collectibles LEFT JOIN hurtajadmin_company
-    ON hurtajadmin_collectibles.company_id = hurtajadmin_company.id WHERE collectibles_status = '1' AND (hurtajadmin_company.company_name LIKE '%".$text."%' OR collectibles_po_number LIKE '%".$text."%' OR collectibles_invoice_number LIKE '%".$text."%') ORDER BY hurtajadmin_collectibles.id DESC"; 
+if($collectiblesIdListArrayCount > 0) {
+  $headCheckbox = '<input type="checkbox" name="cb1" id="collectibles-all-checkbox" onclick="checkUncheckAll()" checked/>';
+}
+
+$sql = "SELECT hurtajadmin_collectibles.* FROM hurtajadmin_collectibles JOIN hurtajadmin_company WHERE hurtajadmin_collectibles.company_id = hurtajadmin_company.id AND hurtajadmin_collectibles.collectibles_status = '1' AND (hurtajadmin_company.company_name LIKE '%".$text."%' OR hurtajadmin_collectibles.collectibles_po_number LIKE '%".$text."%' OR collectibles_invoice_number LIKE '%".$text."%') ORDER BY hurtajadmin_collectibles.id DESC"; 
 $result = mysqli_query($db_conn, $sql);
 
 if($_POST["search"] == "") {
@@ -15,6 +26,7 @@ if($_POST["search"] == "") {
   <table class="table table-bordered">
   <thead>
   <tr>
+  <th>'.$headCheckbox.'</th>
   <th>#</th>
   <th>Client/Company</th>
   <th>Total Amount</th>
@@ -27,14 +39,27 @@ if($_POST["search"] == "") {
   </thead>
   <tbody>
   ';
+  $collectiblesidarray = "[";
   while($row = mysqli_fetch_array($result)) {  
-    $count++; 
     $recid = $row["id"];
     $companyid = $row["company_id"];
 
-    $sql1 = "SELECT * FROM hurtajadmin_company WHERE id = '$companyid' ORDER BY id DESC";
+    if (in_array((string)$recid, $collectiblesIdListArray)) {
+      $singleCheckbox = '<input type="checkbox" name="collectibles-checkbox" id="collectibles-checkbox" onclick="addToAgeingCollectibleIdArray('.$recid.')" checked/>';
+    } else {
+      $singleCheckbox = '<input type="checkbox" name="collectibles-checkbox" id="collectibles-checkbox" onclick="addToAgeingCollectibleIdArray('.$recid.')"/>';
+    }
+
+    $sql1 = "SELECT * FROM hurtajadmin_company WHERE id = '$companyid' AND company_status = '1' ORDER BY id DESC";
     $query1 = mysqli_query($db_conn, $sql1);
+    $querycount1 = mysqli_num_rows($query1);
     while($row1 = mysqli_fetch_array($query1)) {
+      $count++; 
+      if($count == 1) {
+        $collectiblesidarray .= $recid;
+      } else {
+          $collectiblesidarray .= ','.$recid;
+      }
       $companyname = $row1["company_name"];
     }
 
@@ -98,8 +123,11 @@ if($_POST["search"] == "") {
 
     $dateadded = date("F d, Y", strtotime($dateadded));
 
+    if($querycount1 > 0) {
+
     $output .= '
     <tr>
+    <td>'.$singleCheckbox.'</td>
     <td>'.$count.'</td>
     <td>'.$companyname.'</td>           
     <td>'.$totalamount.'</td>
@@ -111,8 +139,12 @@ if($_POST["search"] == "") {
     </tr>
     ';   
 
+    }
+
   }
+  $collectiblesidarray .= "]";
   $output .= '
+  <input type="hidden" id="collectibles-all-checkbox-id" value="'.$collectiblesidarray.'"/>
   </tbody>
   </table>
   ';
@@ -123,6 +155,7 @@ if($_POST["search"] == "") {
     <table class="table table-bordered">
     <thead>
     <tr>
+    <th></th>
     <th>#</th>
     <th>Client/Company</th>
     <th>Total Amount</th>
@@ -135,15 +168,28 @@ if($_POST["search"] == "") {
     </thead>
     <tbody>
     ';
+    $collectiblesidarray = "[";
     while($row = mysqli_fetch_array($result)) {  
-     $count++; 
     $recid = $row["id"];
     $companyid = $row["company_id"];
 
-    $sql1 = "SELECT * FROM hurtajadmin_company WHERE id = '$companyid' ORDER BY id DESC";
+    if (in_array((string)$recid, $collectiblesIdListArray)) {
+      $singleCheckbox = '<input type="checkbox" name="collectibles-checkbox" id="collectibles-checkbox" onclick="addToAgeingCollectibleIdArray('.$recid.')" checked/>';
+    } else {
+      $singleCheckbox = '<input type="checkbox" name="collectibles-checkbox" id="collectibles-checkbox" onclick="addToAgeingCollectibleIdArray('.$recid.')"/>';
+    }
+
+    $sql1 = "SELECT * FROM hurtajadmin_company WHERE id = '$companyid' AND company_status = '1' ORDER BY id DESC";
     $query1 = mysqli_query($db_conn, $sql1);
+    $querycount1 = mysqli_num_rows($query1);
     while($row1 = mysqli_fetch_array($query1)) {
+      $count++; 
       $companyname = $row1["company_name"];
+      if($count == 1) {
+        $collectiblesidarray .= $recid;
+      } else {
+          $collectiblesidarray .= ','.$recid;
+      }
     }
 
     $totalamount = $row["collectibles_total_amount"];
@@ -206,8 +252,11 @@ if($_POST["search"] == "") {
 
     $dateadded = date("F d, Y", strtotime($dateadded));
 
+    if($querycount1 > 0) {
+
     $output .= '
     <tr>
+    <td>'.$singleCheckbox.'</td>
     <td>'.$count.'</td>
     <td>'.$companyname.'</td>           
     <td>'.$totalamount.'</td>
@@ -220,7 +269,11 @@ if($_POST["search"] == "") {
     ';   
 
     }
+
+    }
+    $collectiblesidarray .= "]";
     $output .= '
+    <input type="hidden" id="collectibles-all-checkbox-id" value="'.$collectiblesidarray.'"/>
     </tbody>
     </table>
     ';

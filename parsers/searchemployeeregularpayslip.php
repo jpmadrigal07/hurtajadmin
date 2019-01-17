@@ -7,7 +7,7 @@ $count = 0;
 $text = $_POST["search"];
 $payslipid = $_POST["payslipid"];
 
-$sql = "SELECT * FROM hurtajadmin_regular_payslip WHERE employee_id = '$text' AND regular_payslip_payslip_id = '$payslipid'";
+$sql = "SELECT hurtajadmin_regular_payslip.* FROM hurtajadmin_regular_payslip LEFT JOIN hurtajadmin_employee ON hurtajadmin_regular_payslip.employee_id = hurtajadmin_employee.employee_id WHERE (hurtajadmin_regular_payslip.employee_id LIKE '%".$text."%' OR hurtajadmin_employee.employee_fname LIKE '%".$text."%' OR hurtajadmin_employee.employee_mname LIKE '%".$text."%' OR hurtajadmin_employee.employee_lname LIKE '%".$text."%') AND hurtajadmin_regular_payslip.regular_payslip_payslip_id = '$payslipid'";
 $result = mysqli_query($db_conn, $sql);  
 
 if($_POST["search"] == "") {

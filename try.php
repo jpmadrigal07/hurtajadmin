@@ -32,19 +32,57 @@
 
 // var_dump($sundays);
 
-$latecount2 = 0;
+// $latecount2 = 0;
 
-$datein = "2018-01-23 09:00:00";
+// $datein = "2018-01-23 09:00:00";
+
+// $dateindate = date("Y-m-d", strtotime($datein));
+
+//                                                         $latecount2 = $latecount2 + round((strtotime($datein) - strtotime($dateindate." 08:00:00"))/3600, 1);
+
+//                                                         if($latecount2 < 0.01) {
+//                                                             $latecount2 = 0;
+//                                                         }
+
+
+// echo $latecount2;
+
+// IF DATE IN AND DATE OUT IS WITHIN 7:30 AM AND 6PM, IT WILL COUNT AS REGULAR TIME ELSE ALL EXCESS IS COUNT AS OVERTIME
+
+$datein = "2018-08-21 07:30:47";
+$dateout = "2018-08-21 18:00:00";
 
 $dateindate = date("Y-m-d", strtotime($datein));
+$dateoutdate = date("Y-m-d", strtotime($dateout));
 
-                                                        $latecount2 = $latecount2 + round((strtotime($datein) - strtotime($dateindate." 08:00:00"))/3600, 1);
+$hourdiff = round((strtotime($dateout) - strtotime($datein))/3600, 1);
 
-                                                        if($latecount2 < 0.01) {
-                                                            $latecount2 = 0;
-                                                        }
+$dateinstrtotime = strtotime($datein);
+$dateoutstrtotime = strtotime($dateout);
 
+$dateinminregulartimestrtotime = strtotime($dateindate. " 07:30:00");
+$dateinmaxregulartimestrtotime = strtotime($dateoutdate. " 18:00:00");
 
-echo $latecount2;
+if($dateinstrtotime > $dateinminregulartimestrtotime && $dateinmaxregulartimestrtotime >= $dateoutstrtotime) {
+    $dailycount1 = $hourdiff;
+    if($dailycount1 > 9.5) {
+        $dailycount1 = 9.5;
+    }
+} else {
+    if($dateinminregulartimestrtotime > $dateinstrtotime && $dateinmaxregulartimestrtotime >= $dateoutstrtotime) {
+        $otcount1 = round(($dateinminregulartimestrtotime - $dateinstrtotime)/3600, 1);
+        $dailycount1 = $hourdiff - $otcount1;
+    } else if($dateinstrtotime > $dateinminregulartimestrtotime && $dateoutstrtotime > $dateinmaxregulartimestrtotime) {
+        $otcount1 = round(($dateoutstrtotime - $dateinmaxregulartimestrtotime)/3600, 1);
+        $dailycount1 = $hourdiff - $otcount1;
+    } else {
+        $otcount1 = $otcount1 + round(($dateinminregulartimestrtotime - $dateinstrtotime)/3600, 1);
+
+        $otcount1 = $otcount1 + round(($dateoutstrtotime - $dateinmaxregulartimestrtotime)/3600, 1);
+        $dailycount1 = $hourdiff - $otcount1;
+    }
+}
+
+echo $dailycount1."<br/>".$otcount1;
 
 ?>

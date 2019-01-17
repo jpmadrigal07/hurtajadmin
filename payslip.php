@@ -130,7 +130,7 @@ if($type == "1") {
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Hurt AJ Admin - Payslip Print</title>
     <!-- FavIcon -->
-    <link rel="icon" type="image/png" href="image/logoonly.png" />
+    <link rel="icon" type="image/png" href="image/logopayslip.png" />
     <!-- Bootstrap -->
     <!-- <link href="css/bootstrap.min.css" rel="stylesheet"> -->
     <!-- Latest compiled and minified CSS -->
@@ -188,6 +188,7 @@ if($type == "1") {
                                                     $dayspresent = $row["regular_payslip_days_present"];
                                                     $cashadvance = $row["regular_payslip_cash_advance"];
                                                     $cashloan = $row["regular_payslip_cash_loan"];
+                                                    $cashloansss = (integer)$row["regular_payslip_cash_loan_sss"];
                                                     $lesslatehours = $row["regular_payslip_less_lates_hours"];
                                                     $lesslate = $row["regular_payslip_less_lates"];
                                                     $snonworkingholidayhours = $row["regular_payslip_s_non_working_holiday_hours"];
@@ -225,7 +226,7 @@ if($type == "1") {
                                                          <div class="row">
                                                             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border-bottom: 1px solid #ddd;">
                                                                 <div style="padding-bottom: 5px; padding-top: 5px;">
-                                                               <img src="image/logoonly.png" width="50" height="50" style="float: left; margin-right: 5px;" /><h5>HURT AJ FABRICATION<br>AND ENTERPRISES CO.</h5>
+                                                               <img src="image/logopayslip.png" width="50" height="50" style="float: left; margin-right: 5px;" /><h5>HURT AJ FABRICATION ENTERPRISES AND CON...</h5>
                                                                 </div>
                                                                <table style="width: 100%; font-size: 13px; margin-bottom: 16px;">
                                                                     <tr>
@@ -249,14 +250,14 @@ if($type == "1") {
                                                                     <tr>
                                                                         <td>Total Deductions</td>
                                                                         <td>:</td>
-                                                                        <td style="text-align: right;">'.number_format($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$lesslate, 2, '.', ',').'</td>
+                                                                        <td style="text-align: right;">'.number_format($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$cashloansss+$lesslate, 2, '.', ',').'</td>
                                                                     </tr>
                                                                     <tr><td><br></td></tr>
                                                                     <tr><td><br><br></td></tr>
                                                                     <tr>
                                                                         <td><b>NET PAY</b></td>
                                                                         <td>:</td>
-                                                                        <td style="text-align: right;"><b>'.number_format(($basicpay+$overtimepay)-($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$lesslate), 2, '.', ',').'</b></td>
+                                                                        <td style="text-align: right;"><b>'.number_format(($basicpay+$overtimepay)-($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$cashloansss+$lesslate), 2, '.', ',').'</b></td>
                                                                     </tr>
                                                                     <tr><td><br></td></tr>
                                                                     <tr><td><br></td></tr>
@@ -278,7 +279,7 @@ if($type == "1") {
                                                             <table style="width: 100%">
                                                                 <tr>
                                                                     <td><div style="padding-bottom: 5px; padding-top: 5px;">
-                                                               <img src="image/logoonly.png" width="50" height="50" style="float: left; margin-right: 5px;" /><h5>HURT AJ FABRICATION<br>AND ENTERPRISES CO.</h5>
+                                                               <img src="image/logopayslip.png" width="50" height="50" style="float: left; margin-right: 5px;" /><h5>HURT AJ FABRICATION ENTERPRISES<br/> AND CONSTRUCTION COMPANY</h5>
                                                                 </div></td>
                                                                     <td></td>
                                                                     <td></td>
@@ -328,7 +329,7 @@ if($type == "1") {
                                                                         <td style="text-align: right;">'.number_format($basicregot, 2, '.', ',').'</td>
                                                                         <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;SSS Loan</td>
                                                                         <td></td>
-                                                                        <td style="text-align: right;">0.00</td>
+                                                                        <td style="text-align: right;">'.number_format($cashloansss, 2, '.', ',').'</td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>&nbsp;Sunday</td>
@@ -392,7 +393,7 @@ if($type == "1") {
                                                                         <td style="text-align: right;">'.number_format($basicpay+$overtimepay, 2, '.', ',').'</td>
                                                                         <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;<b>TOTAL DEDUCTIONS</b></td>
                                                                         <td></td>
-                                                                        <td style="text-align: right;">'.number_format($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$lesslate, 2, '.', ',').'</td>
+                                                                        <td style="text-align: right;">'.number_format($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$cashloansss+$lesslate, 2, '.', ',').'</td>
                                                                     </tr>
                                                                     <tr style="border-bottom: 1px solid #000;border-top: 1px solid #ddd;padding: 3px;">
                                                                         <td></td>
@@ -400,7 +401,7 @@ if($type == "1") {
                                                                         <td></td>
                                                                         <td>&nbsp;<B>NET PAY</B></td>
                                                                         <td>:</td>
-                                                                        <td style="text-align: right;"><B>'.number_format(($basicpay+$overtimepay)-($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$lesslate), 2, '.', ',').'</B></td>
+                                                                        <td style="text-align: right;"><B>'.number_format(($basicpay+$overtimepay)-($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$cashloansss+$lesslate), 2, '.', ',').'</B></td>
                                                                     </tr>
                                                                 </table>
                                                             
@@ -416,7 +417,7 @@ if($type == "1") {
                                                      <div class="row">
                                                         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border-bottom: 1px solid #ddd;">
                                                             <div style="padding-bottom: 5px; padding-top: 5px;">
-                                                           <img src="image/logoonly.png" width="50" height="50" style="float: left; margin-right: 5px;" /><h5>HURT AJ FABRICATION<br>AND ENTERPRISES CO.</h5>
+                                                           <img src="image/logopayslip.png" width="50" height="50" style="float: left; margin-right: 5px;" /><h5>HURT AJ FABRICATION ENTERPRISES AND CON...</h5>
                                                             </div>
                                                            <table style="width: 100%; font-size: 13px; margin-bottom: 16px;">
                                                                 <tr>
@@ -440,14 +441,14 @@ if($type == "1") {
                                                                 <tr>
                                                                     <td>Total Deductions</td>
                                                                     <td>:</td>
-                                                                    <td style="text-align: right;">'.number_format($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$lesslate, 2, '.', ',').'</td>
+                                                                    <td style="text-align: right;">'.number_format($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$cashloansss+$lesslate, 2, '.', ',').'</td>
                                                                 </tr>
                                                                 <tr><td><br></td></tr>
                                                                 <tr><td><br><br></td></tr>
                                                                 <tr>
                                                                     <td><b>NET PAY</b></td>
                                                                     <td>:</td>
-                                                                    <td style="text-align: right;"><b>'.number_format(($basicpay+$overtimepay)-($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$lesslate), 2, '.', ',').'</b></td>
+                                                                    <td style="text-align: right;"><b>'.number_format(($basicpay+$overtimepay)-($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$cashloansss+$lesslate), 2, '.', ',').'</b></td>
                                                                 </tr>
                                                                 <tr><td><br></td></tr>
                                                                 <tr><td><br></td></tr>
@@ -469,7 +470,7 @@ if($type == "1") {
                                                         <table style="width: 100%">
                                                             <tr>
                                                                 <td><div style="padding-bottom: 5px; padding-top: 5px;">
-                                                           <img src="image/logoonly.png" width="50" height="50" style="float: left; margin-right: 5px;" /><h5>HURT AJ FABRICATION<br>AND ENTERPRISES CO.</h5>
+                                                           <img src="image/logopayslip.png" width="50" height="50" style="float: left; margin-right: 5px;" /><h5>HURT AJ FABRICATION ENTERPRISES<br/> AND CONSTRUCTION COMPANY</h5>
                                                             </div></td>
                                                                 <td></td>
                                                                 <td></td>
@@ -519,7 +520,7 @@ if($type == "1") {
                                                                     <td style="text-align: right;">'.number_format($basicregot, 2, '.', ',').'</td>
                                                                     <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;SSS Loan</td>
                                                                     <td></td>
-                                                                    <td style="text-align: right;">0.00</td>
+                                                                    <td style="text-align: right;">'.number_format($cashloansss, 2, '.', ',').'</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td>&nbsp;Sunday</td>
@@ -583,7 +584,7 @@ if($type == "1") {
                                                                     <td style="text-align: right;">'.number_format($basicpay+$overtimepay, 2, '.', ',').'</td>
                                                                     <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;<b>TOTAL DEDUCTIONS</b></td>
                                                                     <td></td>
-                                                                    <td style="text-align: right;">'.number_format($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$lesslate, 2, '.', ',').'</td>
+                                                                    <td style="text-align: right;">'.number_format($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$cashloansss+$lesslate, 2, '.', ',').'</td>
                                                                 </tr>
                                                                 <tr style="border-bottom: 1px solid #000;border-top: 1px solid #ddd;padding: 3px;">
                                                                     <td></td>
@@ -591,7 +592,7 @@ if($type == "1") {
                                                                     <td></td>
                                                                     <td>&nbsp;<B>NET PAY</B></td>
                                                                     <td>:</td>
-                                                                    <td style="text-align: right;"><B>'.number_format(($basicpay+$overtimepay)-($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$lesslate), 2, '.', ',').'</B></td>
+                                                                    <td style="text-align: right;"><B>'.number_format(($basicpay+$overtimepay)-($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$cashloansss+$lesslate), 2, '.', ',').'</B></td>
                                                                 </tr>
                                                             </table>
                                                         
@@ -608,7 +609,7 @@ if($type == "1") {
                                                     <div class="row">
                                                        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border-bottom: 1px solid #ddd;">
                                                            <div style="padding-bottom: 5px; padding-top: 5px;">
-                                                          <img src="image/logoonly.png" width="50" height="50" style="float: left; margin-right: 5px;" /><h5>HURT AJ FABRICATION<br>AND ENTERPRISES CO.</h5>
+                                                          <img src="image/logopayslip.png" width="50" height="50" style="float: left; margin-right: 5px;" /><h5>HURT AJ FABRICATION ENTERPRISES AND CON...</h5>
                                                            </div>
                                                           <table style="width: 100%; font-size: 13px; margin-bottom: 16px;">
                                                                <tr>
@@ -632,14 +633,14 @@ if($type == "1") {
                                                                <tr>
                                                                    <td>Total Deductions</td>
                                                                    <td>:</td>
-                                                                   <td style="text-align: right;">'.number_format($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$lesslate, 2, '.', ',').'</td>
+                                                                   <td style="text-align: right;">'.number_format($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$cashloansss+$lesslate, 2, '.', ',').'</td>
                                                                </tr>
                                                                <tr><td><br></td></tr>
                                                                <tr><td><br><br></td></tr>
                                                                <tr>
                                                                    <td><b>NET PAY</b></td>
                                                                    <td>:</td>
-                                                                   <td style="text-align: right;"><b>'.number_format(($basicpay+$overtimepay)-($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$lesslate), 2, '.', ',').'</b></td>
+                                                                   <td style="text-align: right;"><b>'.number_format(($basicpay+$overtimepay)-($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$cashloansss+$lesslate), 2, '.', ',').'</b></td>
                                                                </tr>
                                                                <tr><td><br></td></tr>
                                                                <tr><td><br></td></tr>
@@ -661,7 +662,7 @@ if($type == "1") {
                                                        <table style="width: 100%">
                                                            <tr>
                                                                <td><div style="padding-bottom: 5px; padding-top: 5px;">
-                                                          <img src="image/logoonly.png" width="50" height="50" style="float: left; margin-right: 5px;" /><h5>HURT AJ FABRICATION<br>AND ENTERPRISES CO.</h5>
+                                                          <img src="image/logopayslip.png" width="50" height="50" style="float: left; margin-right: 5px;" /><h5>HURT AJ FABRICATION ENTERPRISES<br/> AND CONSTRUCTION COMPANY</h5>
                                                            </div></td>
                                                                <td></td>
                                                                <td></td>
@@ -711,7 +712,7 @@ if($type == "1") {
                                                                    <td style="text-align: right;">'.number_format($basicregot, 2, '.', ',').'</td>
                                                                    <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;SSS Loan</td>
                                                                    <td></td>
-                                                                   <td style="text-align: right;">0.00</td>
+                                                                   <td style="text-align: right;">'.number_format($cashloansss, 2, '.', ',').'</td>
                                                                </tr>
                                                                <tr>
                                                                    <td>&nbsp;Sunday</td>
@@ -775,7 +776,7 @@ if($type == "1") {
                                                                    <td style="text-align: right;">'.number_format($basicpay+$overtimepay, 2, '.', ',').'</td>
                                                                    <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;<b>TOTAL DEDUCTIONS</b></td>
                                                                    <td></td>
-                                                                   <td style="text-align: right;">'.number_format($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$lesslate, 2, '.', ',').'</td>
+                                                                   <td style="text-align: right;">'.number_format($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$cashloansss+$lesslate, 2, '.', ',').'</td>
                                                                </tr>
                                                                <tr style="border-bottom: 1px solid #000;border-top: 1px solid #ddd;padding: 3px;">
                                                                    <td></td>
@@ -783,7 +784,7 @@ if($type == "1") {
                                                                    <td></td>
                                                                    <td>&nbsp;<B>NET PAY</B></td>
                                                                    <td>:</td>
-                                                                   <td style="text-align: right;"><B>'.number_format(($basicpay+$overtimepay)-($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$lesslate), 2, '.', ',').'</B></td>
+                                                                   <td style="text-align: right;"><B>'.number_format(($basicpay+$overtimepay)-($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$cashloansss+$lesslate), 2, '.', ',').'</B></td>
                                                                </tr>
                                                            </table>
                                                        
@@ -840,7 +841,7 @@ if($type == "1") {
                                                          <div class="row">
                                                             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border-bottom: 1px solid #ddd;">
                                                                 <div style="padding-bottom: 5px; padding-top: 5px;">
-                                                               <img src="image/logoonly.png" width="50" height="50" style="float: left; margin-right: 5px;" /><h5>HURT AJ FABRICATION<br>AND ENTERPRISES CO.</h5>
+                                                               <img src="image/logopayslip.png" width="50" height="50" style="float: left; margin-right: 5px;" /><h5>HURT AJ FABRICATION ENTERPRISES AND CON...</h5>
                                                                 </div>
                                                                <table style="width: 100%; font-size: 13px; margin-bottom: 16px;">
                                                                     <tr>
@@ -893,7 +894,7 @@ if($type == "1") {
                                                             <table style="width: 100%">
                                                                 <tr>
                                                                     <td><div style="padding-bottom: 5px; padding-top: 5px;">
-                                                               <img src="image/logoonly.png" width="50" height="50" style="float: left; margin-right: 5px;" /><h5>HURT AJ FABRICATION<br>AND ENTERPRISES CO.</h5>
+                                                               <img src="image/logopayslip.png" width="50" height="50" style="float: left; margin-right: 5px;" /><h5>HURT AJ FABRICATION ENTERPRISES<br/> AND CONSTRUCTION COMPANY</h5>
                                                                 </div></td>
                                                                     <td></td>
                                                                     <td></td>
@@ -1031,7 +1032,7 @@ if($type == "1") {
                                                      <div class="row">
                                                         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border-bottom: 1px solid #ddd;">
                                                             <div style="padding-bottom: 5px; padding-top: 5px;">
-                                                           <img src="image/logoonly.png" width="50" height="50" style="float: left; margin-right: 5px;" /><h5>HURT AJ FABRICATION<br>AND ENTERPRISES CO.</h5>
+                                                           <img src="image/logopayslip.png" width="50" height="50" style="float: left; margin-right: 5px;" /><h5>HURT AJ FABRICATION ENTERPRISES AND CON...</h5>
                                                             </div>
                                                            <table style="width: 100%; font-size: 13px; margin-bottom: 16px;">
                                                                 <tr>
@@ -1055,14 +1056,14 @@ if($type == "1") {
                                                                 <tr>
                                                                     <td>Total Deductions</td>
                                                                     <td>:</td>
-                                                                    <td style="text-align: right;">'.number_format($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$lesslate, 2, '.', ',').'</td>
+                                                                    <td style="text-align: right;">'.number_format($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$cashloansss+$lesslate, 2, '.', ',').'</td>
                                                                 </tr>
                                                                 <tr><td><br></td></tr>
                                                                 <tr><td><br><br></td></tr>
                                                                 <tr>
                                                                     <td><b>NET PAY</b></td>
                                                                     <td>:</td>
-                                                                    <td style="text-align: right;"><b>'.number_format(($basicpay+$overtimepay)-($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$lesslate), 2, '.', ',').'</b></td>
+                                                                    <td style="text-align: right;"><b>'.number_format(($basicpay+$overtimepay)-($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$cashloansss+$lesslate), 2, '.', ',').'</b></td>
                                                                 </tr>
                                                                 <tr><td><br></td></tr>
                                                                 <tr><td><br></td></tr>
@@ -1084,7 +1085,7 @@ if($type == "1") {
                                                         <table style="width: 100%">
                                                             <tr>
                                                                 <td><div style="padding-bottom: 5px; padding-top: 5px;">
-                                                           <img src="image/logoonly.png" width="50" height="50" style="float: left; margin-right: 5px;" /><h5>HURT AJ FABRICATION<br>AND ENTERPRISES CO.</h5>
+                                                           <img src="image/logopayslip.png" width="50" height="50" style="float: left; margin-right: 5px;" /><h5>HURT AJ FABRICATION ENTERPRISES<br/> AND CONSTRUCTION COMPANY</h5>
                                                             </div></td>
                                                                 <td></td>
                                                                 <td></td>
@@ -1134,7 +1135,7 @@ if($type == "1") {
                                                                     <td style="text-align: right;">'.number_format($basicregot, 2, '.', ',').'</td>
                                                                     <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;SSS Loan</td>
                                                                     <td></td>
-                                                                    <td style="text-align: right;">0.00</td>
+                                                                    <td style="text-align: right;">'.number_format($cashloansss, 2, '.', ',').'</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td>&nbsp;Sunday</td>
@@ -1198,7 +1199,7 @@ if($type == "1") {
                                                                     <td style="text-align: right;">'.number_format($basicpay+$overtimepay, 2, '.', ',').'</td>
                                                                     <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;<b>TOTAL DEDUCTIONS</b></td>
                                                                     <td></td>
-                                                                    <td style="text-align: right;">'.number_format($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$lesslate, 2, '.', ',').'</td>
+                                                                    <td style="text-align: right;">'.number_format($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$cashloansss+$lesslate, 2, '.', ',').'</td>
                                                                 </tr>
                                                                 <tr style="border-bottom: 1px solid #000;border-top: 1px solid #ddd;padding: 3px;">
                                                                     <td></td>
@@ -1206,7 +1207,7 @@ if($type == "1") {
                                                                     <td></td>
                                                                     <td>&nbsp;<B>NET PAY</B></td>
                                                                     <td>:</td>
-                                                                    <td style="text-align: right;"><B>'.number_format(($basicpay+$overtimepay)-($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$lesslate), 2, '.', ',').'</B></td>
+                                                                    <td style="text-align: right;"><B>'.number_format(($basicpay+$overtimepay)-($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$cashloansss+$lesslate), 2, '.', ',').'</B></td>
                                                                 </tr>
                                                             </table>
                                                         
@@ -1223,7 +1224,7 @@ if($type == "1") {
                                                     <div class="row">
                                                        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border-bottom: 1px solid #ddd;">
                                                            <div style="padding-bottom: 5px; padding-top: 5px;">
-                                                          <img src="image/logoonly.png" width="50" height="50" style="float: left; margin-right: 5px;" /><h5>HURT AJ FABRICATION<br>AND ENTERPRISES CO.</h5>
+                                                          <img src="image/logopayslip.png" width="50" height="50" style="float: left; margin-right: 5px;" /><h5>HURT AJ FABRICATION ENTERPRISES AND CON...</h5>
                                                            </div>
                                                           <table style="width: 100%; font-size: 13px; margin-bottom: 16px;">
                                                                <tr>
@@ -1247,14 +1248,14 @@ if($type == "1") {
                                                                <tr>
                                                                    <td>Total Deductions</td>
                                                                    <td>:</td>
-                                                                   <td style="text-align: right;">'.number_format($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$lesslate, 2, '.', ',').'</td>
+                                                                   <td style="text-align: right;">'.number_format($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$cashloansss+$lesslate, 2, '.', ',').'</td>
                                                                </tr>
                                                                <tr><td><br></td></tr>
                                                                <tr><td><br><br></td></tr>
                                                                <tr>
                                                                    <td><b>NET PAY</b></td>
                                                                    <td>:</td>
-                                                                   <td style="text-align: right;"><b>'.number_format(($basicpay+$overtimepay)-($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$lesslate), 2, '.', ',').'</b></td>
+                                                                   <td style="text-align: right;"><b>'.number_format(($basicpay+$overtimepay)-($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$cashloansss+$lesslate), 2, '.', ',').'</b></td>
                                                                </tr>
                                                                <tr><td><br></td></tr>
                                                                <tr><td><br></td></tr>
@@ -1276,7 +1277,7 @@ if($type == "1") {
                                                        <table style="width: 100%">
                                                            <tr>
                                                                <td><div style="padding-bottom: 5px; padding-top: 5px;">
-                                                          <img src="image/logoonly.png" width="50" height="50" style="float: left; margin-right: 5px;" /><h5>HURT AJ FABRICATION<br>AND ENTERPRISES CO.</h5>
+                                                          <img src="image/logopayslip.png" width="50" height="50" style="float: left; margin-right: 5px;" /><h5>HURT AJ FABRICATION ENTERPRISES<br/> AND CONSTRUCTION COMPANY</h5>
                                                            </div></td>
                                                                <td></td>
                                                                <td></td>
@@ -1326,7 +1327,7 @@ if($type == "1") {
                                                                    <td style="text-align: right;">'.number_format($basicregot, 2, '.', ',').'</td>
                                                                    <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;SSS Loan</td>
                                                                    <td></td>
-                                                                   <td style="text-align: right;">0.00</td>
+                                                                   <td style="text-align: right;">'.number_format($cashloansss, 2, '.', ',').'</td>
                                                                </tr>
                                                                <tr>
                                                                    <td>&nbsp;Sunday</td>
@@ -1390,7 +1391,7 @@ if($type == "1") {
                                                                    <td style="text-align: right;">'.number_format($basicpay+$overtimepay, 2, '.', ',').'</td>
                                                                    <td style="border-left: 1px solid #ddd;height: 1px;">&nbsp;<b>TOTAL DEDUCTIONS</b></td>
                                                                    <td></td>
-                                                                   <td style="text-align: right;">'.number_format($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$lesslate, 2, '.', ',').'</td>
+                                                                   <td style="text-align: right;">'.number_format($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$cashloansss+$lesslate, 2, '.', ',').'</td>
                                                                </tr>
                                                                <tr style="border-bottom: 1px solid #000;border-top: 1px solid #ddd;padding: 3px;">
                                                                    <td></td>
@@ -1398,7 +1399,7 @@ if($type == "1") {
                                                                    <td></td>
                                                                    <td>&nbsp;<B>NET PAY</B></td>
                                                                    <td>:</td>
-                                                                   <td style="text-align: right;"><B>'.number_format(($basicpay+$overtimepay)-($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$lesslate), 2, '.', ',').'</B></td>
+                                                                   <td style="text-align: right;"><B>'.number_format(($basicpay+$overtimepay)-($ssscont+$philhealthcont+$pagibigcont+$taxcont+$cashadvance+$cashloan+$cashloansss+$lesslate), 2, '.', ',').'</B></td>
                                                                </tr>
                                                            </table>
                                                        

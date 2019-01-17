@@ -19,7 +19,7 @@ $count = 0;
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Hurt AJ Admin - Print Leave Form</title>
     <!-- FavIcon -->
-    <link rel="icon" type="image/png" href="img/fav.png" />
+    <link rel="icon" type="image/png" href="image/logoonly.png" />
     <!-- Bootstrap -->
     <!-- <link href="css/bootstrap.min.css" rel="stylesheet"> -->
     <!-- Latest compiled and minified CSS -->
@@ -43,21 +43,48 @@ $count = 0;
       height: 12px;
       width: 12px;
       background-color: #ffffff;
-      border: 1px solid #000000;
       display: inline-block; 
     }
     .squarebox {
       height: 80px;
       width: 100%;
       background-color: #ffffff;
-      border: 1px solid #000000;
     }
     .whole-border {
-      border: 1px solid #000000; 
-      padding-bottom: 15px;
+    }
+    .table-bordered {
+        border: none !important;
+    }
+    .table>thead:first-child>tr:first-child>th {
+        border: none !important;
+        font-size: 5px !important;
+    }
+    .table {
+        margin-bottom: 0px;
+        
+    }
+    table.table-bordered{
+    border:1px solid #000000;
+  }
+    #wp-text {
+        color: rgba(255, 255, 255, 1) !important;
     }
     #page-break { page-break-after: always; }
     @page { size: auto;  margin: 0mm; }
+    @media print {
+        .table>thead:first-child>tr:first-child>th,
+        #wp-text {
+            color: rgba(255, 255, 255, 1) !important;
+        }
+
+        @media print and (-webkit-min-device-pixel-ratio:0) {
+        .table>thead:first-child>tr:first-child>th,
+        #wp-text {
+            color: rgba(255, 255, 255, 1) !important;
+            -webkit-print-color-adjust: exact;
+        }
+      }
+    }
     </style>
   </head>
   <body>
@@ -66,70 +93,260 @@ $count = 0;
         <div class="row">
         <?php for($i = 0; $i < $formcount; $i++) {
           $count++;
-          if($count != 6) {
+          if($count != 2) {
               echo '
-                  <div class="col-md-6 col-sm-6 col-xs-6 whole-border">
-                    <h3>Leave Form</h3>
-                    <p style="font-size: 12px;">HURT AJ ENTERPRISES CORPORATION</p>
-                    <hr> 
-                    <div class="row">
-                     <div class="col-md-4 col-sm-4 col-xs-4">
-                            Employee ID:<br>
-                            From (Date):<br>
-                            To (Date):<br><br>
-                            Type:
-                     </div>
-                     <div class="col-md-8 col-sm-8 col-xs-8">
-                            _______________________________<br>
-                            _______________________________<br>
-                            _______________________________<br><br>
-                            Sick <div class="square"></div> &nbsp; &nbsp; &nbsp; Vacation <div class="square"></div>
-                     </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <br>Reason:
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="squarebox"></div>
-                        </div>
-                    </div>
+                  <div class="col-md-12 col-sm-12 col-xs-12 whole-border">
+                  <table class="table table-bordered">
+                  <thead>
+                  <tr style="border: none; color: white;  font-size: 10px;">
+                  <th style=" padding: 0px;">asdasd</th>
+                  <th style=" padding: 0px;">asdasd</th>
+                  <th style=" padding: 0px;">asdasd</th>
+                  <th style=" padding: 0px;">asdasd</th>
+                  <th style=" padding: 0px;">asdasd</th>
+                  <th style=" padding: 0px;">asdasd</th>
+                  <th style=" padding: 0px;">asdasd</th>
+                  <th style=" padding: 0px;">asdasd</th>
+                  <th style=" padding: 0px;">asdasd</th>
+                  <th style=" padding: 0px;">asdasd</th>
+                  <th style=" padding: 0px;">asdasd</th>
+                </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td colspan="7"><center style="font-weight: 900; font-size: 11px;">HURT AJ FABRICATION ENTERPRISES AND CONSTRUCTION COMPANY</center></td>
+                      <td colspan="4"><center style="font-weight: 900; font-size: 11px;">APPLICATION FOR LEAVE OF ABSENCE</center></td>
+                    </tr>
+                    <tr>
+                      <td colspan="5" style="padding: 0px 0px 17px 4px; font-size: 12px;">NAME</td>
+                      <td colspan="2" style="padding: 0px 0px 17px 4px; font-size: 12px;">POSITION</td>
+                      <td colspan="2" style="padding: 0px 0px 17px 4px; font-size: 12px;">ID NO.</td>
+                      <td colspan="2" style="padding: 0px 0px 17px 4px; font-size: 12px;">DATE</td>
+                    </tr>
+                    <tr>
+                      <td colspan="7" style="padding: 0px 0px 0px 4px; font-size: 12px;">DEPARTMENT</td>
+                      <td colspan="4"><center style=" font-size: 12px;">Regular ____ &nbsp; Casual _____</center></td>
+                    </tr>
+                    <tr>
+                      <td colspan="1" style="padding: 8px 0px 8px 4px; font-size: 12px;">DATE OF LEAVE:</td>
+                      <td colspan="4" style="padding: 0px 0px 0px 4px; font-size: 12px;">FROM</td>
+                      <td colspan="3" style="padding: 0px 0px 0px 4px; font-size: 12px;">TO</td>
+                      <td colspan="3" style="padding: 0px 0px 0px 4px; font-size: 12px;">NO. OF DAYS</td>
+                    </tr>
+                    <tr>
+                      <td colspan="5" style="padding: 0px 0px 3px 4px; font-size: 12px;">ADDRESS WHILE ON LEAVE</td>
+                      <td colspan="3" style="padding: 0px 8px 3px 8px;"><center style="font-weight: 900; font-size: 12px;">FOR ACCOUNTING USE<br>ONLY</center></td>
+                      <td colspan="1" style="padding: 0px 8px 3px 8px;"><center style="font-weight: 900; font-size: 12px;">VACATION LEAVE</center></td>
+                      <td colspan="1" style="padding: 0px 8px 3px 8px;"><center style="font-weight: 900; font-size: 12px;">SICK LEAVE</center></td>
+                      <td colspan="1" style="padding: 0px 8px 3px 8px;"><center style="font-weight: 900; font-size: 12px;">FORCED LEAVE</center></td>
+                    </tr>
+                    <tr>
+                      <td colspan="5" style="padding: 0px 0px 0px 4px; font-size: 12px;">REASON/S:<br/><br/><br/><br/><br/><span style=" font-size: 12px;">REMARKS:</span></td>
+                      <td colspan="6" style="padding: 0px;">
+                      <table class="table table-bordered" style="margin-bottom: 0px;">
+                      <tbody>
+                            <tr>
+                            <td style="padding: 0px 0px 0px 8px; font-size: 12px;" width="39%"><span>APPLIED FOR</span></td>
+                            <td style="padding: 0px 0px 0px 0px; margin: 0px 10px 0px 50px;" width="23%"><center style="font-size: 12px;">WP | WOP</td>
+                            <td style="padding: 0px 0px 0px 0px;" width="16.8%"><center style="font-size: 12px;">WP | WOP</center></td>
+                            <td style="padding: 0px 0px 0px 0px;"><center style="font-size: 12px;">WP | WOP</center></td>
+                            </tr>
+                            <tr>
+                            <td style="padding: 0px 0px 0px 8px; font-size: 12px;">APPROVED</td>
+                            <td style="padding: 0px 0px 0px 0px; font-size: 12px;"><center style="font-size: 12px;"><span id="wp-text">WP</span> | <span id="wp-text">WOP</span></center></td>
+                            <td style="padding: 0px 0px 0px 0px; font-size: 12px;"><center style="font-size: 12px;"><span id="wp-text">WP</span> | <span id="wp-text">WOP</span></center></td>
+                            <td style="padding: 0px 0px 0px 0px; font-size: 12px;"><center style="font-size: 12px;"><span id="wp-text">WP</span> | <span id="wp-text">WOP</span></center></td>
+                            </tr>
+                            <tr>
+                            <td style="padding: 0px 0px 0px 8px; font-size: 12px;">BAL. DEC. 31, 20___</td>
+                            <td style="padding: 0px 0px 0px 0px; font-size: 12px;" id="wp-text">yessir</td>
+                            <td style="padding: 0px 0px 0px 0px; font-size: 12px;" id="wp-text">yessir</td>
+                            <td style="padding: 0px 0px 0px 0px; font-size: 12px;" id="wp-text">yessir</td>
+                            </tr>
+                            <tr>
+                            <td style="padding: 0px 0px 0px 8px; font-size: 12px;">20___ LEAVES</td>
+                            <td style="padding: 0px 0px 0px 0px; font-size: 12px;" id="wp-text">yessir</td>
+                            <td style="padding: 0px 0px 0px 0px; font-size: 12px;" id="wp-text">yessir</td>
+                            <td style="padding: 0px 0px 0px 0px; font-size: 12px;" id="wp-text">yessir</td>
+                            </tr>
+                            <tr>
+                            <td style="padding: 0px 0px 0px 8px; font-size: 12px;">TOTAL AVAIL. LEAVES</td>
+                            <td style="padding: 0px 0px 0px 0px; font-size: 12px;" id="wp-text">yessir</td>
+                            <td style="padding: 0px 0px 0px 0px; font-size: 12px;" id="wp-text">yessir</td>
+                            <td style="padding: 0px 0px 0px 0px; font-size: 12px;" id="wp-text">yessir</td>
+                            </tr>
+                            <tr>
+                            <td style="padding: 0px 0px 0px 8px; font-size: 12px;">AVAILED LEAVES</td>
+                            <td style="padding: 0px 0px 0px 0px; font-size: 12px;" id="wp-text">yessir</td>
+                            <td style="padding: 0px 0px 0px 0px; font-size: 12px;" id="wp-text">yessir</td>
+                            <td style="padding: 0px 0px 0px 0px; font-size: 12px;" id="wp-text">yessir</td>
+                            </tr>
+                            <tr>
+                            <td style="padding: 0px 0px 0px 8px; font-size: 12px;">BALANCE_____20___</td>
+                            <td style="padding: 0px 0px 0px 0px; font-size: 12px;" id="wp-text">yessir</td>
+                            <td style="padding: 0px 0px 0px 0px; font-size: 12px;" id="wp-text">yessir</td>
+                            <td style="padding: 0px 0px 0px 0px; font-size: 12px;" id="wp-text">yessir</td>
+                            </tr>
+                            <tr>
+                            <td style="padding: 0px 0px 0px 8px; font-size: 12px;">TODAY\'S LEAVE</td>
+                            <td style="padding: 0px 0px 0px 0px; font-size: 12px;" id="wp-text">yessir</td>
+                            <td style="padding: 0px 0px 0px 0px; font-size: 12px;" id="wp-text">yessir</td>
+                            <td style="padding: 0px 0px 0px 0px; font-size: 12px;" id="wp-text">yessir</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="11" style="padding: 0px 0px 0px 4px; font-size: 12px;">
+                      NOTE:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vacation Leave:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Seven (7) days advance notice required.
+                      <br>
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sick Leave:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Submit Medical Certificate for absences of two (2) or more days.
+                      <br>
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Non-compliance of the above shall subject employee to disciplinary action<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in accordance with company policies and procedures.
+                      <br>
+                      <br>
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I agree that I have fully read and understood the above. I also hereby certify that&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONFORME: _________________<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the reason/s stated for my being absent are true to the best of my knowledge.
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="3" style="padding: 0px 0px 0px 4px; font-size: 12px;">REQUESTED BY:<br/><br/><center style="font-size: 12px;">Application</center></td>
+                      <td colspan="3" style="padding: 0px 0px 0px 4px; font-size: 12px;">NOTED BY:<br/><br/><center style="font-size: 12px;">Immediate Supervisor</center></td>
+                      <td colspan="3" style="padding: 0px 0px 0px 4px; font-size: 12px;">VERIFIED BY:<br/><br/><center style="font-size: 12px;">HR Department</center></td>
+                      <td colspan="2" style="padding: 0px 0px 0px 4px; font-size: 12px;">APPROVED BY:</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <hr style="margin-bottom: 2px;">
                   </div>
+                
               ';
           } else {
               $count = 0;
               echo '
-                  <div class="col-md-6 col-sm-6 col-xs-6 whole-border" style="margin-bottom: 3px;">
-                    <h3>Leave Form</h3>
-                    <p style="font-size: 12px;">HURT AJ ENTERPRISES CORPORATION</p>
-                    <hr> 
-                    <div class="row">
-                     <div class="col-md-4 col-sm-4 col-xs-4">
-                            Employee ID:<br>
-                            From (Date):<br>
-                            To (Date):<br><br>
-                            Type:
-                     </div>
-                     <div class="col-md-8 col-sm-8 col-xs-8">
-                            _______________________________<br>
-                            _______________________________<br>
-                            _______________________________<br><br>
-                            Sick <div class="square"></div> &nbsp; &nbsp; &nbsp; Vacation <div class="square"></div>
-                     </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <br>Reason:
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="squarebox"></div>
-                        </div>
-                    </div>
-                  </div>
+              <div class="col-md-12 col-sm-12 col-xs-12 whole-border">
+              <table class="table table-bordered">
+              <thead>
+              <tr style="border: none; color: white;  font-size: 10px;">
+              <th style=" padding: 0px;">asdasd</th>
+              <th style=" padding: 0px;">asdasd</th>
+              <th style=" padding: 0px;">asdasd</th>
+              <th style=" padding: 0px;">asdasd</th>
+              <th style=" padding: 0px;">asdasd</th>
+              <th style=" padding: 0px;">asdasd</th>
+              <th style=" padding: 0px;">asdasd</th>
+              <th style=" padding: 0px;">asdasd</th>
+              <th style=" padding: 0px;">asdasd</th>
+              <th style=" padding: 0px;">asdasd</th>
+              <th style=" padding: 0px;">asdasd</th>
+            </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="7"><center style="font-weight: 900; font-size: 11px;">HURT AJ FABRICATION ENTERPRISES AND CONSTRUCTION COMPANY</center></td>
+                  <td colspan="4"><center style="font-weight: 900; font-size: 11px;">APPLICATION FOR LEAVE OF ABSENCE</center></td>
+                </tr>
+                <tr>
+                  <td colspan="5" style="padding: 0px 0px 17px 4px; font-size: 12px;">NAME</td>
+                  <td colspan="2" style="padding: 0px 0px 17px 4px; font-size: 12px;">POSITION</td>
+                  <td colspan="2" style="padding: 0px 0px 17px 4px; font-size: 12px;">ID NO.</td>
+                  <td colspan="2" style="padding: 0px 0px 17px 4px; font-size: 12px;">DATE</td>
+                </tr>
+                <tr>
+                  <td colspan="7" style="padding: 0px 0px 0px 4px; font-size: 12px;">DEPARTMENT</td>
+                  <td colspan="4"><center style=" font-size: 12px;">Regular ____ &nbsp; Casual _____</center></td>
+                </tr>
+                <tr>
+                  <td colspan="1" style="padding: 8px 0px 8px 4px; font-size: 12px;">DATE OF LEAVE:</td>
+                  <td colspan="4" style="padding: 0px 0px 0px 4px; font-size: 12px;">FROM</td>
+                  <td colspan="3" style="padding: 0px 0px 0px 4px; font-size: 12px;">TO</td>
+                  <td colspan="3" style="padding: 0px 0px 0px 4px; font-size: 12px;">NO. OF DAYS</td>
+                </tr>
+                <tr>
+                  <td colspan="5" style="padding: 0px 0px 3px 4px; font-size: 12px;">ADDRESS WHILE ON LEAVE</td>
+                  <td colspan="3" style="padding: 0px 8px 3px 8px;"><center style="font-weight: 900; font-size: 12px;">FOR ACCOUNTING USE<br>ONLY</center></td>
+                  <td colspan="1" style="padding: 0px 8px 3px 8px;"><center style="font-weight: 900; font-size: 12px;">VACATION LEAVE</center></td>
+                  <td colspan="1" style="padding: 0px 8px 3px 8px;"><center style="font-weight: 900; font-size: 12px;">SICK LEAVE</center></td>
+                  <td colspan="1" style="padding: 0px 8px 3px 8px;"><center style="font-weight: 900; font-size: 12px;">FORCED LEAVE</center></td>
+                </tr>
+                <tr>
+                  <td colspan="5" style="padding: 0px 0px 0px 4px; font-size: 12px;">REASON/S:<br/><br/><br/><br/><br/><span style=" font-size: 12px;">REMARKS:</span></td>
+                  <td colspan="6" style="padding: 0px;">
+                  <table class="table table-bordered" style="margin-bottom: 0px;">
+                  <tbody>
+                        <tr>
+                        <td style="padding: 0px 0px 0px 8px; font-size: 12px;" width="39%"><span>APPLIED FOR</span></td>
+                        <td style="padding: 0px 0px 0px 0px; margin: 0px 10px 0px 50px;" width="23%"><center style="font-size: 12px;">WP | WOP</td>
+                        <td style="padding: 0px 0px 0px 0px;" width="16.8%"><center style="font-size: 12px;">WP | WOP</center></td>
+                        <td style="padding: 0px 0px 0px 0px;"><center style="font-size: 12px;">WP | WOP</center></td>
+                        </tr>
+                        <tr>
+                        <td style="padding: 0px 0px 0px 8px; font-size: 12px;">APPROVED</td>
+                        <td style="padding: 0px 0px 0px 0px; font-size: 12px;"><center style="font-size: 12px;"><span id="wp-text">WP</span> | <span id="wp-text">WOP</span></center></td>
+                        <td style="padding: 0px 0px 0px 0px; font-size: 12px;"><center style="font-size: 12px;"><span id="wp-text">WP</span> | <span id="wp-text">WOP</span></center></td>
+                        <td style="padding: 0px 0px 0px 0px; font-size: 12px;"><center style="font-size: 12px;"><span id="wp-text">WP</span> | <span id="wp-text">WOP</span></center></td>
+                        </tr>
+                        <tr>
+                        <td style="padding: 0px 0px 0px 8px; font-size: 12px;">BAL. DEC. 31, 20___</td>
+                        <td style="padding: 0px 0px 0px 0px; font-size: 12px;" id="wp-text">yessir</td>
+                        <td style="padding: 0px 0px 0px 0px; font-size: 12px;" id="wp-text">yessir</td>
+                        <td style="padding: 0px 0px 0px 0px; font-size: 12px;" id="wp-text">yessir</td>
+                        </tr>
+                        <tr>
+                        <td style="padding: 0px 0px 0px 8px; font-size: 12px;">20___ LEAVES</td>
+                        <td style="padding: 0px 0px 0px 0px; font-size: 12px;" id="wp-text">yessir</td>
+                        <td style="padding: 0px 0px 0px 0px; font-size: 12px;" id="wp-text">yessir</td>
+                        <td style="padding: 0px 0px 0px 0px; font-size: 12px;" id="wp-text">yessir</td>
+                        </tr>
+                        <tr>
+                        <td style="padding: 0px 0px 0px 8px; font-size: 12px;">TOTAL AVAIL. LEAVES</td>
+                        <td style="padding: 0px 0px 0px 0px; font-size: 12px;" id="wp-text">yessir</td>
+                        <td style="padding: 0px 0px 0px 0px; font-size: 12px;" id="wp-text">yessir</td>
+                        <td style="padding: 0px 0px 0px 0px; font-size: 12px;" id="wp-text">yessir</td>
+                        </tr>
+                        <tr>
+                        <td style="padding: 0px 0px 0px 8px; font-size: 12px;">AVAILED LEAVES</td>
+                        <td style="padding: 0px 0px 0px 0px; font-size: 12px;" id="wp-text">yessir</td>
+                        <td style="padding: 0px 0px 0px 0px; font-size: 12px;" id="wp-text">yessir</td>
+                        <td style="padding: 0px 0px 0px 0px; font-size: 12px;" id="wp-text">yessir</td>
+                        </tr>
+                        <tr>
+                        <td style="padding: 0px 0px 0px 8px; font-size: 12px;">BALANCE_____20___</td>
+                        <td style="padding: 0px 0px 0px 0px; font-size: 12px;" id="wp-text">yessir</td>
+                        <td style="padding: 0px 0px 0px 0px; font-size: 12px;" id="wp-text">yessir</td>
+                        <td style="padding: 0px 0px 0px 0px; font-size: 12px;" id="wp-text">yessir</td>
+                        </tr>
+                        <tr>
+                        <td style="padding: 0px 0px 0px 8px; font-size: 12px;">TODAY\'S LEAVE</td>
+                        <td style="padding: 0px 0px 0px 0px; font-size: 12px;" id="wp-text">yessir</td>
+                        <td style="padding: 0px 0px 0px 0px; font-size: 12px;" id="wp-text">yessir</td>
+                        <td style="padding: 0px 0px 0px 0px; font-size: 12px;" id="wp-text">yessir</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="11" style="padding: 0px 0px 0px 4px; font-size: 12px;">
+                  NOTE:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vacation Leave:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Seven (7) days advance notice required.
+                  <br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sick Leave:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Submit Medical Certificate for absences of two (2) or more days.
+                  <br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Non-compliance of the above shall subject employee to disciplinary action<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in accordance with company policies and procedures.
+                  <br>
+                  <br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I agree that I have fully read and understood the above. I also hereby certify that&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONFORME: _________________<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the reason/s stated for my being absent are true to the best of my knowledge.
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="3" style="padding: 0px 0px 0px 4px; font-size: 12px;">REQUESTED BY:<br/><br/><center style="font-size: 12px;">Application</center></td>
+                  <td colspan="3" style="padding: 0px 0px 0px 4px; font-size: 12px;">NOTED BY:<br/><br/><center style="font-size: 12px;">Immediate Supervisor</center></td>
+                  <td colspan="3" style="padding: 0px 0px 0px 4px; font-size: 12px;">VERIFIED BY:<br/><br/><center style="font-size: 12px;">HR Department</center></td>
+                  <td colspan="2" style="padding: 0px 0px 0px 4px; font-size: 12px;">APPROVED BY:</td>
+                </tr>
+              </tbody>
+            </table>
+              </div>
               ';
           }
         } ?> 

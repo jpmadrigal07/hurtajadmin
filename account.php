@@ -826,10 +826,15 @@ if(
                                             <span class="input-group-addon add-on"><span class="glyphicon glyphicon-search"></span></span>
                                         </div>
                                         <hr>
+                                        <div id="collectiblesSelectedButtons" hidden>
+                                        <span id="collectiblesSelectedCount" style="font-weight: 900;">0</span> Selected </span><a type="button" class="btn btn-primary" href="javascript: void(0)" onclick="openCollectiblesMarkManyPaidDialog()">Paid All Selected</a> <a type="button" class="btn btn-primary" href="javascript: void(0)" onclick="openCollectiblesDeleteManyDialog()">Delete All Selected</a>
+                                        <hr>
+                                        </div>
                                         <div id="collectibles-search-result">
-                                        <table class="table >">
+                                        <table class="table table-bordered">
                                             <thead>
                                                 <tr>
+                                                    <th><input type="checkbox" name="cb1" id="collectibles-all-checkbox" onclick="checkUncheckAll()"/></th>
                                                     <th>#</th>
                                                     <th>Client/Company</th>
                                                     <th>Total Amount</th>
@@ -845,8 +850,8 @@ if(
                                                 $sql = "SELECT * FROM hurtajadmin_collectibles WHERE collectibles_status = '1' ORDER BY id DESC";
                                                 $query = mysqli_query($db_conn, $sql);
                                                 $count = 0;
+                                                $collectiblesidarray = "[";
                                                 while($row = mysqli_fetch_array($query)) {  
-                                                    $count++; 
                                                     $recid = $row["id"];
                                                     $companyid = $row["company_id"];
 
@@ -856,6 +861,12 @@ if(
                                                     $querycount1 = mysqli_num_rows($query1);
 
                                                     while($row1 = mysqli_fetch_array($query1)) {
+                                                        $count++; 
+                                                        if($count == 1) {
+                                                            $collectiblesidarray .= $recid;
+                                                        } else {
+                                                            $collectiblesidarray .= ','.$recid;
+                                                        }
                                                         $companyname = $row1["company_name"];
                                                     }
 
@@ -925,6 +936,7 @@ if(
 
                                                         echo '
                                                         <tr>
+                                                        <td><input type="checkbox" name="collectibles-checkbox" id="collectibles-checkbox" onclick="addToAgeingCollectibleIdArray('.$recid.')"/></td>
                                                         <td>'.$count.'</td>
                                                         <td>'.$companyname.'</td>           
                                                         <td>'.$totalamount.'</td>
@@ -932,14 +944,16 @@ if(
                                                         <td>'.$maturitydate.'</td>
                                                         <td>'.$leftdays.'</td>
                                                         <td>'.$exceeddays.'</td>
-                                                        <td><a href="javascript:void(0)" onclick="openCollectiblesInfoDialog(\''.$count.'\',\''.$companyname.'\',\''.$totalamount.'\',\''.$ponumber.'\',\''.$invocenumber.'\',\''.$invoicedate.'\',\''.$maturitydate.'\',\''.$drnumber.'\',\''.$deliverydate.'\',\''.$remarkspaid.'\',\''.$ornumber.'\',\''.$ordate.'\')">More</a> | <a href="javascript:void(0)" onclick="openCollectiblesEditDialog(\''.$recid.'\',\''.$companyid.'\',\''.$totalamount.'\',\''.$ponumber.'\',\''.$invocenumber.'\',\''.$editinvoicedate.'\',\''.$editmaturitydate.'\',\''.$drnumber.'\',\''.$editdeliverydate.'\',\''.$remarkspaid.'\',\''.$ornumber.'\',\''.$editordate.'\')">Edit</a> | <a href="javascript:void(0)" onclick="openCollectiblesMarkPaidDialog('.$recid.')">Paid</a> | <a href="javascript:void(0)" onclick="openCollectiblesDeleteDialog('.$recid.')">Delete</a></td>
+                                                        <td><a href="javascript:void(0)" onclick="openCollectiblesInfoDialog(\''.$count.'\',\''.$companyname.'\',\''.$totalamount.'\',\''.$ponumber.'\',\''.$invocenumber.'\',\''.$invoicedate.'\',\''.$maturitydate.'\',\''.$drnumber.'\',\''.$deliverydate.'\',\''.$remarkspaid.'\',\''.$ornumber.'\',\''.$ordate.'\')">More</a> | <a href="javascript:void(0)" onclick="openCollectiblesEditDialog(\''.$recid.'\',\''.$companyid.'\',\''.$totalamount.'\',\''.$ponumber.'\',\''.$invocenumber.'\',\''.$editinvoicedate.'\',\''.$editmaturitydate.'\',\''.$drnumber.'\',\''.$editdeliverydate.'\',\''.$remarkspaid.'\',\''.$ornumber.'\',\''.$editordate.'\')">Edit</a> | <a href="javascript:void(0)" onclick="openCollectiblesMarkPaidDialog('.$recid.',\''.$leftdays.'\',\''.$exceeddays.'\')">Paid</a> | <a href="javascript:void(0)" onclick="openCollectiblesDeleteDialog('.$recid.')">Delete</a></td>
                                                         </tr>
                                                         ';   
 
                                                     }
 
                                                   }
+                                                  $collectiblesidarray .= "]";
                                                 ?>
+                                                <input type="hidden" id="collectibles-all-checkbox-id" value="<?php echo $collectiblesidarray; ?>"/>
                                             </tbody>
                                         </table>
                                         </div>
@@ -967,10 +981,15 @@ if(
                                             <span class="input-group-addon add-on"><span class="glyphicon glyphicon-search"></span></span>
                                         </div>
                                         <hr>
+                                        <div id="collectiblesSelectedButtons" hidden>
+                                        <span id="collectiblesSelectedCount" style="font-weight: 900;">0</span> Selected </span><a type="button" class="btn btn-primary" href="javascript: void(0)" onclick="openCollectiblesMarkManyUnpaidDialog()">Unpaid All Selected</a> <a type="button" class="btn btn-primary" href="javascript: void(0)" onclick="openCollectiblesDeleteManyDialog()">Delete All Selected</a>
+                                        <hr>
+                                        </div>
                                         <div id="paid-collectibles-search-result">
                                         <table class="table table-bordered">
                                             <thead>
                                                 <tr>
+                                                    <th><input type="checkbox" name="cb1" id="collectibles-all-checkbox" onclick="checkUncheckAll()"/></th>
                                                     <th>#</th>
                                                     <th>Client/Company</th>
                                                     <th>Total Amount</th>
@@ -986,14 +1005,22 @@ if(
                                                 $sql = "SELECT * FROM hurtajadmin_collectibles WHERE collectibles_status = '2' ORDER BY id DESC";
                                                 $query = mysqli_query($db_conn, $sql);
                                                 $count = 0;
+                                                $collectiblesidarray = "[";
                                                 while($row = mysqli_fetch_array($query)) {  
-                                                    $count++; 
+                                                    
                                                     $recid = $row["id"];
                                                     $companyid = $row["company_id"];
 
-                                                    $sql1 = "SELECT * FROM hurtajadmin_company WHERE id = '$companyid' ORDER BY id DESC";
+                                                    $sql1 = "SELECT * FROM hurtajadmin_company WHERE id = '$companyid' AND company_status = '1' ORDER BY id DESC";
                                                     $query1 = mysqli_query($db_conn, $sql1);
+                                                    $querycount1 = mysqli_num_rows($query1);
                                                     while($row1 = mysqli_fetch_array($query1)) {
+                                                        $count++; 
+                                                        if($count == 1) {
+                                                            $collectiblesidarray .= $recid;
+                                                          } else {
+                                                              $collectiblesidarray .= ','.$recid;
+                                                          }
                                                         $companyname = $row1["company_name"];
                                                     }
 
@@ -1002,6 +1029,8 @@ if(
                                                     $invocenumber = $row["collectibles_invoice_number"];
                                                     $invoicedate = $row["collectibles_invoice_date"];
                                                     $maturitydate = $row["collectibles_maturity_date"];
+                                                    $paidleftdays = $row["collectibles_paid_left_days"];
+                                                    $paidexceeddays = $row["collectibles_paid_exceed_days"];
                                                     $drnumber = $row["collectibles_dr_number"];
                                                     $deliverydate = $row["collectibles_delivery_date"];
                                                     $remarkspaid = $row["collectibles_remarks_paid"];
@@ -1057,21 +1086,28 @@ if(
 
                                                     $dateadded = date("F d, Y", strtotime($dateadded));
 
+                                                    if($querycount1 > 0) {
+
                                                     echo '
                                                     <tr>
+                                                    <td><input type="checkbox" name="collectibles-checkbox" id="collectibles-checkbox" onclick="addToAgeingCollectibleIdArray('.$recid.')"/></td>
                                                     <td>'.$count.'</td>
                                                     <td>'.$companyname.'</td>           
                                                     <td>'.$totalamount.'</td>
                                                     <td>'.$invoicedate.'</td>
                                                     <td>'.$maturitydate.'</td>
-                                                    <td>'.$leftdays.'</td>
-                                                    <td>'.$exceeddays.'</td>
+                                                    <td>'.$paidleftdays.'</td>
+                                                    <td>'.$paidexceeddays.'</td>
                                                     <td><a href="javascript:void(0)" onclick="openCollectiblesInfoDialog(\''.$count.'\',\''.$companyname.'\',\''.$totalamount.'\',\''.$ponumber.'\',\''.$invocenumber.'\',\''.$invoicedate.'\',\''.$maturitydate.'\',\''.$drnumber.'\',\''.$deliverydate.'\',\''.$remarkspaid.'\',\''.$ornumber.'\',\''.$ordate.'\')">More</a> | <a href="javascript:void(0)" onclick="openCollectiblesEditDialog(\''.$recid.'\',\''.$companyid.'\',\''.$totalamount.'\',\''.$ponumber.'\',\''.$invocenumber.'\',\''.$editinvoicedate.'\',\''.$editmaturitydate.'\',\''.$drnumber.'\',\''.$editdeliverydate.'\',\''.$remarkspaid.'\',\''.$ornumber.'\',\''.$editordate.'\')">Edit</a> | <a href="javascript:void(0)" onclick="openCollectiblesMarkUnpaidDialog('.$recid.')">Unpaid</a> | <a href="javascript:void(0)" onclick="openCollectiblesDeleteDialog('.$recid.')">Delete</a></td>
                                                     </tr>
                                                     ';   
 
+                                                    }
+
                                                   }
+                                                  $collectiblesidarray .= "]";
                                                 ?>
+                                                <input type="hidden" id="collectibles-all-checkbox-id" value="<?php echo $collectiblesidarray; ?>"/>
                                             </tbody>
                                         </table>
                                         </div>
@@ -1099,10 +1135,15 @@ if(
                                             <span class="input-group-addon add-on"><span class="glyphicon glyphicon-search"></span></span>
                                         </div>
                                         <hr>
+                                        <div id="collectiblesSelectedButtons" hidden>
+                                        <span id="collectiblesSelectedCount" style="font-weight: 900;">0</span> Selected </span><a type="button" class="btn btn-primary" href="javascript: void(0)" onclick="openPayablesMarkManyPaidDialog()">Paid All Selected</a> <a type="button" class="btn btn-primary" href="javascript: void(0)" onclick="openPayablesMarkManyUnpaidDialog()">Unpaid All Selected</a> <a type="button" class="btn btn-primary" href="javascript: void(0)" onclick="openPayablesDeleteManyDialog()">Delete All Selected</a>
+                                        <hr>
+                                        </div>
                                         <div id="payables-search-result">
-                                        <table class="table table-striped">
+                                        <table class="table table-bordered">
                                             <thead>
                                                 <tr>
+                                                    <th><input type="checkbox" name="cb1" id="collectibles-all-checkbox" onclick="checkUncheckAll()"/></th>
                                                     <th>#</th>
                                                     <th>Supplier</th>
                                                     <th>Total Amount</th>
@@ -1123,23 +1164,27 @@ if(
                                                 , hurtajadmin_payables.payables_invoice_number
                                                 , hurtajadmin_payables.payables_invoice_date 
                                                 , hurtajadmin_payables.payables_maturity_date 
+                                                , hurtajadmin_payables.payables_paid_left_days 
+                                                , hurtajadmin_payables.payables_paid_exceed_days 
                                                 , hurtajadmin_payables.payables_dr_number 
                                                 , hurtajadmin_payables.payables_delivery_date 
                                                 , hurtajadmin_payables.payables_bank
                                                 , hurtajadmin_payables.payables_check_number 
                                                 , hurtajadmin_payables.payables_check_date 
                                                 , hurtajadmin_payables.payables_date_added
+                                                , hurtajadmin_payables.payables_status
                                                 , hurtajadmin_supplier.id AS supplier_id
                                                 , hurtajadmin_supplier.supplier_name  
                                                 FROM hurtajadmin_payables
                                                 LEFT JOIN hurtajadmin_supplier
                                                 ON hurtajadmin_payables.supplier_id=hurtajadmin_supplier.id
-                                                WHERE hurtajadmin_payables.payables_status = '1'
+                                                WHERE (hurtajadmin_payables.payables_status = '1' OR hurtajadmin_payables.payables_status = '2')
                                                 AND hurtajadmin_supplier.supplier_status = '1' 
                                                 ORDER BY hurtajadmin_supplier.supplier_name";
 
                                                 $query = mysqli_query($db_conn, $sql);
                                                 $count = 0;
+                                                $collectiblesidarray = "[";
                                                 while($row = mysqli_fetch_array($query)) {  
                                                     $count++; 
                                                     $recid = $row["id"];
@@ -1150,25 +1195,42 @@ if(
                                                     $invocenumber = $row["payables_invoice_number"];
                                                     $invoicedate = $row["payables_invoice_date"];
                                                     $maturitydate = $row["payables_maturity_date"];
+                                                    $paidleftdays = $row["payables_paid_left_days"];
+                                                    $paidexceeddays = $row["payables_paid_exceed_days"];
                                                     $drnumber = $row["payables_dr_number"];
                                                     $deliverydate = $row["payables_delivery_date"];
                                                     $bank = $row["payables_bank"];
                                                     $checknumber = $row["payables_check_number"];
                                                     $checkdate = $row["payables_check_date"];
                                                     $dateadded = $row["payables_date_added"];
+                                                    $stat = $row["payables_status"];
 
-                                                    $now = time(); // or your date as well
-                                                    $your_date = strtotime($maturitydate);
-                                                    $datediff = $your_date - $now;
-                                                    $datediff = round($datediff / (60 * 60 * 24));
+                                                    if($count == 1) {
+                                                        $collectiblesidarray .= $recid;
+                                                    } else {
+                                                        $collectiblesidarray .= ','.$recid;
+                                                    }
 
+                                                    $paidbutton = '';
                                                     $exceeddays = 0;
                                                     $leftdays = 0;
 
-                                                    if($datediff < 0) {
-                                                        $exceeddays = abs($datediff);
-                                                    } else if($datediff > 0) {
-                                                        $leftdays = $datediff;
+                                                    if($stat == "1") {
+                                                        $now = time(); // or your date as well
+                                                        $your_date = strtotime($maturitydate);
+                                                        $datediff = $your_date - $now;
+                                                        $datediff = round($datediff / (60 * 60 * 24));
+
+                                                        if($datediff < 0) {
+                                                            $exceeddays = abs($datediff);
+                                                        } else if($datediff > 0) {
+                                                            $leftdays = $datediff;
+                                                        }
+                                                        $paidbutton = '| <a href="javascript:void(0)" onclick="openPayablesMarkPaidDialog('.$recid.',\''.$exceeddays.'\',\''.$leftdays.'\')">Paid</a>';
+                                                    } else if($stat == "2") {
+                                                        $exceeddays = $paidexceeddays;
+                                                        $leftdays = $paidleftdays;
+                                                        $paidbutton = '| <a href="javascript:void(0)" onclick="openPayablesMarkUnpaidDialog('.$recid.')">Unpaid</a>';
                                                     }
 
                                                     if($invoicedate != "" && $invoicedate != "1970-01-01 01:00:00" && $invoicedate != "1970-01-01 00:00:00" && $invoicedate != "0000-00-00 00:00:00") {
@@ -1207,6 +1269,7 @@ if(
 
                                                     echo '
                                                     <tr>
+                                                    <td><input type="checkbox" name="collectibles-checkbox" id="collectibles-checkbox" onclick="addToAgeingCollectibleIdArray('.$recid.')"/></td>
                                                     <td>'.$count.'</td>
                                                     <td>'.$suppliername.'</td>           
                                                     <td>'.$totalamount.'</td>
@@ -1216,12 +1279,14 @@ if(
                                                     <td>'.$invocenumber.'</td>
                                                     <td>'.$leftdays.'</td>
                                                     <td>'.$exceeddays.'</td>
-                                                    <td><a href="javascript:void(0)" onclick="openPayablesInfoDialog(\''.$count.'\',\''.$suppliername.'\',\''.$totalamount.'\',\''.$ponumber.'\',\''.$invocenumber.'\',\''.$invoicedate.'\',\''.$maturitydate.'\',\''.$drnumber.'\',\''.$deliverydate.'\',\''.$bank.'\',\''.$checknumber.'\',\''.$checkdate.'\')">More</a> | <a href="javascript:void(0)" onclick="openPayablesEditDialog(\''.$recid.'\',\''.$supplierid.'\',\''.$totalamount.'\',\''.$ponumber.'\',\''.$invocenumber.'\',\''.$editinvoicedate.'\',\''.$editmaturitydate.'\',\''.$drnumber.'\',\''.$editdeliverydate.'\',\''.$bank.'\',\''.$checknumber.'\',\''.$editcheckdate.'\')">Edit</a> | <a href="javascript:void(0)" onclick="openPayablesDeleteDialog('.$recid.')">Delete</a></td>
+                                                    <td><a href="javascript:void(0)" onclick="openPayablesInfoDialog(\''.$count.'\',\''.$suppliername.'\',\''.$totalamount.'\',\''.$ponumber.'\',\''.$invocenumber.'\',\''.$invoicedate.'\',\''.$maturitydate.'\',\''.$drnumber.'\',\''.$deliverydate.'\',\''.$bank.'\',\''.$checknumber.'\',\''.$checkdate.'\')">More</a> | <a href="javascript:void(0)" onclick="openPayablesEditDialog(\''.$recid.'\',\''.$supplierid.'\',\''.$totalamount.'\',\''.$ponumber.'\',\''.$invocenumber.'\',\''.$editinvoicedate.'\',\''.$editmaturitydate.'\',\''.$drnumber.'\',\''.$editdeliverydate.'\',\''.$bank.'\',\''.$checknumber.'\',\''.$editcheckdate.'\')">Edit</a> '.$paidbutton.'  | <a href="javascript:void(0)" onclick="openPayablesDeleteDialog('.$recid.')">Delete</a></td>
                                                     </tr>
                                                     ';   
 
                                                   }
+                                                  $collectiblesidarray .= "]";
                                                 ?>
+                                                <input type="hidden" id="collectibles-all-checkbox-id" value="<?php echo $collectiblesidarray; ?>"/>
                                             </tbody>
                                         </table>
                                         </div>
@@ -1542,6 +1607,8 @@ if(
                                                     $cashloansecondcycle = 0;
                                                     $cashadvancefirstcycle = 0;
                                                     $cashadvancesecondcycle = 0;
+                                                    $cashloansssfirstcycle = 0;
+                                                    $cashloanssssecondcycle = 0;
                                                     $holidayfirstcycle = 0;
                                                     $holidaysecondcycle = 0;
 
@@ -1565,7 +1632,7 @@ if(
 
                                                         $dateindate = date("Y-m-d", strtotime($datein));
 
-                                                        $latecount1 = $latecount1 + round((strtotime($datein) - strtotime($dateindate." 08:00:00"))/3600, 1);
+                                                        $latecount1 = $latecount1 + round((strtotime($datein) - strtotime($dateindate." 08:06:00"))/3600, 1);
 
                                                         if($latecount1 < 0.01) {
                                                             $latecount1 = 0;
@@ -1578,17 +1645,37 @@ if(
                                                             while($rowout = mysqli_fetch_array($queryout)) {
                                                                 $attendanceidout = $rowout["id"];  
                                                                 $dateout = $rowout["attendance_date_in_out"];
+                                                                $dateoutdate = date("Y-m-d", strtotime($dateout));
                                                             }
+
                                                             $hourdiff = round((strtotime($dateout) - strtotime($datein))/3600, 1);
-                                                               
-                                                            if($hourdiff > 8){ // this is for overtime 
-                                                                $otcount1 = $hourdiff - 8;
-                                                                $dailycount1 = $hourdiff - $otcount1;
-                                                            } else if($hourdiff < 8){ // this is for undertime
-                                                                $utcount1 = $hourdiff;
+
+                                                            // IF DATE IN AND DATE OUT IS WITHIN 7:30 AM AND 6PM, IT WILL COUNT AS REGULAR TIME ELSE ALL EXCESS IS COUNT AS OVERTIME
+
+                                                            $dateinstrtotime = strtotime($datein);
+                                                            $dateoutstrtotime = strtotime($dateout);
+
+                                                            $dateinminregulartimestrtotime = strtotime($dateindate. " 07:30:00");
+                                                            $dateinmaxregulartimestrtotime = strtotime($dateoutdate. " 18:00:00");
+
+                                                            if($dateinstrtotime > $dateinminregulartimestrtotime && $dateinmaxregulartimestrtotime >= $dateoutstrtotime) {
                                                                 $dailycount1 = $hourdiff;
+                                                                if($dailycount1 > 9.5) {
+                                                                    $dailycount1 = 9.5;
+                                                                }
                                                             } else {
-                                                                $dailycount1 = $hourdiff;
+                                                                if($dateinminregulartimestrtotime > $dateinstrtotime && $dateinmaxregulartimestrtotime >= $dateoutstrtotime) {
+                                                                    $otcount1 = round(($dateinminregulartimestrtotime - $dateinstrtotime)/3600, 1);
+                                                                    $dailycount1 = $hourdiff - $otcount1;
+                                                                } else if($dateinstrtotime > $dateinminregulartimestrtotime && $dateoutstrtotime > $dateinmaxregulartimestrtotime) {
+                                                                    $otcount1 = round(($dateoutstrtotime - $dateinmaxregulartimestrtotime)/3600, 1);
+                                                                    $dailycount1 = $hourdiff - $otcount1;
+                                                                } else {
+                                                                    $otcount1 = $otcount1 + round(($dateinminregulartimestrtotime - $dateinstrtotime)/3600, 1);
+
+                                                                    $otcount1 = $otcount1 + round(($dateoutstrtotime - $dateinmaxregulartimestrtotime)/3600, 1);
+                                                                    $dailycount1 = $hourdiff - $otcount1;
+                                                                }
                                                             }
                                                             
                                                             $hoursworked1 = $hoursworked1+$dailycount1;
@@ -1654,7 +1741,7 @@ if(
 
                                                         $dateindate = date("Y-m-d", strtotime($datein));
 
-                                                        $latecount2 = $latecount2 + round((strtotime($datein) - strtotime($dateindate." 08:00:00"))/3600, 1);
+                                                        $latecount2 = $latecount2 + round((strtotime($datein) - strtotime($dateindate." 08:06:00"))/3600, 1);
 
                                                         if($latecount2 < 0.01) {
                                                             $latecount2 = 0;
@@ -1667,17 +1754,37 @@ if(
                                                             while($rowout = mysqli_fetch_array($queryout)) {
                                                                 $attendanceidout = $rowout["id"];  
                                                                 $dateout = $rowout["attendance_date_in_out"];
+                                                                $dateoutdate = date("Y-m-d", strtotime($dateout));
                                                             }
                                                             $hourdiff = round((strtotime($dateout) - strtotime($datein))/3600, 1);
-                                                              
-                                                            if($hourdiff > 8){ // this is for overtime 
-                                                                $otcount2 = $hourdiff - 8;
-                                                                $dailycount2 = $hourdiff - $otcount2;
-                                                            }else if($hourdiff < 8){ // this is for undertime
-                                                                $utcount2 = $hourdiff;
+
+                                                            // IF DATE IN AND DATE OUT IS WITHIN 7:30 AM AND 6PM, IT WILL COUNT AS REGULAR TIME ELSE ALL EXCESS IS COUNT AS OVERTIME
+
+                                                            $dateinstrtotime = strtotime($datein);
+                                                            $dateoutstrtotime = strtotime($dateout);
+
+                                                            $dateinminregulartimestrtotime = strtotime($dateindate. " 07:30:00");
+                                                            $dateinmaxregulartimestrtotime = strtotime($dateoutdate. " 18:00:00");
+
+                                                            if($dateinstrtotime > $dateinminregulartimestrtotime && $dateinmaxregulartimestrtotime >= $dateoutstrtotime) {
                                                                 $dailycount2 = $hourdiff;
-                                                            }else{
-                                                                $dailycount2 = $hourdiff;
+                                                                if($dailycount2 > 9.5) {
+                                                                    $dailycount2 = 9.5;
+                                                                }
+                                                            } else {
+
+                                                                if($dateinminregulartimestrtotime > $dateinstrtotime && $dateinmaxregulartimestrtotime >= $dateoutstrtotime) {
+                                                                    $otcount2 = round(($dateinminregulartimestrtotime - $dateinstrtotime)/3600, 1);
+                                                                    $dailycount2 = $hourdiff - $otcount2;
+                                                                } else if($dateinstrtotime > $dateinminregulartimestrtotime && $dateoutstrtotime > $dateinmaxregulartimestrtotime) {
+                                                                    $otcount2 = round(($dateoutstrtotime - $dateinmaxregulartimestrtotime)/3600, 1);
+                                                                    $dailycount2 = $hourdiff - $otcount2;
+                                                                } else {
+                                                                    $otcount2 = $otcount2 + round(($dateinminregulartimestrtotime - $dateinstrtotime)/3600, 1);
+
+                                                                    $otcount2 = $otcount2 + round(($dateoutstrtotime - $dateinmaxregulartimestrtotime)/3600, 1);
+                                                                    $dailycount2 = $hourdiff - $otcount2;
+                                                                }
                                                             }
                                                             
                                                             $hoursworked2 = $hoursworked2+$dailycount2;
@@ -1889,6 +1996,10 @@ if(
                                                         if($count31 > 0) {
                                                             while($row31 = mysqli_fetch_array($query31)) {  
                                                                 $ssscont2 = $row31["sss_contribution_contribution"];
+                                                                $totalmonthlyssscont = $ssscont1 + $ssscont2;
+                                                                if($totalmonthlyssscont > 581) {
+                                                                    $ssscont2 = 581 - $ssscont1;
+                                                                }
                                                                 if($ssscont2 == "") {
                                                                     $ssscont2 = 0;
                                                                 }
@@ -1953,6 +2064,8 @@ if(
                                                                 $cashloanfirstcycle = $cashloanfirstcycle+$row6["cash_loan_advance_amount"];
                                                             } else if($cltype == "2") {
                                                                 $cashadvancefirstcycle = $cashadvancefirstcycle+$row6["cash_loan_advance_amount"];
+                                                            } else if($cltype == "3") {
+                                                                $cashloansssfirstcycle = $cashloansssfirstcycle+$row6["cash_loan_advance_amount"];
                                                             }
                                                             
                                                         }
@@ -1967,6 +2080,8 @@ if(
                                                                 $cashloansecondcycle = $cashloansecondcycle+$row7["cash_loan_advance_amount"];
                                                             } else if($cltype == "2") {
                                                                 $cashadvancesecondcycle = $cashadvancesecondcycle+$row7["cash_loan_advance_amount"];
+                                                            } else if($cltype == "3") {
+                                                                $cashloanssssecondcycle = $cashloanssssecondcycle+$row7["cash_loan_advance_amount"];
                                                             }
                                                         }
                                                     }
@@ -1996,16 +2111,16 @@ if(
                                                     $payroll_settings_paycheck_base_2= 0;
                                                     
                                                     if($perhour > 0) {
-                                                        if($deductions1 > 0 && ($cashloanfirstcycle > 0 || $cashadvancefirstcycle > 0) && $hoursworked1 > 0) { 
-                                                            $payroll_settings_paycheck_deducted_1 = ($perhour*$hoursworked1+$perhour*$xotcount1)-$deductions1-$cashloanfirstcycle-$cashadvancefirstcycle;
+                                                        if($deductions1 > 0 && ($cashloanfirstcycle > 0 || $cashadvancefirstcycle > 0 || $cashloansssfirstcycle > 0) && $hoursworked1 > 0) { 
+                                                            $payroll_settings_paycheck_deducted_1 = ($perhour*$hoursworked1+$perhour*$xotcount1)-$deductions1-$cashloanfirstcycle-$cashadvancefirstcycle-$cashloansssfirstcycle;
                                                             $payroll_settings_paycheck_base_1 = $perhour*$hoursworked1+$perhour*$xotcount1;
-                                                        } else if($deductions1 > 0 && $cashloanfirstcycle < 1 && $cashadvancefirstcycle < 1 && $hoursworked1 > 0) {
+                                                        } else if($deductions1 > 0 && $cashloanfirstcycle < 1 && $cashadvancefirstcycle < 1 && $cashloansssfirstcycle < 1 && $hoursworked1 > 0) {
                                                             $payroll_settings_paycheck_deducted_1 = ($perhour*$hoursworked1+$perhour*$xotcount1)-$deductions1;
                                                             $payroll_settings_paycheck_base_1 = $perhour*$hoursworked1+$perhour*$xotcount1;
-                                                        } else if($deductions1 < 1 && ($cashloanfirstcycle > 0 || $cashadvancefirstcycle > 0)  && $hoursworked1 > 0) { 
-                                                            $payroll_settings_paycheck_deducted_1 = ($perhour*$hoursworked1+$perhour*$xotcount1)-$cashloanfirstcycle-$cashadvancefirstcycle;
+                                                        } else if($deductions1 < 1 && ($cashloanfirstcycle > 0 || $cashadvancefirstcycle > 0 || $cashloansssfirstcycle > 0)  && $hoursworked1 > 0) { 
+                                                            $payroll_settings_paycheck_deducted_1 = ($perhour*$hoursworked1+$perhour*$xotcount1)-$cashloanfirstcycle-$cashadvancefirstcycle-$cashloansssfirstcycle;
                                                             $payroll_settings_paycheck_base_1 = $perhour*$hoursworked1+$perhour*$xotcount1;
-                                                        } else if($deductions1 < 1 && $cashloanfirstcycle < 1 && $cashadvancefirstcycle < 1  && $hoursworked1 > 0) { 
+                                                        } else if($deductions1 < 1 && $cashloanfirstcycle < 1 && $cashadvancefirstcycle < 1 && $cashloansssfirstcycle < 1 && $hoursworked1 > 0) { 
                                                             $payroll_settings_paycheck_deducted_1 = $perhour*$hoursworked1+$perhour*$xotcount1;
                                                             $payroll_settings_paycheck_base_1 = $perhour*$hoursworked1+$perhour*$xotcount1;
                                                         } else {
@@ -2016,16 +2131,16 @@ if(
                                                     }
 
                                                     if($perhour > 0) {
-                                                        if($deductions2 > 0 && ($cashloansecondcycle > 0 || $cashadvancesecondcycle > 0) && $hoursworked2 > 0) { 
-                                                            $payroll_settings_paycheck_deducted_2 = ($perhour*$hoursworked2+$perhour*$xotcount2)-$deductions2-$cashloansecondcycle-$cashadvancesecondcycle;
+                                                        if($deductions2 > 0 && ($cashloansecondcycle > 0 || $cashadvancesecondcycle > 0 || $cashloanssssecondcycle > 0) && $hoursworked2 > 0) { 
+                                                            $payroll_settings_paycheck_deducted_2 = ($perhour*$hoursworked2+$perhour*$xotcount2)-$deductions2-$cashloansecondcycle-$cashadvancesecondcycle-$cashloanssssecondcycle;
                                                             $payroll_settings_paycheck_base_2 = $perhour*$hoursworked2+$perhour*$xotcount2;
-                                                        } else if($deductions2 > 0 && $cashloansecondcycle < 1 && $cashadvancesecondcycle < 1 && $hoursworked2 > 0) { 
+                                                        } else if($deductions2 > 0 && $cashloansecondcycle < 1 && $cashadvancesecondcycle < 1 && $cashloanssssecondcycle < 1 && $hoursworked2 > 0) { 
                                                             $payroll_settings_paycheck_deducted_2 = ($perhour*$hoursworked2+$perhour*$xotcount2)-$deductions2;
                                                             $payroll_settings_paycheck_base_2 = $perhour*$hoursworked2+$perhour*$xotcount2;
-                                                        } else if($deductions2 < 1 && ($cashloansecondcycle > 0 || $cashadvancesecondcycle > 0) && $hoursworked2 > 0) { 
-                                                            $payroll_settings_paycheck_deducted_2 = ($perhour*$hoursworked2+$perhour*$xotcount2)-$cashadvancesecondcycle;
+                                                        } else if($deductions2 < 1 && ($cashloansecondcycle > 0 || $cashadvancesecondcycle > 0 || $cashloanssssecondcycle > 0) && $hoursworked2 > 0) { 
+                                                            $payroll_settings_paycheck_deducted_2 = ($perhour*$hoursworked2+$perhour*$xotcount2)-$cashadvancesecondcycle-$cashloansecondcycle-$cashloanssssecondcycle;
                                                             $payroll_settings_paycheck_base_2 = $perhour*$hoursworked2+$perhour*$xotcount2;
-                                                        } else if($deductions2 < 1 && $cashloansecondcycle < 1 && $cashadvancesecondcycle < 1 && $hoursworked2 > 0) { 
+                                                        } else if($deductions2 < 1 && $cashloansecondcycle < 1 && $cashadvancesecondcycle < 1 && $cashloanssssecondcycle < 1 && $hoursworked2 > 0) { 
                                                             $payroll_settings_paycheck_deducted_2 = $perhour*$hoursworked2+$perhour*$xotcount2;
                                                             $payroll_settings_paycheck_base_2 = $perhour*$hoursworked2+$perhour*$xotcount2;
                                                         } else {
@@ -2116,6 +2231,8 @@ if(
                                                         $typetext = "Loan";
                                                     } else if($type == "2") {
                                                         $typetext = "Advance";
+                                                    } else if($type == "3") {
+                                                        $typetext = "SSS Loan";
                                                     }
 
                                                     echo '
@@ -2555,6 +2672,8 @@ if(
                                                     $cashloansecondcycle = 0;
                                                     $cashadvancefirstcycle = 0;
                                                     $cashadvancesecondcycle = 0;
+                                                    $cashloansssfirstcycle = 0;
+                                                    $cashloanssssecondcycle = 0;
                                                     $holidayfirstcycle = 0;
                                                     $holidaysecondcycle = 0;
 
@@ -2578,7 +2697,7 @@ if(
 
                                                         $dateindate = date("Y-m-d", strtotime($datein));
 
-                                                        $latecount1 = $latecount1 + round((strtotime($datein) - strtotime($dateindate." 08:00:00"))/3600, 1);
+                                                        $latecount1 = $latecount1 + round((strtotime($datein) - strtotime($dateindate." 08:06:00"))/3600, 1);
 
                                                         if($latecount1 < 0.01) {
                                                             $latecount1 = 0;
@@ -2591,17 +2710,37 @@ if(
                                                             while($rowout = mysqli_fetch_array($queryout)) {
                                                                 $attendanceidout = $rowout["id"];  
                                                                 $dateout = $rowout["attendance_date_in_out"];
+                                                                $dateoutdate = date("Y-m-d", strtotime($dateout));
                                                             }
+
                                                             $hourdiff = round((strtotime($dateout) - strtotime($datein))/3600, 1);
-                                                               
-                                                            if($hourdiff > 8){ // this is for overtime 
-                                                                $otcount1 = $hourdiff - 8;
-                                                                $dailycount1 = $hourdiff - $otcount1;
-                                                            } else if($hourdiff < 8){ // this is for undertime
-                                                                $utcount1 = $hourdiff;
+
+                                                            // IF DATE IN AND DATE OUT IS WITHIN 7:30 AM AND 6PM, IT WILL COUNT AS REGULAR TIME ELSE ALL EXCESS IS COUNT AS OVERTIME
+
+                                                            $dateinstrtotime = strtotime($datein);
+                                                            $dateoutstrtotime = strtotime($dateout);
+
+                                                            $dateinminregulartimestrtotime = strtotime($dateindate. " 07:30:00");
+                                                            $dateinmaxregulartimestrtotime = strtotime($dateoutdate. " 18:00:00");
+
+                                                            if($dateinstrtotime > $dateinminregulartimestrtotime && $dateinmaxregulartimestrtotime >= $dateoutstrtotime) {
                                                                 $dailycount1 = $hourdiff;
+                                                                if($dailycount1 > 9.5) {
+                                                                    $dailycount1 = 9.5;
+                                                                }
                                                             } else {
-                                                                $dailycount1 = $hourdiff;
+                                                                if($dateinminregulartimestrtotime > $dateinstrtotime && $dateinmaxregulartimestrtotime >= $dateoutstrtotime) {
+                                                                    $otcount1 = round(($dateinminregulartimestrtotime - $dateinstrtotime)/3600, 1);
+                                                                    $dailycount1 = $hourdiff - $otcount1;
+                                                                } else if($dateinstrtotime > $dateinminregulartimestrtotime && $dateoutstrtotime > $dateinmaxregulartimestrtotime) {
+                                                                    $otcount1 = round(($dateoutstrtotime - $dateinmaxregulartimestrtotime)/3600, 1);
+                                                                    $dailycount1 = $hourdiff - $otcount1;
+                                                                } else {
+                                                                    $otcount1 = $otcount1 + round(($dateinminregulartimestrtotime - $dateinstrtotime)/3600, 1);
+
+                                                                    $otcount1 = $otcount1 + round(($dateoutstrtotime - $dateinmaxregulartimestrtotime)/3600, 1);
+                                                                    $dailycount1 = $hourdiff - $otcount1;
+                                                                }
                                                             }
                                                             
                                                             $hoursworked1 = $hoursworked1+$dailycount1;
@@ -2667,7 +2806,7 @@ if(
 
                                                         $dateindate = date("Y-m-d", strtotime($datein));
 
-                                                        $latecount2 = $latecount2 + round((strtotime($datein) - strtotime($dateindate." 08:00:00"))/3600, 1);
+                                                        $latecount2 = $latecount2 + round((strtotime($datein) - strtotime($dateindate." 08:06:00"))/3600, 1);
 
                                                         if($latecount2 < 0.01) {
                                                             $latecount2 = 0;
@@ -2680,17 +2819,37 @@ if(
                                                             while($rowout = mysqli_fetch_array($queryout)) {
                                                                 $attendanceidout = $rowout["id"];  
                                                                 $dateout = $rowout["attendance_date_in_out"];
+                                                                $dateoutdate = date("Y-m-d", strtotime($dateout));
                                                             }
                                                             $hourdiff = round((strtotime($dateout) - strtotime($datein))/3600, 1);
-                                                              
-                                                            if($hourdiff > 8){ // this is for overtime 
-                                                                $otcount2 = $hourdiff - 8;
-                                                                $dailycount2 = $hourdiff - $otcount2;
-                                                            }else if($hourdiff < 8){ // this is for undertime
-                                                                $utcount2 = $hourdiff;
+
+                                                            // IF DATE IN AND DATE OUT IS WITHIN 7:30 AM AND 6PM, IT WILL COUNT AS REGULAR TIME ELSE ALL EXCESS IS COUNT AS OVERTIME
+
+                                                            $dateinstrtotime = strtotime($datein);
+                                                            $dateoutstrtotime = strtotime($dateout);
+
+                                                            $dateinminregulartimestrtotime = strtotime($dateindate. " 07:30:00");
+                                                            $dateinmaxregulartimestrtotime = strtotime($dateoutdate. " 18:00:00");
+
+                                                            if($dateinstrtotime > $dateinminregulartimestrtotime && $dateinmaxregulartimestrtotime >= $dateoutstrtotime) {
                                                                 $dailycount2 = $hourdiff;
-                                                            }else{
-                                                                $dailycount2 = $hourdiff;
+                                                                if($dailycount2 > 9.5) {
+                                                                    $dailycount2 = 9.5;
+                                                                }
+                                                            } else {
+
+                                                                if($dateinminregulartimestrtotime > $dateinstrtotime && $dateinmaxregulartimestrtotime >= $dateoutstrtotime) {
+                                                                    $otcount2 = round(($dateinminregulartimestrtotime - $dateinstrtotime)/3600, 1);
+                                                                    $dailycount2 = $hourdiff - $otcount2;
+                                                                } else if($dateinstrtotime > $dateinminregulartimestrtotime && $dateoutstrtotime > $dateinmaxregulartimestrtotime) {
+                                                                    $otcount2 = round(($dateoutstrtotime - $dateinmaxregulartimestrtotime)/3600, 1);
+                                                                    $dailycount2 = $hourdiff - $otcount2;
+                                                                } else {
+                                                                    $otcount2 = $otcount2 + round(($dateinminregulartimestrtotime - $dateinstrtotime)/3600, 1);
+
+                                                                    $otcount2 = $otcount2 + round(($dateoutstrtotime - $dateinmaxregulartimestrtotime)/3600, 1);
+                                                                    $dailycount2 = $hourdiff - $otcount2;
+                                                                }
                                                             }
                                                             
                                                             $hoursworked2 = $hoursworked2+$dailycount2;
@@ -2923,6 +3082,8 @@ if(
                                                                 $cashloanfirstcycle = $cashloanfirstcycle+$row6["cash_loan_advance_amount"];
                                                             } else if($cltype == "2") {
                                                                 $cashadvancefirstcycle = $cashadvancefirstcycle+$row6["cash_loan_advance_amount"];
+                                                            } else if($cltype == "3") {
+                                                                $cashloansssfirstcycle = $cashloansssfirstcycle+$row6["cash_loan_advance_amount"];
                                                             }
                                                             
                                                         }
@@ -2937,6 +3098,8 @@ if(
                                                                 $cashloansecondcycle = $cashloansecondcycle+$row7["cash_loan_advance_amount"];
                                                             } else if($cltype == "2") {
                                                                 $cashadvancesecondcycle = $cashadvancesecondcycle+$row7["cash_loan_advance_amount"];
+                                                            } else if($cltype == "3") {
+                                                                $cashloanssssecondcycle = $cashloanssssecondcycle+$row7["cash_loan_advance_amount"];
                                                             }
                                                         }
                                                     }
@@ -2971,16 +3134,16 @@ if(
                                                     $payroll_settings_paycheck_base_2= 0;
                                                     
                                                     if($perhour > 0) {
-                                                        if($deductions1 > 0 && ($cashloanfirstcycle > 0 || $cashadvancefirstcycle > 0) && $hoursworked1 > 0) { 
-                                                            $payroll_settings_paycheck_deducted_1 = ($perhour*$hoursworked1+$perhour*$xotcount1)-$deductions1-$cashloanfirstcycle-$cashadvancefirstcycle;
+                                                        if($deductions1 > 0 && ($cashloanfirstcycle > 0 || $cashadvancefirstcycle > 0 || $cashloansssfirstcycle > 0) && $hoursworked1 > 0) { 
+                                                            $payroll_settings_paycheck_deducted_1 = ($perhour*$hoursworked1+$perhour*$xotcount1)-$deductions1-$cashloanfirstcycle-$cashadvancefirstcycle-$cashloansssfirstcycle;
                                                             $payroll_settings_paycheck_base_1 = $perhour*$hoursworked1+$perhour*$xotcount1;
-                                                        } else if($deductions1 > 0 && $cashloanfirstcycle < 1 && $cashadvancefirstcycle < 1 && $hoursworked1 > 0) {
+                                                        } else if($deductions1 > 0 && $cashloanfirstcycle < 1 && $cashadvancefirstcycle < 1 && $cashloansssfirstcycle < 1 && $hoursworked1 > 0) {
                                                             $payroll_settings_paycheck_deducted_1 = ($perhour*$hoursworked1+$perhour*$xotcount1)-$deductions1;
                                                             $payroll_settings_paycheck_base_1 = $perhour*$hoursworked1+$perhour*$xotcount1;
-                                                        } else if($deductions1 < 1 && ($cashloanfirstcycle > 0 || $cashadvancefirstcycle > 0)  && $hoursworked1 > 0) { 
-                                                            $payroll_settings_paycheck_deducted_1 = ($perhour*$hoursworked1+$perhour*$xotcount1)-$cashloanfirstcycle-$cashadvancefirstcycle;
+                                                        } else if($deductions1 < 1 && ($cashloanfirstcycle > 0 || $cashadvancefirstcycle > 0 || $cashloansssfirstcycle > 0)  && $hoursworked1 > 0) { 
+                                                            $payroll_settings_paycheck_deducted_1 = ($perhour*$hoursworked1+$perhour*$xotcount1)-$cashloanfirstcycle-$cashadvancefirstcycle-$cashloansssfirstcycle;
                                                             $payroll_settings_paycheck_base_1 = $perhour*$hoursworked1+$perhour*$xotcount1;
-                                                        } else if($deductions1 < 1 && $cashloanfirstcycle < 1 && $cashadvancefirstcycle < 1  && $hoursworked1 > 0) { 
+                                                        } else if($deductions1 < 1 && $cashloanfirstcycle < 1 && $cashadvancefirstcycle < 1 && $cashloansssfirstcycle < 1 && $hoursworked1 > 0) { 
                                                             $payroll_settings_paycheck_deducted_1 = $perhour*$hoursworked1+$perhour*$xotcount1;
                                                             $payroll_settings_paycheck_base_1 = $perhour*$hoursworked1+$perhour*$xotcount1;
                                                         } else {
@@ -2991,16 +3154,16 @@ if(
                                                     }
 
                                                     if($perhour > 0) {
-                                                        if($deductions2 > 0 && ($cashloansecondcycle > 0 || $cashadvancesecondcycle > 0) && $hoursworked2 > 0) { 
-                                                            $payroll_settings_paycheck_deducted_2 = ($perhour*$hoursworked2+$perhour*$xotcount2)-$deductions2-$cashloansecondcycle-$cashadvancesecondcycle;
+                                                        if($deductions2 > 0 && ($cashloansecondcycle > 0 || $cashadvancesecondcycle > 0 || $cashloanssssecondcycle > 0) && $hoursworked2 > 0) { 
+                                                            $payroll_settings_paycheck_deducted_2 = ($perhour*$hoursworked2+$perhour*$xotcount2)-$deductions2-$cashloansecondcycle-$cashadvancesecondcycle-$cashloanssssecondcycle;
                                                             $payroll_settings_paycheck_base_2 = $perhour*$hoursworked2+$perhour*$xotcount2;
-                                                        } else if($deductions2 > 0 && $cashloansecondcycle < 1 && $cashadvancesecondcycle < 1 && $hoursworked2 > 0) { 
+                                                        } else if($deductions2 > 0 && $cashloansecondcycle < 1 && $cashadvancesecondcycle < 1 && $cashloanssssecondcycle < 1 && $hoursworked2 > 0) { 
                                                             $payroll_settings_paycheck_deducted_2 = ($perhour*$hoursworked2+$perhour*$xotcount2)-$deductions2;
                                                             $payroll_settings_paycheck_base_2 = $perhour*$hoursworked2+$perhour*$xotcount2;
-                                                        } else if($deductions2 < 1 && ($cashloansecondcycle > 0 || $cashadvancesecondcycle > 0) && $hoursworked2 > 0) { 
-                                                            $payroll_settings_paycheck_deducted_2 = ($perhour*$hoursworked2+$perhour*$xotcount2)-$cashadvancesecondcycle;
+                                                        } else if($deductions2 < 1 && ($cashloansecondcycle > 0 || $cashadvancesecondcycle > 0 || $cashloanssssecondcycle > 0) && $hoursworked2 > 0) { 
+                                                            $payroll_settings_paycheck_deducted_2 = ($perhour*$hoursworked2+$perhour*$xotcount2)-$cashadvancesecondcycle-$cashloansecondcycle-$cashloanssssecondcycle;
                                                             $payroll_settings_paycheck_base_2 = $perhour*$hoursworked2+$perhour*$xotcount2;
-                                                        } else if($deductions2 < 1 && $cashloansecondcycle < 1 && $cashadvancesecondcycle < 1 && $hoursworked2 > 0) { 
+                                                        } else if($deductions2 < 1 && $cashloansecondcycle < 1 && $cashadvancesecondcycle < 1 && $cashloanssssecondcycle < 1 && $hoursworked2 > 0) { 
                                                             $payroll_settings_paycheck_deducted_2 = $perhour*$hoursworked2+$perhour*$xotcount2;
                                                             $payroll_settings_paycheck_base_2 = $perhour*$hoursworked2+$perhour*$xotcount2;
                                                         } else {
@@ -3036,6 +3199,7 @@ if(
                                                         $bimonthbasesalaryfinal = $payroll_settings_paycheck_base_1;
                                                         $cashloanfinal = $cashloanfirstcycle;
                                                         $cashadvancefinal = $cashadvancefirstcycle;
+                                                        $cashloansssfinal = $cashloansssfirstcycle;
                                                         $deductionfinal = $deductions1;
                                                         $datediff = strtotime($firstcycledate2) - strtotime($firstcycledate1);
                                                         $daysofwork = $datediff / (60 * 60 * 24) - 2;
@@ -3060,6 +3224,7 @@ if(
                                                         $bimonthbasesalaryfinal = $payroll_settings_paycheck_base_2;
                                                         $cashloanfinal = $cashloansecondcycle;
                                                         $cashadvancefinal = $cashadvancesecondcycle;
+                                                        $cashloansssfinal = $cashloanssssecondcycle;
                                                         $deductionfinal = $deductions2;
                                                         $datediff = strtotime($secondcycledate2) - strtotime($secondcycledate1);
                                                         $daysofwork = $datediff / (60 * 60 * 24) - 2;
@@ -3114,7 +3279,7 @@ if(
                                                             $count_check_emp = mysqli_num_rows($query_check_emp);
 
                                                             if($count_check_emp == 0) {
-                                                                $sql_reg_pay = "INSERT INTO hurtajadmin_regular_payslip (regular_payslip_payslip_id, regular_payslip_date_cycle_month, regular_payslip_date_cycle_cycle, regular_payslip_date_cycle_year, employee_id, regular_payslip_basic_pay, regular_payslip_overtime_pay, regular_payslip_tax_cont, regular_payslip_pagibig_cont, regular_payslip_sss_cont, regular_payslip_philhealth_cont, 	regular_payslip_days_of_work, regular_payslip_days_present,regular_payslip_cash_advance, regular_payslip_cash_loan,regular_payslip_less_lates_hours, regular_payslip_less_lates,regular_payslip_s_non_working_holiday_hours,regular_payslip_s_non_working_holiday,	regular_payslip_holiday_hours,	regular_payslip_holiday,regular_payslip_sunday_hours,regular_payslip_sunday,regular_payslip_basic_reg_ot_hours,regular_payslip_basic_reg_ot,	regular_payslip_basic_reg_hours,regular_payslip_basic_reg, regular_payslip_date_created, regular_payslip_status) VALUES ('$payslipid','$month','$cycle','$year','$empid','$regularpay','$overtimepay','$taxcontfinal','$pagibigcontfinal','$ssscontfinal','$philhealthcontfinal','$daysofwork','$dayspresent','$cashadvancefinal','$cashloanfinal','$latecountfinal','$latecountfinalamount','$specialholidayfinal','$specialholidayfinalamount','$regularholidayfinal','$regularholidayfinalamount','$sundayhoursworked','$sundayhoursworkedamount','$otbasedhoursworked','$othoursworkedamount','$basicreg','$basicregamount',NOW(),'1')";
+                                                                $sql_reg_pay = "INSERT INTO hurtajadmin_regular_payslip (regular_payslip_payslip_id, regular_payslip_date_cycle_month, regular_payslip_date_cycle_cycle, regular_payslip_date_cycle_year, employee_id, regular_payslip_basic_pay, regular_payslip_overtime_pay, regular_payslip_tax_cont, regular_payslip_pagibig_cont, regular_payslip_sss_cont, regular_payslip_philhealth_cont, 	regular_payslip_days_of_work, regular_payslip_days_present,regular_payslip_cash_advance, regular_payslip_cash_loan, regular_payslip_cash_loan_sss,regular_payslip_less_lates_hours, regular_payslip_less_lates,regular_payslip_s_non_working_holiday_hours,regular_payslip_s_non_working_holiday,	regular_payslip_holiday_hours,	regular_payslip_holiday,regular_payslip_sunday_hours,regular_payslip_sunday,regular_payslip_basic_reg_ot_hours,regular_payslip_basic_reg_ot,	regular_payslip_basic_reg_hours,regular_payslip_basic_reg, regular_payslip_date_created, regular_payslip_status) VALUES ('$payslipid','$month','$cycle','$year','$empid','$regularpay','$overtimepay','$taxcontfinal','$pagibigcontfinal','$ssscontfinal','$philhealthcontfinal','$daysofwork','$dayspresent','$cashadvancefinal','$cashloanfinal','$cashloansssfinal','$latecountfinal','$latecountfinalamount','$specialholidayfinal','$specialholidayfinalamount','$regularholidayfinal','$regularholidayfinalamount','$sundayhoursworked','$sundayhoursworkedamount','$otbasedhoursworked','$othoursworkedamount','$basicreg','$basicregamount',NOW(),'1')";
                                                                 $query_reg_pay = mysqli_query($db_conn, $sql_reg_pay);
 
                                                                 $insertpayslipcount++;
@@ -3137,7 +3302,7 @@ if(
                                                         if($count_check_payslip == 0) {
                                                             echo '<h3>Generating...</h3>';
             
-                                                            $sql_reg_pay = "INSERT INTO hurtajadmin_regular_payslip (regular_payslip_payslip_id, regular_payslip_date_cycle_month, regular_payslip_date_cycle_cycle, regular_payslip_date_cycle_year, employee_id, regular_payslip_basic_pay, regular_payslip_overtime_pay, regular_payslip_tax_cont, regular_payslip_pagibig_cont, regular_payslip_sss_cont, regular_payslip_philhealth_cont, 	regular_payslip_days_of_work, regular_payslip_days_present,regular_payslip_cash_advance, regular_payslip_cash_loan,regular_payslip_less_lates_hours, regular_payslip_less_lates,regular_payslip_s_non_working_holiday_hours,regular_payslip_s_non_working_holiday,	regular_payslip_holiday_hours,	regular_payslip_holiday,regular_payslip_sunday_hours,regular_payslip_sunday,regular_payslip_basic_reg_ot_hours,regular_payslip_basic_reg_ot,	regular_payslip_basic_reg_hours,regular_payslip_basic_reg, regular_payslip_date_created, regular_payslip_status) VALUES ('$payslipid','$month','$cycle','$year','$empid','$regularpay','$overtimepay','$taxcontfinal','$pagibigcontfinal','$ssscontfinal','$philhealthcontfinal','$daysofwork','$dayspresent','$cashadvancefinal','$cashloanfinal','$latecountfinal','$latecountfinalamount','$specialholidayfinal','$specialholidayfinalamount','$regularholidayfinal','$regularholidayfinalamount','$sundayhoursworked','$sundayhoursworkedamount','$otbasedhoursworked','$othoursworkedamount','$basicreg','$basicregamount',NOW(),'1')";
+                                                            $sql_reg_pay = "INSERT INTO hurtajadmin_regular_payslip (regular_payslip_payslip_id, regular_payslip_date_cycle_month, regular_payslip_date_cycle_cycle, regular_payslip_date_cycle_year, employee_id, regular_payslip_basic_pay, regular_payslip_overtime_pay, regular_payslip_tax_cont, regular_payslip_pagibig_cont, regular_payslip_sss_cont, regular_payslip_philhealth_cont, 	regular_payslip_days_of_work, regular_payslip_days_present,regular_payslip_cash_advance, regular_payslip_cash_loan, regular_payslip_cash_loan_sss, regular_payslip_less_lates_hours, regular_payslip_less_lates,regular_payslip_s_non_working_holiday_hours,regular_payslip_s_non_working_holiday,	regular_payslip_holiday_hours,	regular_payslip_holiday,regular_payslip_sunday_hours,regular_payslip_sunday,regular_payslip_basic_reg_ot_hours,regular_payslip_basic_reg_ot,	regular_payslip_basic_reg_hours,regular_payslip_basic_reg, regular_payslip_date_created, regular_payslip_status) VALUES ('$payslipid','$month','$cycle','$year','$empid','$regularpay','$overtimepay','$taxcontfinal','$pagibigcontfinal','$ssscontfinal','$philhealthcontfinal','$daysofwork','$dayspresent','$cashadvancefinal','$cashloanfinal', '$cashloansssfinal','$latecountfinal','$latecountfinalamount','$specialholidayfinal','$specialholidayfinalamount','$regularholidayfinal','$regularholidayfinalamount','$sundayhoursworked','$sundayhoursworkedamount','$otbasedhoursworked','$othoursworkedamount','$basicreg','$basicregamount',NOW(),'1')";
                                                             $query_reg_pay = mysqli_query($db_conn, $sql_reg_pay);
 
                                                             echo("<script>location.href = 'account.php?id=$log_id&payroll=focus&action=regularpayslip&payslipid=$payslipid';</script>");
@@ -3472,7 +3637,7 @@ if(
                                 <hr>
                                 <input type="hidden" id="search-employee-regular-payslip-payslipid" value="<?php echo $payslipid; ?>" />
                                 <div class="input-group">
-                                            <input type="text" class="form-control" name="date" placeholder="Search Employee ID" id="search-employee-regular-payslip" autocomplete="off" />
+                                            <input type="text" class="form-control" name="date" placeholder="Search Employee ID, First Name, Last Name, Middle Name" id="search-employee-regular-payslip" autocomplete="off" />
                                             <span class="input-group-addon add-on"><span class="glyphicon glyphicon-search"></span></span>
                                         </div>
                                         <br/>
@@ -5274,6 +5439,8 @@ if(
           <div class="modal-body">
             <span id="markPaidCollectiblesStatus"></span>
             <input type="hidden" class="form-control" id="mark-paid-collectibles-id">
+            <input type="hidden" class="form-control" id="mark-paid-collectibles-left-days">
+            <input type="hidden" class="form-control" id="mark-paid-collectibles-exceed-days">
             <p>Are you sure with this?</p>
           </div>
           <div class="modal-footer">
@@ -5305,11 +5472,129 @@ if(
     </div>
 
     <!-- Modal -->
+    <div class="modal fade bd-example-modal-sm" id="markManyPaidCollectibles" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Mark Many as Paid (Collectibles)</h5>
+          </div>
+          <div class="modal-body">
+            <span id="markManyPaidCollectiblesStatus"></span>
+            <p>Are you sure with this?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="markManyPaidCollectiblesBtn" onclick="markManyPaidCollectiblesRecord()">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade bd-example-modal-sm" id="markManyUnpaidCollectibles" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Mark Many as Unpaid (Collectibles)</h5>
+          </div>
+          <div class="modal-body">
+            <span id="markManyUnpaidCollectiblesStatus"></span>
+            <p>Are you sure with this?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="markManyUnpaidCollectiblesBtn" onclick="markManyUnpaidCollectiblesRecord()">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade bd-example-modal-sm" id="markPaidPayables" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Mark as Paid (Payables)</h5>
+          </div>
+          <div class="modal-body">
+            <span id="markPaidPayablesStatus"></span>
+            <input type="hidden" class="form-control" id="mark-paid-payables-id">
+            <input type="hidden" class="form-control" id="mark-paid-payables-left-days">
+            <input type="hidden" class="form-control" id="mark-paid-payables-exceed-days">
+            <p>Are you sure with this?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="markPaidPayablesBtn" onclick="markPaidPayablesRecord()">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade bd-example-modal-sm" id="markUnpaidPayables" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Mark as Unpaid (Payables)</h5>
+          </div>
+          <div class="modal-body">
+            <span id="markUnpaidPayablesStatus"></span>
+            <input type="hidden" class="form-control" id="mark-unpaid-payables-id">
+            <p>Are you sure with this?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="markUnpaidPayablesBtn" onclick="markUnpaidPayablesRecord()">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade bd-example-modal-sm" id="markManyPaidPayables" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Mark Many as Paid (Payables)</h5>
+          </div>
+          <div class="modal-body">
+            <span id="markManyPaidPayablesStatus"></span>
+            <p>Are you sure with this?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="markManyPaidPayablesBtn" onclick="markManyPaidPayablesRecord()">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade bd-example-modal-sm" id="markManyUnpaidPayables" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Mark Many as Unpaid (Payables)</h5>
+          </div>
+          <div class="modal-body">
+            <span id="markManyUnpaidPayablesStatus"></span>
+            <p>Are you sure with this?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="markManyUnpaidPayablesBtn" onclick="markManyUnpaidPayablesRecord()">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
     <div class="modal fade bd-example-modal-sm" id="deleteCollectibles" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Delete Company</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Delete Collectibles</h5>
           </div>
           <div class="modal-body">
             <span id="deleteCollectiblesStatus"></span>
@@ -5319,6 +5604,25 @@ if(
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             <button type="button" class="btn btn-primary" id="deleteCollectiblesBtn" onclick="deleteCollectiblesRecord()">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade bd-example-modal-sm" id="deleteManyCollectibles" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Delete Many Collectibles</h5>
+          </div>
+          <div class="modal-body">
+            <span id="deleteManyCollectiblesStatus"></span>
+            <p>Are you sure with this?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="deleteManyCollectiblesBtn" onclick="deleteManyCollectiblesRecord()">Yes</button>
           </div>
         </div>
       </div>
@@ -5627,6 +5931,7 @@ if(
                     <option value=""></option>
                     <option value="1">Loan</option>
                     <option value="2">Advance</option>
+                    <option value="3">SSS Loan</option>
                 </select>
                 </div>
                 <div class="form-group">
@@ -5664,6 +5969,7 @@ if(
                     <option value=""></option>
                     <option value="1">Loan</option>
                     <option value="2">Advance</option>
+                    <option value="3">SSS Loan</option>
                 </select>
                 </div>
                 <div class="form-group">
@@ -6445,6 +6751,25 @@ if(
       </div>
     </div>
 
+     <!-- Modal -->
+     <div class="modal fade bd-example-modal-sm" id="deleteManyPayables" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Delete Many Payables</h5>
+          </div>
+          <div class="modal-body">
+            <span id="deleteManyPayablesStatus"></span>
+            <p>Are you sure with this?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="deleteManyPayablesBtn" onclick="deleteManyPayablesRecord()">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Modal -->
     <div class="modal fade bd-example-modal-lg" id="infoPayables" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg" role="document">
@@ -6525,6 +6850,75 @@ if(
     <script src="js/inputmask.js"></script>
 
     <script type="text/javascript">
+
+      var ageingCollectibleIdArray = [];
+      var collectibleAllCheckbox = document.getElementById("collectibles-all-checkbox");
+      var collectibleCheckbox = document.getElementsByName("collectibles-checkbox");
+
+      Array.prototype.remove = function() {
+            var what, a = arguments, L = a.length, ax;
+            while (L && this.length) {
+                what = a[--L];
+                while ((ax = this.indexOf(what)) !== -1) {
+                    this.splice(ax, 1);
+                }
+            }
+            return this;
+        };
+                                    
+      function addToAgeingCollectibleIdArray(id) {
+        if(!ageingCollectibleIdArray.includes(id)) {
+            ageingCollectibleIdArray.push(id);
+            collectibleAllCheckbox.checked = true;
+        } else {
+            ageingCollectibleIdArray.remove(id);
+            if(ageingCollectibleIdArray.length == 0) {
+                collectibleAllCheckbox.checked = false;
+            }
+        }
+
+        if(ageingCollectibleIdArray.length > 0) {
+            $('#collectiblesSelectedButtons').show();
+        } else {
+            $('#collectiblesSelectedButtons').hide();
+        }
+
+        selectedCount();
+        
+        console.log(ageingCollectibleIdArray);
+      }
+
+        function checkUncheckAll() {   
+
+            if($('#collectibles-all-checkbox').prop("checked") == true) {
+                $(':checkbox').each(function() {
+                    this.checked = true; 
+                });
+                var selectedCollectibleIdArray = $('#collectibles-all-checkbox-id').val();
+                ageingCollectibleIdArray = JSON.parse(selectedCollectibleIdArray);
+                console.log(ageingCollectibleIdArray);      
+            } else {
+                $(':checkbox').each(function() {
+                    this.checked = false;                       
+                });
+                ageingCollectibleIdArray = [];
+                console.log(ageingCollectibleIdArray);   
+                $('#collectibles-all-checkbox').removeAttr('checked');
+            }
+
+            if(ageingCollectibleIdArray.length > 0) {
+                $('#collectiblesSelectedButtons').show();
+            } else {
+                $('#collectiblesSelectedButtons').hide();
+            }
+
+            selectedCount();
+
+        }
+
+      function selectedCount() {
+        $('#collectiblesSelectedCount').text(ageingCollectibleIdArray.length);
+      }
 
       $("#add-holiday-type").change(function () { 
             var filterleaveValue = $("#add-holiday-type").val();
@@ -6782,11 +7176,6 @@ if(
         }
       }
 
-      function openCollectiblesMarkPaidDialog(rid) {
-        $('#markPaidCollectibles').modal('show');
-        _("mark-paid-collectibles-id").value = rid;
-      }
-
       function openGenPaySlipDialog() {
         var type = _("payrollType").value;
 		var to = _("payrollTo").value;
@@ -6830,8 +7219,17 @@ if(
 		}
     }
 
+    function openCollectiblesMarkPaidDialog(rid, leftdays, exceeddays) {
+        $('#markPaidCollectibles').modal('show');
+        _("mark-paid-collectibles-id").value = rid;
+        _("mark-paid-collectibles-left-days").value = leftdays;
+        _("mark-paid-collectibles-exceed-days").value = exceeddays;
+      }
+
       function markPaidCollectiblesRecord() {
         var rid = _("mark-paid-collectibles-id").value;
+        var leftdays = _("mark-paid-collectibles-left-days").value;
+        var exceeddays = _("mark-paid-collectibles-exceed-days").value;
         var load = '<center><i class="fa fa-circle-o-notch fa-spin" style="color: #999; margin-bottom: 10px;"></i><center>';
         var error = '<div style="color: red; margin-bottom: 10px;">Incomplete Parameters.</div>';
         var status = _("markPaidCollectiblesStatus");
@@ -6853,7 +7251,7 @@ if(
                   }
               }
             }
-          ajax.send("markpaidcollectiblesid="+rid);
+          ajax.send("markpaidcollectiblesid="+rid+"&markpaidcollectiblesleftdays="+leftdays+"&markpaidcollectiblesexceeddays="+exceeddays);
         }
       }
 
@@ -6888,6 +7286,195 @@ if(
           ajax.send("markunpaidcollectiblesid="+rid);
         }
       }
+      
+
+      function openCollectiblesMarkManyPaidDialog() {
+        $('#markManyPaidCollectibles').modal('show');
+      }
+
+      function markManyPaidCollectiblesRecord() {
+        var load = '<center><i class="fa fa-circle-o-notch fa-spin" style="color: #999; margin-bottom: 10px;"></i><center>';
+        var error = '<div style="color: red; margin-bottom: 10px;">Incomplete Parameters.</div>';
+        var status = _("markManyPaidCollectiblesStatus");
+        var button = _("markManyPaidCollectiblesBtn");
+        status.innerHTML = load;
+        if (ageingCollectibleIdArray.length == 0) {
+            status.innerHTML = error;
+        } else {
+            button.disabled = true;
+            status.innerHTML = load;
+            var ajax = ajaxObj("POST", "parsers/account.php");
+            ajax.onreadystatechange = function() {
+              if(ajaxReturn(ajax) == true) {
+                  if (ajax.responseText == "successupdate"){
+                      window.location = "account.php?id=<?php echo $id; ?>&ageing=focus&view=collectibles";
+                  } else {
+                      button.disabled = false;
+                      status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Unknown error! Error Details: '+ ajax.responseText +'</div>';
+                  }
+              }
+            }
+          ajax.send("markmanypaidcollectiblesarrayid="+ageingCollectibleIdArray.toString());
+        }
+      }
+
+      function openCollectiblesMarkManyUnpaidDialog() {
+        $('#markManyUnpaidCollectibles').modal('show');
+      }
+
+      function markManyUnpaidCollectiblesRecord() {
+        var load = '<center><i class="fa fa-circle-o-notch fa-spin" style="color: #999; margin-bottom: 10px;"></i><center>';
+        var error = '<div style="color: red; margin-bottom: 10px;">Incomplete Parameters.</div>';
+        var status = _("markManyUnpaidCollectiblesStatus");
+        var button = _("markManyUnpaidCollectiblesBtn");
+        status.innerHTML = load;
+        if (ageingCollectibleIdArray.length == 0) {
+            status.innerHTML = error;
+        } else {
+            button.disabled = true;
+            status.innerHTML = load;
+            var ajax = ajaxObj("POST", "parsers/account.php");
+            ajax.onreadystatechange = function() {
+              if(ajaxReturn(ajax) == true) {
+                  if (ajax.responseText == "successupdate"){
+                      window.location = "account.php?id=<?php echo $id; ?>&ageing=focus&view=paidcollectibles";
+                  } else {
+                      button.disabled = false;
+                      status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Unknown error! Error Details: '+ ajax.responseText +'</div>';
+                  }
+              }
+            }
+          ajax.send("markmanyunpaidcollectiblesarrayid="+ageingCollectibleIdArray.toString());
+        }
+      }
+
+      function openPayablesMarkPaidDialog(rid, leftdays, exceeddays) {
+        $('#markPaidPayables').modal('show');
+        _("mark-paid-payables-id").value = rid;
+        _("mark-paid-payables-left-days").value = leftdays;
+        _("mark-paid-payables-exceed-days").value = exceeddays;
+      }
+
+      function markPaidPayablesRecord() {
+        var rid = _("mark-paid-payables-id").value;
+        var leftdays = _("mark-paid-payables-left-days").value;
+        var exceeddays = _("mark-paid-payables-exceed-days").value;
+        var load = '<center><i class="fa fa-circle-o-notch fa-spin" style="color: #999; margin-bottom: 10px;"></i><center>';
+        var error = '<div style="color: red; margin-bottom: 10px;">Incomplete Parameters.</div>';
+        var status = _("markPaidPayablesStatus");
+        var button = _("markPaidPayablesBtn");
+        status.innerHTML = load;
+        if (rid == "") {
+            status.innerHTML = error;
+        } else {
+            button.disabled = true;
+            status.innerHTML = load;
+            var ajax = ajaxObj("POST", "parsers/account.php");
+            ajax.onreadystatechange = function() {
+              if(ajaxReturn(ajax) == true) {
+                  if (ajax.responseText == "successupdate"){
+                      window.location = "account.php?id=<?php echo $id; ?>&ageing=focus&view=payables";
+                  } else {
+                      button.disabled = false;
+                      status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Unknown error! Error Details: '+ ajax.responseText +'</div>';
+                  }
+              }
+            }
+          ajax.send("markpaidpayablesid="+rid+"&markpaidpayablesleftdays="+leftdays+"&markpaidpayablesexceeddays="+exceeddays);
+        }
+      }
+
+      function openPayablesMarkUnpaidDialog(rid) {
+        $('#markUnpaidPayables').modal('show');
+        _("mark-unpaid-payables-id").value = rid;
+      }
+
+      function markUnpaidPayablesRecord() {
+        var rid = _("mark-unpaid-payables-id").value;
+        var load = '<center><i class="fa fa-circle-o-notch fa-spin" style="color: #999; margin-bottom: 10px;"></i><center>';
+        var error = '<div style="color: red; margin-bottom: 10px;">Incomplete Parameters.</div>';
+        var status = _("markUnpaidPayablesStatus");
+        var button = _("markUnpaidPayablesBtn");
+        status.innerHTML = load;
+        if (rid == "") {
+            status.innerHTML = error;
+        } else {
+            button.disabled = true;
+            status.innerHTML = load;
+            var ajax = ajaxObj("POST", "parsers/account.php");
+            ajax.onreadystatechange = function() {
+              if(ajaxReturn(ajax) == true) {
+                  if (ajax.responseText == "successupdate"){
+                      window.location = "account.php?id=<?php echo $id; ?>&ageing=focus&view=payables";
+                  } else {
+                      button.disabled = false;
+                      status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Unknown error! Error Details: '+ ajax.responseText +'</div>';
+                  }
+              }
+            }
+          ajax.send("markunpaidpayablesid="+rid);
+        }
+      }
+
+      function openPayablesMarkManyPaidDialog() {
+        $('#markManyPaidPayables').modal('show');
+      }
+
+      function markManyPaidPayablesRecord() {
+        var load = '<center><i class="fa fa-circle-o-notch fa-spin" style="color: #999; margin-bottom: 10px;"></i><center>';
+        var error = '<div style="color: red; margin-bottom: 10px;">Incomplete Parameters.</div>';
+        var status = _("markManyPaidPayablesStatus");
+        var button = _("markManyPaidPayablesBtn");
+        status.innerHTML = load;
+        if (ageingCollectibleIdArray.length == 0) {
+            status.innerHTML = error;
+        } else {
+            button.disabled = true;
+            status.innerHTML = load;
+            var ajax = ajaxObj("POST", "parsers/account.php");
+            ajax.onreadystatechange = function() {
+              if(ajaxReturn(ajax) == true) {
+                  if (ajax.responseText == "successupdate"){
+                      window.location = "account.php?id=<?php echo $id; ?>&ageing=focus&view=payables";
+                  } else {
+                      button.disabled = false;
+                      status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Unknown error! Error Details: '+ ajax.responseText +'</div>';
+                  }
+              }
+            }
+            ajax.send("markmanypaidpayablesarrayid="+ageingCollectibleIdArray.toString());
+        }
+      }
+
+      function openPayablesMarkManyUnpaidDialog() {
+        $('#markManyUnpaidPayables').modal('show');
+      }
+
+      function markManyUnpaidPayablesRecord() {
+        var load = '<center><i class="fa fa-circle-o-notch fa-spin" style="color: #999; margin-bottom: 10px;"></i><center>';
+        var error = '<div style="color: red; margin-bottom: 10px;">Incomplete Parameters.</div>';
+        var status = _("markManyUnpaidPayablesStatus");
+        var button = _("markManyUnpaidPayablesBtn");
+        status.innerHTML = load;
+        if (ageingCollectibleIdArray.length == 0) {
+            status.innerHTML = error;
+        } else {
+            button.disabled = true;
+            status.innerHTML = load;
+            var ajax = ajaxObj("POST", "parsers/account.php");
+            ajax.onreadystatechange = function() {
+              if(ajaxReturn(ajax) == true) {
+                  if (ajax.responseText == "successupdate"){
+                      window.location = "account.php?id=<?php echo $id; ?>&ageing=focus&view=payables";
+                  } else {
+                      button.disabled = false;
+                      status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Unknown error! Error Details: '+ ajax.responseText +'</div>';
+                  }
+              }
+            }
+            ajax.send("markmanyunpaidpayablesarrayid="+ageingCollectibleIdArray.toString());
+        }
+      }
 
       function openCollectiblesDeleteDialog(rid) {
         $('#deleteCollectibles').modal('show');
@@ -6918,6 +7505,36 @@ if(
               }
             }
           ajax.send("deletecollectiblesid="+rid);
+        }
+      }
+
+      function openCollectiblesDeleteManyDialog() {
+        $('#deleteManyCollectibles').modal('show');
+      }
+
+      function deleteManyCollectiblesRecord() {
+        var load = '<center><i class="fa fa-circle-o-notch fa-spin" style="color: #999; margin-bottom: 10px;"></i><center>';
+        var error = '<div style="color: red; margin-bottom: 10px;">Incomplete Parameters.</div>';
+        var status = _("deleteManyCollectiblesStatus");
+        var button = _("deleteManyCollectiblesBtn");
+        status.innerHTML = load;
+        if (ageingCollectibleIdArray.length == 0) {
+            status.innerHTML = error;
+        } else {
+            button.disabled = true;
+            status.innerHTML = load;
+            var ajax = ajaxObj("POST", "parsers/account.php");
+            ajax.onreadystatechange = function() {
+              if(ajaxReturn(ajax) == true) {
+                  if (ajax.responseText == "successupdate"){
+                      window.location.reload();
+                  } else {
+                      button.disabled = false;
+                      status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Unknown error! Error Details: '+ ajax.responseText +'</div>';
+                  }
+              }
+            }
+          ajax.send("deletemanycollectiblesarrayid="+ageingCollectibleIdArray.toString());
         }
       }
 
@@ -7850,13 +8467,22 @@ if(
             oncleared: function () { self.Value(''); }
       });
 
+      $('#add-payables-total-amount').inputmask("numeric", {
+            radixPoint: ".",
+            groupSeparator: ",",
+            digits: 2,
+            autoGroup: true,
+            prefix: '₱', //No Space, this will truncate the first character
+            rightAlign: false,
+            oncleared: function () { self.Value(''); }
+      });   
       $('#search-collectibles').keyup(function(e){  
             var txtSearch = $(this).val();
             console.log(txtSearch);
             $.ajax({ 
                 url:"parsers/searchcollectibles.php",  
                 method:"post",  
-                data:{search:txtSearch},  
+                data:{search:txtSearch,collectiblesIdList:ageingCollectibleIdArray.toString()},  
                 dataType:"text",  
                 success:function(data) {
                     $('#collectibles-search-result').html(data); 
@@ -7961,7 +8587,7 @@ if(
             $.ajax({ 
                 url:"parsers/searchpaidcollectibles.php",  
                 method:"post",  
-                data:{search:txtSearch},  
+                data:{search:txtSearch,collectiblesIdList:ageingCollectibleIdArray.toString()},  
                 dataType:"text",  
                 success:function(data) {
                     $('#paid-collectibles-search-result').html(data); 
@@ -7975,7 +8601,7 @@ if(
             $.ajax({ 
                 url:"parsers/searchpayables.php",  
                 method:"post",  
-                data:{search:txtSearch},  
+                data:{search:txtSearch,collectiblesIdList:ageingCollectibleIdArray.toString()},  
                 dataType:"text",  
                 success:function(data) {
                     $('#payables-search-result').html(data); 
@@ -8604,7 +9230,7 @@ if(
             if (month == "" || cycle == "" || year == "") {
                _("summaryPayrollStatus").innerHTML = '<div style="color: red; margin-bottom: 10px;">Incomplete parameters!</div>';
             } else {
-              window.open("summarypayroll.php?month="+ month +"&cycle="+ cycle +"&year="+ year, '_blank');
+              window.open("summarypayrollnew.php?month="+ month +"&cycle="+ cycle +"&year="+ year, '_blank');
             }
       }
 
@@ -8614,7 +9240,7 @@ if(
             if (month == "" || year == "") {
                _("summaryContributionStatus").innerHTML = '<div style="color: red; margin-bottom: 10px;">Incomplete parameters!</div>';
             } else {
-              window.open("summarycontribution.php?month="+ month +"&year="+ year, '_blank');
+              window.open("summarycontributionnew.php?month="+ month +"&year="+ year, '_blank');
             }
       }
 
@@ -8894,6 +9520,36 @@ if(
               }
             }
           ajax.send("deletepayablesid="+rid);
+        }
+      }
+
+      function openPayablesDeleteManyDialog() {
+        $('#deleteManyPayables').modal('show');
+      }
+
+      function deleteManyPayablesRecord() {
+        var load = '<center><i class="fa fa-circle-o-notch fa-spin" style="color: #999; margin-bottom: 10px;"></i><center>';
+        var error = '<div style="color: red; margin-bottom: 10px;">Incomplete Parameters.</div>';
+        var status = _("deleteManyPayablesStatus");
+        var button = _("deleteManyPayablesBtn");
+        status.innerHTML = load;
+        if (ageingCollectibleIdArray.length == 0) {
+            status.innerHTML = error;
+        } else {
+            button.disabled = true;
+            status.innerHTML = load;
+            var ajax = ajaxObj("POST", "parsers/account.php");
+            ajax.onreadystatechange = function() {
+              if(ajaxReturn(ajax) == true) {
+                  if (ajax.responseText == "successupdate"){
+                      window.location = "account.php?id=<?php echo $log_id; ?>&ageing=focus&view=payables";
+                  } else {
+                      button.disabled = false;
+                      status.innerHTML = '<div style="color: red; margin-bottom: 10px;">Unknown error! Error Details: '+ ajax.responseText +'</div>';
+                  }
+              }
+            }
+          ajax.send("deletemanypayablesarrayid="+ageingCollectibleIdArray.toString());
         }
       }
 

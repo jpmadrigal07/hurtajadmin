@@ -177,9 +177,9 @@ $year = $_GET["year"];
 
                                                     while($rowemp = mysqli_fetch_array($queryemp)) { 
                                                         $regular_payslip_basic_pay = $rowemp["regular_payslip_basic_pay"];
-                                                        if($regular_payslip_basic_pay > 14999 && $regular_payslip_basic_pay > 0) {
+                                                        if($regular_payslip_basic_pay > 526.80 && $regular_payslip_basic_pay > 0) {
                                                             $ec = 30;
-                                                        } else if($regular_payslip_basic_pay < 15000 && $regular_payslip_basic_pay > 0) {
+                                                        } else if($regular_payslip_basic_pay < 526.81 && $regular_payslip_basic_pay > 0) {
                                                             $ec = 10;
                                                         } else {
                                                             $ec = 0;
